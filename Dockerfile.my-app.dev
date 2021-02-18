@@ -1,0 +1,7 @@
+FROM node:12.18.3 AS ui-build
+WORKDIR /my-app
+COPY my-app/ ./
+RUN npm install 
+
+CMD ["npm", "start"]
+

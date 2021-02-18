@@ -1,0 +1,27 @@
+services:
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data:delegated
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3080:3080
+    environment:
+      - PGUSER=postgres
+      - PGHOST=db
+      - PGPASSWORD=postgres
+      - PGDATABASE=test1
+      - PGPORT=5432
+
+volumes:
+  db-data:

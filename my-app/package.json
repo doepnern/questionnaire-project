@@ -7,6 +7,11 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.0",
+    "framer-motion": "^3.2.1",
+    "http-proxy-middleware": "^1.0.6",
+    "lodash": "^4.17.20",
+    "node-sass": "^4.14.1",
+    "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
@@ -16,9 +21,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "jest": "jest",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3080",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -33,5 +38,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

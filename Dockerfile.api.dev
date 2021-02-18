@@ -1,0 +1,10 @@
+FROM node:12.18.3 AS server-build
+WORKDIR /api
+COPY api/package*.json ./
+RUN npm install
+COPY api/server.js ./
+COPY api/db-integration ./
+
+EXPOSE 3080
+
+CMD ["npm", "run", "dev"]

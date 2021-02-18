@@ -1,7 +1,9 @@
-
+.questionOverview {
+  height: 100%;
+  width: 100%;
+}
 .header {
   width: 100%;
-  padding: 2%;
   background-color: burlywood;
   color: white;
   text-align: center;
@@ -10,7 +12,6 @@
 .display-board {
   width: 100%;
   background-color: rgb(555, 200, 789);
-  padding: 5%;
 }
 
 .number {
@@ -21,4 +22,7 @@
 
 .mrgnbtm {
   margin-top: 20px;
+}
+body {
+  background-color: #e7e2e2;
 }
