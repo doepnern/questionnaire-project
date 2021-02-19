@@ -7,10 +7,10 @@ import {
   useQuestionContext,
   clearHistory,
 } from "context/QuestionContext";
-import { updateQuestions } from "services/UserService";
+import { updateQuestions, createQuestionForUser } from "services/UserService";
 import _ from "lodash";
 
-export default function QuestionBoxContainer({ questions }) {
+export default function QuestionBoxContainer({ reloadQuestions }) {
   const [showDetails, setShown] = useState({
     active: false,
     currentQuestion: 0,
@@ -38,6 +38,11 @@ export default function QuestionBoxContainer({ questions }) {
           dispatchUpdate: (q) => dispatch(updateQuestion(q)),
         }}
       ></QuestionDetailedContainer>
+      <QuestionBox
+        onClick={() => createQuestionForUser(1).then(() => reloadQuestions())}
+      >
+        <QuestionBox.NewQuestion />
+      </QuestionBox>
       {questionContext.questions.map((question, index) => {
         return (
           <QuestionBox key={index}>

@@ -31,7 +31,7 @@ function QuestionOverview() {
     <div className="questionOverview">
       {!fragenLoader.isLoading ? (
         <QuestionBoxContainer
-          questions={fragenLoader.fragen}
+          reloadQuestions={getAllUsersHere}
         ></QuestionBoxContainer>
       ) : (
         <motion.div

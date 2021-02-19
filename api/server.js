@@ -4,7 +4,13 @@ const path = require("path");
 const app = express(),
   bodyParser = require("body-parser");
 port = 3080;
-const { initDB, getUserView, updateQuestions } = require("./db-integration");
+const {
+  initDB,
+  getUserView,
+  updateQuestions,
+  createNewQuestion,
+  deleteQuestionById,
+} = require("./db-integration");
 
 //enable env file
 if (process.env.NODE_ENV !== "production") {
@@ -56,6 +62,27 @@ app.post("/api/questions", (req, res) => {
     res.json({ status: "error", msg: err.message });
   }
   res.json({ status: "success" });
+});
+
+app.get("/api/users/:id/addQuestion", (req, res) => {
+  console.log("requested to add question for user " + req.params.id);
+  createNewQuestion(req.params.id).then((result) => {
+    if (result.error) {
+      res.json(result);
+    } else {
+      res.json({ status: "success" });
+    }
+  });
+});
+
+app.get("/api/questions/deleteQuestion/:id", (req, res) => {
+  deleteQuestionById(req.params.id).then((result) => {
+    if (result.error) {
+      res.json(result);
+    } else {
+      res.json({ status: "success" });
+    }
+  });
 });
 
 app.get("/", (req, res) => {

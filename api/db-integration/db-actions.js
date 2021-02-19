@@ -29,12 +29,21 @@ function selectTable(tableName, keys) {
 //performs a single/ array of querys asynchronus, resolves promise after all querys are done
 async function performQuery(query, optionalParams) {
   if (query instanceof Array) {
-    await (async () => {
+    let arrRes = await (async () => {
       for (let q of query) {
-        await performQuery(q);
+        let r = { error: "no query performed of multiple querys" };
+        if (q instanceof Array) {
+          r = await performQuery(...q);
+        } else {
+          r = await performQuery(q);
+        }
+        if (r.error) {
+          return r;
+        }
       }
+      return { status: "success" };
     })();
-    return;
+    return arrRes;
   }
   if (!query) {
     console.log("undefined Query");

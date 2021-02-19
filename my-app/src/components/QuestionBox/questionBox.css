@@ -176,3 +176,35 @@
   background-color: rgb(185, 218, 255);
   border-radius: 10px;
 }
+
+.qb_addButtonContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+.qb_addButtonContainer:hover {
+  background: linear-gradient(180deg, #cbe6ff 0%, rgba(255, 255, 255, 0) 60%);
+  cursor: pointer;
+}
+
+.qb_addButtonTitle {
+  height: 27%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+}
+.qb_addButton {
+  position: absolute;
+  height: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

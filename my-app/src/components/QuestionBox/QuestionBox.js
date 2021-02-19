@@ -1,6 +1,7 @@
 import React from "react";
 import "./questionBox.css";
 import { motion } from "framer-motion";
+import { ReactComponent as AddButton } from "svg/plus_button.svg";
 
 /**
  * QuestionBoxLayout:
@@ -79,6 +80,17 @@ QuestionBox.Tags = function QuestionBoxTags({ children, tags, ...restProps }) {
         {tags.map((tag, index) => {
           return tag && <CustomTag key={index}>{tag.tagname}</CustomTag>;
         })}
+      </div>
+    </div>
+  );
+};
+
+QuestionBox.NewQuestion = function QuestionBoxNewQuestion() {
+  return (
+    <div className="qb_addButtonContainer">
+      <div className="qb_addButtonTitle">Add new question</div>
+      <div className="qb_addButton">
+        <AddButton title="add new question" />
       </div>
     </div>
   );
