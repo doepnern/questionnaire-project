@@ -55,12 +55,17 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
             >
               <QuestionBox.Title>{index + 1}</QuestionBox.Title>
               <QuestionBox.Text>{question.titel}</QuestionBox.Text>
-              <QuestionBox.DeleteContainer
-                handleClick={() => deleteQuestionByid(question.fragenid)}
-              ></QuestionBox.DeleteContainer>
             </QuestionBox.Header>
             <QuestionBox.Body>
               <QuestionBox.Tags tags={question.tags}></QuestionBox.Tags>
+              <QuestionBox.DeleteContainer
+                handleClick={(e) => {
+                  e.stopPropagation();
+                  deleteQuestionByid(question.fragenid).then(() =>
+                    reloadQuestions()
+                  );
+                }}
+              />
             </QuestionBox.Body>
           </QuestionBox>
         );

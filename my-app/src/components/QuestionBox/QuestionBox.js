@@ -102,7 +102,7 @@ QuestionBox.DeleteContainer = function QuestionBoxDeleteContainer({
   ...restProps
 }) {
   return (
-    <div className="qb_deleteContainer">
+    <div className="qb_deleteContainer" onClick={handleClick}>
       <TrashButton></TrashButton>
     </div>
   );

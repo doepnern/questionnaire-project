@@ -30,6 +30,8 @@ services:
       - "/api/node_modules"
     networks:
       - backend
+    depends_on:
+      - "db_dev"
   frontend:
     stdin_open: true
     build:
@@ -46,6 +48,8 @@ services:
       - "/my-app/node_modules"
     networks:
       - backend
+    depends_on:
+      - "server_api"
 
 volumes:
   db-data:
