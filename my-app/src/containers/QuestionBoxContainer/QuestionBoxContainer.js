@@ -7,7 +7,11 @@ import {
   useQuestionContext,
   clearHistory,
 } from "context/QuestionContext";
-import { updateQuestions, createQuestionForUser } from "services/UserService";
+import {
+  updateQuestions,
+  createQuestionForUser,
+  deleteQuestionByid,
+} from "services/UserService";
 import _ from "lodash";
 
 export default function QuestionBoxContainer({ reloadQuestions }) {
@@ -51,6 +55,9 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
             >
               <QuestionBox.Title>{index + 1}</QuestionBox.Title>
               <QuestionBox.Text>{question.titel}</QuestionBox.Text>
+              <QuestionBox.DeleteContainer
+                handleClick={() => deleteQuestionByid(question.fragenid)}
+              ></QuestionBox.DeleteContainer>
             </QuestionBox.Header>
             <QuestionBox.Body>
               <QuestionBox.Tags tags={question.tags}></QuestionBox.Tags>

@@ -1,7 +1,8 @@
 import React from "react";
-import "./questionBox.css";
+import "./questionBox.scss";
 import { motion } from "framer-motion";
 import { ReactComponent as AddButton } from "svg/plus_button.svg";
+import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 
 /**
  * QuestionBoxLayout:
@@ -92,6 +93,17 @@ QuestionBox.NewQuestion = function QuestionBoxNewQuestion() {
       <div className="qb_addButton">
         <AddButton title="add new question" />
       </div>
+    </div>
+  );
+};
+
+QuestionBox.DeleteContainer = function QuestionBoxDeleteContainer({
+  handleClick,
+  ...restProps
+}) {
+  return (
+    <div className="qb_deleteContainer">
+      <TrashButton></TrashButton>
     </div>
   );
 };
