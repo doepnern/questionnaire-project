@@ -53,7 +53,7 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
             <QuestionBox.Header
               onClick={() => handleQuestionBoxHeaderClick(index)}
             >
-              <QuestionBox.Title>{index + 1}</QuestionBox.Title>
+              <QuestionBox.Title>{question.fragenid}</QuestionBox.Title>
               <QuestionBox.Text>{question.titel}</QuestionBox.Text>
             </QuestionBox.Header>
             <QuestionBox.Body>

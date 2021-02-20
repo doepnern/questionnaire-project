@@ -24,21 +24,23 @@ function getBenutzerFragenView(userId) {
 /* get all questions for a specified user, if no user is specified, return all users with their qustions */
 function getBenutzerFragenViewAggregate(userId) {
   let error = false;
-  const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin)) as tags FROM fragen 
-                          LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid) AS fragentagjoin 
+  const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags FROM fragen 
+                          LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid ORDER BY tags.tagid ASC) AS fragentagjoin 
                           ON fragen.fragenid = fragentagjoin.fragenid
-                          GROUP BY fragen.fragenid`;
-  const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen)) as fragenArray
-                            FROM benutzerfragen, (${fragenTagsJoin}) AS alleFragen
+                          GROUP BY fragen.fragenid
+                          `;
+  const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC) as fragenArray
+                            FROM benutzerfragen , (${fragenTagsJoin}) AS alleFragen
                             WHERE benutzerFragen.fragenId = alleFragen.fragenid
-                            GROUP BY benutzerFragen.benutzerId`;
+                            GROUP BY benutzerFragen.benutzerId
+                            `;
 
   const query = `(
                  SELECT currentUser.benutzerId, currentUser.benutzername, benutzerFragenJoin.fragenArray as fragen
                  FROM (${benutzerSelection()}) AS currentUser
                  LEFT JOIN (${benutzerFragenJoin}) as benutzerFragenJoin
                  ON currentUser.benutzerId = benutzerFragenJoin.benutzerId
-                 ORDER BY currentUser.benutzerId
+                 ORDER BY currentUser.benutzerId ASC
                  );`;
 
   if (error) return undefined;

@@ -19,7 +19,7 @@ function QuestionOverview() {
           ...fragenLoader,
           isLoading: false,
         });
-        dispatch(addQuestion(newQuestions));
+        dispatch(addQuestion(newQuestions != null ? newQuestions : []));
       } else {
         getAllUsersHere();
       }

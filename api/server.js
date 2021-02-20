@@ -46,6 +46,7 @@ app.get("/api/users", (req, res) => {
   try {
     getUserView().then((ret) => {
       console.log(ret);
+      console.log(ret[0].fragen[0].tags);
       res.json(ret);
     });
   } catch (err) {

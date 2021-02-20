@@ -11,9 +11,10 @@ $svg-onWhite: rgba(54, 106, 148, 0.651);
 }
 
 .qa_singleAnswerContainer {
+  width: 99%;
   overflow: hidden;
   height: 15%;
-  margin: 10px 0 0 0;
+  margin: 10px auto 0 auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
