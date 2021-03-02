@@ -225,3 +225,25 @@
     transform: scale(1.05);
   }
 }
+
+.qb_textEditing {
+  width: 90%;
+  height: 80%;
+  border: none;
+  font-size: 19.5px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 0 0 1px rgba(58, 161, 245, 0.205);
+
+  &:focus {
+    box-shadow: 0 0 0 1px rgba(58, 161, 245, 0.397);
+  }
+  outline: none;
+  border-radius: 5px;
+}
+
+textarea[type="text"] {
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+  box-sizing: border-box;
+}

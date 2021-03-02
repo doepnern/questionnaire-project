@@ -1,9 +1,17 @@
 import { QuestionBox, QuestionAnswer } from "components";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { QuestionDetailed } from "components";
 import { ReactComponent as UndoButton } from "svg/back_button.svg";
 import { ReactComponent as RedoButton } from "svg/redo_button.svg";
-import { useQuestionContext, undo, redo } from "context/QuestionContext.js";
+import {
+  useQuestionContext,
+  undo,
+  redo,
+  updateQuestion,
+  seenNew,
+} from "context/QuestionContext.js";
+import { ReactComponent as EditButtonMinimal } from "svg/edit_minimal.svg";
+import "./questionDetailed.scss";
 
 export default function QuestionDetailedContainer({
   children,
@@ -21,7 +29,6 @@ export default function QuestionDetailedContainer({
     >
       <QuestionDetailed.Layout
         question={{
-          num: questions.currentClicked + 1,
           ...questions.questionArray[questions.currentClicked],
         }}
         functionality={functionality}
@@ -32,7 +39,7 @@ export default function QuestionDetailedContainer({
   );
 }
 
-QuestionDetailed.Layout = function ({
+QuestionDetailed.Layout = function QuestionDetailedLayout({
   children,
   question,
   functionality,
@@ -40,7 +47,17 @@ QuestionDetailed.Layout = function ({
   questionContext,
   ...restProps
 }) {
-  console.log(question);
+  const [editing, setEditing] = useState("inactive");
+  const switchEditing = (x) => {
+    switch (x) {
+      case "inactive":
+        return "active";
+      case "active":
+        return "inactive";
+      default:
+        return x;
+    }
+  };
   return (
     <div className="qd_container">
       <div className="qd_headerContainer">
@@ -48,11 +65,34 @@ QuestionDetailed.Layout = function ({
           style={{ fontSize: "30px" }}
           classNameAdd={"-detailed"}
         >
-          {question.num}
+          {question.fragenid}
+          <div
+            className="editMinimal"
+            title={"edit title"}
+            onClick={() => setEditing(switchEditing(editing))}
+          >
+            <EditButtonMinimal />
+          </div>
         </QuestionBox.Title>
-        <QuestionBox.Text classNameAdd={"-detailed"}>
-          {question.titel}
-        </QuestionBox.Text>
+        {editing === "active" ? (
+          <QuestionBox.TextEditing
+            currentText={question.titel}
+            handleBlur={(e) => {
+              dispatch(
+                updateQuestion({
+                  fragenid: question.fragenid,
+                  titel: e.target.value,
+                })
+              );
+              setEditing("disabled");
+              setTimeout(() => setEditing("inactive"), 400);
+            }}
+          ></QuestionBox.TextEditing>
+        ) : (
+          <QuestionBox.Text classNameAdd={"-detailed"}>
+            {question.titel}
+          </QuestionBox.Text>
+        )}
       </div>
       <div className="qd_bodyContainer">
         {formatAnswers(question, functionality)}
@@ -85,12 +125,7 @@ QuestionDetailed.Layout = function ({
           q.antworten.map((answer, index) => {
             if (!(answer == null)) {
               //check if answer was just added, so it can be in edit mode by default
-              let justAdded = false;
-              if (answer instanceof Array) {
-                answer = answer[0];
-                justAdded = true;
-                q.antworten[index] = answer;
-              }
+              let justAdded = answer.new ? answer.new : false;
               return (
                 <QuestionDetailed.VariableSingleAnswer
                   wasJustAdded={justAdded}

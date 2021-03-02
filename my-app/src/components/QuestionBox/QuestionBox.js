@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./questionBox.scss";
 import { motion } from "framer-motion";
 import { ReactComponent as AddButton } from "svg/plus_button.svg";
@@ -52,7 +52,7 @@ QuestionBox.Title = function QuestionBoxTitle({
       className={[className, className + classNameAdd].join(" ")}
       {...restProps}
     >
-      <p {...restProps}>{children}</p>
+      {children}
     </div>
   );
 };
@@ -69,6 +69,43 @@ QuestionBox.Text = function QuestionBoxText({
       {...restProps}
     >
       <p>{children}</p>
+    </div>
+  );
+};
+
+QuestionBox.TextEditing = function QuestionBoxTextEditing({
+  children,
+  currentText = "",
+  handleBlur,
+  ...restProps
+}) {
+  const initialText = useRef(undefined);
+  const [inputText, setInput] = useState(currentText);
+  const inputRef = useRef(undefined);
+  //update the input field when the prop text changes
+  useEffect(() => {
+    initialText.current = currentText;
+    if (inputRef.current) {
+      inputRef.current.selectionStart = inputRef.current.value.length;
+      inputRef.current.selectionEnd = inputRef.current.value.length;
+      inputRef.current.focus();
+    }
+  }, []);
+  useEffect(() => {
+    if (initialText.current !== currentText) {
+      setInput(currentText);
+    }
+  }, [currentText]);
+  return (
+    <div className=" TextDiv TextDiv-detailed">
+      <textarea
+        ref={inputRef}
+        className={"qb_textEditing"}
+        value={inputText}
+        type="text"
+        onChange={(e) => setInput(e.target.value)}
+        onBlur={handleBlur}
+      />
     </div>
   );
 };

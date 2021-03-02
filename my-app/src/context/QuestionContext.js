@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import { useContext } from "react";
 import qh, { KeepHistory } from "helpers/QuestionHistory/questionHistory.js";
+import _ from "lodash";
 
 export const QuestionContext = React.createContext();
 
@@ -21,7 +22,17 @@ const DELETE_QUESTION = "deleteQuestion";
 const UNDO = "undo";
 const REDO = "redo";
 const CLEAR_HISTORY = "clearHistory";
+/**
+ *
+ * question = {
+ * fragenid: int
+ * titel: String
+ * antworten: [{}]
+ * tags: [{}]
+ * }
+ */
 
+//updates question with same id, overrides all defined values
 function updateQuestion(question) {
   return { type: UPDATE_QUESTION, question };
 }
@@ -49,19 +60,21 @@ function clearHistory() {
 //Reducer function
 function QuestionContextReducer(state, action) {
   console.log(state);
-  let oldQuestions = [...state.questions];
+  let oldQuestions = _.cloneDeep(state.questions);
   switch (action.type) {
     case UPDATE_QUESTION:
-      //find question qith right id
+      //find question with right id
       let oldQuestion = findById(oldQuestions, action.question, "fragenid");
-      console.log("new answers:");
-      console.log(action.question);
-      updateQuestionKeys(oldQuestion.o, action.question);
-      return handleAddingHistory({
-        ...state,
-        changed: !state.changed,
-        questions: oldQuestions,
-      });
+      const changed = updateQuestionKeys(oldQuestion.o, action.question);
+      if (changed) {
+        return handleAddingHistory({
+          ...state,
+          changed: !state.changed,
+          questions: oldQuestions,
+        });
+      } else {
+        return { ...state };
+      }
     case DELETE_QUESTION:
       removeIfIncluded(oldQuestions, action.question);
       return handleAddingHistory({
@@ -179,19 +192,44 @@ function findById(list, obj, idName) {
 }
 
 function updateQuestionKeys(target, source) {
+  console.log("comparing objects: ");
+  console.log(target);
+  console.log(source);
+  console.log("equal: " + _.isEqual(target, source));
+  let changed = false;
   const targetKeys = Object.keys(target);
   for (let key of Object.keys(source)) {
     // if target has the same key, add its value
     if (targetKeys.includes(key)) {
-      target[key] = source[key];
+      //if they have the same value, dont do anything and only set changed to true if at leas one value was changed
+      if (!_.isEqual(target[key], source[key])) {
+        target[key] = source[key];
+        changed = true;
+      }
     }
   }
+  if (!changed) {
+    console.log("nothing changed");
+  }
+  return changed;
 }
 
 //adds the new state to history
 function handleAddingHistory(s) {
   const oldHistory = new KeepHistory(s.history);
-  const newQuestions = s.questions;
+  const newQuestions = _.cloneDeep(s.questions);
+  setAllToOld(newQuestions);
   oldHistory.addToHistory({ q: newQuestions });
   return { ...s, history: oldHistory };
+}
+
+//sets the new key of all answers to old so they are not displayed in editing
+function setAllToOld(questions) {
+  for (let q of questions) {
+    for (let a of q.antworten) {
+      if (a?.new) {
+        a.new = false;
+      }
+    }
+  }
 }

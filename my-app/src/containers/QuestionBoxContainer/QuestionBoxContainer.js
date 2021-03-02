@@ -13,6 +13,7 @@ import {
   deleteQuestionByid,
 } from "services/UserService";
 import _ from "lodash";
+import { AnimatePresence } from "framer-motion";
 
 export default function QuestionBoxContainer({ reloadQuestions }) {
   const [showDetails, setShown] = useState({
@@ -81,7 +82,7 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
   }
 
   function removeAnswer(question, answerIndex, dispatchUpdate) {
-    let newArr = question.antworten;
+    let newArr = _.cloneDeep(question.antworten);
     newArr.splice(answerIndex, 1, null);
     let cpy = _.cloneDeep(question);
     cpy.antworten = newArr;
@@ -89,15 +90,15 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
   }
 
   function addAnswer(question, newAnswer, dispatchUpdate) {
-    let newArr = question.antworten;
+    let newArr = _.cloneDeep(question.antworten);
     if (newArr == null) {
       newArr = [];
     }
-    let myNewAnswer = { text: "default", correct: false };
+    let myNewAnswer = { text: "default", correct: false, new: true };
     Object.keys(newAnswer).forEach(
       (key) => (myNewAnswer[key] = newAnswer[key])
     );
-    newArr.push([myNewAnswer, "added"]);
+    newArr.push(myNewAnswer);
     let cpy = _.cloneDeep(question);
     cpy.antworten = newArr;
     dispatchUpdate(cpy);

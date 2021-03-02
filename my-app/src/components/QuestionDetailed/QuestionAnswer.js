@@ -50,9 +50,15 @@ QuestionAnswer.EditAnswerTextContainer = function AnswerTextContainer({
 }) {
   const initialAnswer = useRef(undefined);
   const [inputText, setInput] = useState(answerText);
+  const inputRef = useRef(undefined);
   //update the input field when the prop text changes
   useEffect(() => {
     initialAnswer.current = answerText;
+    if (inputRef.current) {
+      inputRef.current.selectionStart = inputRef.current.value.length;
+      inputRef.current.selectionEnd = inputRef.current.value.length;
+      inputRef.current.focus();
+    }
   }, []);
   useEffect(() => {
     if (initialAnswer.current !== answerText) {
@@ -64,6 +70,7 @@ QuestionAnswer.EditAnswerTextContainer = function AnswerTextContainer({
       <input
         className="editAnswerinput"
         type="text"
+        ref={inputRef}
         value={inputText}
         onChange={(e) => {
           setInput(e.target.value);
