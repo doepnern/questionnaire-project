@@ -14,7 +14,17 @@ const _ = require("lodash");
 const typesQuestion = {
   fragenid: (x) => isInt(x),
   titel: (x) => typeof x === "string",
-  tags: (x) => x instanceof Array && x.every((y) => typeof y === "string"),
+  tags: (x) =>
+    x instanceof Array &&
+    x.every(
+      (y) =>
+        //TODO: remove null values
+        y === null ||
+        (typeof y === "object" &&
+          isInt(y.fragenid) &&
+          isInt(y.tagid) &&
+          typeof y.tagname === "string")
+    ),
   antworten: (x) =>
     x instanceof Array &&
     x.every(
@@ -103,7 +113,10 @@ function keyTypesAreValid(obj, type) {
       return {
         res: myRes && agg.res,
         failures: !myRes
-          ? [...agg.failures, `${key}, value: ${JSON.stringify(obj[key])}`]
+          ? [
+              ...agg.failures,
+              `${key}, value: ${JSON.stringify(obj[key], null, 4)}`,
+            ]
           : agg.failures,
       };
     },

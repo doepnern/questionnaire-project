@@ -1,5 +1,5 @@
 import { QuestionBox, QuestionAnswer } from "components";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { QuestionDetailed } from "components";
 import { ReactComponent as UndoButton } from "svg/back_button.svg";
 import { ReactComponent as RedoButton } from "svg/redo_button.svg";
@@ -8,17 +8,22 @@ import {
   undo,
   redo,
   updateQuestion,
-  seenNew,
 } from "context/QuestionContext.js";
 import { ReactComponent as EditButtonMinimal } from "svg/edit_minimal.svg";
 import "./questionDetailed.scss";
+import {
+  removeAnswer,
+  updateQuestionStorage,
+  addAnswer,
+  updateAnswer,
+} from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage";
 
 export default function QuestionDetailedContainer({
   children,
   isShown = true,
   handleDetailViewClose,
-  questions,
-  functionality,
+  currentQuestionIndex,
+  dispatchQuestionUpdate,
   ...restProps
 }) {
   const { questionContext, dispatch } = useQuestionContext();
@@ -28,10 +33,7 @@ export default function QuestionDetailedContainer({
       toggleShown={handleDetailViewClose}
     >
       <QuestionDetailed.Layout
-        question={{
-          ...questions.questionArray[questions.currentClicked],
-        }}
-        functionality={functionality}
+        question={questionContext.questions[currentQuestionIndex]}
         dispatch={dispatch}
         questionContext={questionContext}
       ></QuestionDetailed.Layout>
@@ -42,7 +44,6 @@ export default function QuestionDetailedContainer({
 QuestionDetailed.Layout = function QuestionDetailedLayout({
   children,
   question,
-  functionality,
   dispatch,
   questionContext,
   ...restProps
@@ -79,10 +80,12 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
             currentText={question.titel}
             handleBlur={(e) => {
               dispatch(
-                updateQuestion({
-                  fragenid: question.fragenid,
-                  titel: e.target.value,
-                })
+                updateQuestion(
+                  question.fragenid,
+                  updateQuestionStorage({
+                    titel: e.target.value,
+                  })
+                )
               );
               setEditing("disabled");
               setTimeout(() => setEditing("inactive"), 400);
@@ -95,11 +98,11 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
         )}
       </div>
       <div className="qd_bodyContainer">
-        {formatAnswers(question, functionality)}
+        {formatAnswers(question)}
         <div className="undoRedoContainer">
           <UndoButton
             className={
-              questionContext.history.canTravelBackward()
+              questionContext.QuestionStorage.canTravelBackward()
                 ? "undoRedoActive"
                 : "undoRedoInactive"
             }
@@ -107,7 +110,7 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
           ></UndoButton>
           <RedoButton
             className={
-              questionContext.history.canTravelForward()
+              questionContext.QuestionStorage.canTravelForward()
                 ? "undoRedoActive"
                 : "undoRedoInactive"
             }
@@ -118,7 +121,7 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
     </div>
   );
   //converts answers from stringified JSON array to JSX content
-  function formatAnswers(q, functionality) {
+  function formatAnswers(q) {
     return (
       <QuestionAnswer>
         {!(q.antworten == null) &&
@@ -131,21 +134,11 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
                   wasJustAdded={justAdded}
                   key={index}
                   answer={answer}
-                  handleClick={(e) => {
-                    e.stopPropagation();
-                    functionality.removeAnswer(
-                      q,
-                      index,
-                      functionality.dispatchUpdate
-                    );
+                  handleClick={() => {
+                    dispatch(updateQuestion(q.fragenid, removeAnswer(index)));
                   }}
                   handleUpdateAnswer={(e) =>
-                    functionality.updateAnswer(
-                      q,
-                      index,
-                      e,
-                      functionality.dispatchUpdate
-                    )
+                    dispatch(updateQuestion(q.fragenid, updateAnswer(index, e)))
                   }
                 />
               );
@@ -154,12 +147,13 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
         <QuestionAnswer.AddAnswerContainer
           handleClick={(e) => {
             e.stopPropagation();
-            console.log(q);
+            dispatch(updateQuestion(q.fragenid, addAnswer()));
+            /*
             functionality.addAnswer(
               q,
               { text: "my new answer" },
               functionality.dispatchUpdate
-            );
+            );*/
           }}
         />
       </QuestionAnswer>
