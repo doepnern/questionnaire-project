@@ -79,6 +79,16 @@ function deleteAnswer(question, index) {
   return { obj: { ...q, antworten: newA }, changes: 1 };
 }
 
+//updates given keys of question, only returns new question if question is valid format afterwards
+function updateQuestion(question, update) {
+  const newQ = updateObjectKeysWithTypeChecking(
+    question,
+    update,
+    typesQuestion
+  );
+  return newQ;
+}
+
 /**
  *
  * HElPER FUNCTIONS
@@ -93,7 +103,7 @@ function keyTypesAreValid(obj, type) {
       return {
         res: myRes && agg.res,
         failures: !myRes
-          ? [...agg.failures, `${key}, value: ${obj[key]}`]
+          ? [...agg.failures, `${key}, value: ${JSON.stringify(obj[key])}`]
           : agg.failures,
       };
     },
@@ -178,5 +188,8 @@ module.exports = {
   addAnswer,
   updateAnswer,
   deleteAnswer,
-  typesQuestion,
+  updateQuestion: updateQuestion,
+  createAnswer: createAnswer,
+  typesQuestion: typesQuestion,
+  typesAnswer: typesAnswer,
 };

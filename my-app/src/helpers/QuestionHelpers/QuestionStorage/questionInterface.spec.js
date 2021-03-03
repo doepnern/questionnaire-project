@@ -24,9 +24,7 @@ describe("question Interface test", () => {
       titel: "top titel",
       tags: ["hi", "jo"],
     };
-    expect(() => qi.questionFromObject(obj1)).toThrow(
-      "not a valid fragenid, make sure object for questionFromObject has key: fragenid with valid Integer value"
-    );
+    expect(() => qi.questionFromObject(obj1)).toThrow();
     expect(
       qi.questionFromObject({ fragenid: 10, titel: "", tags: ["foo", "bar"] })
         .obj
@@ -40,9 +38,7 @@ describe("question Interface test", () => {
   it("format testting", () => {
     expect(() =>
       qi.questionFromObject({ fragenid: 10, titel: "", tags: "tomomomom" })
-    ).toThrow(
-      "cant update your object, updating object doesnt have right types for: tags, value: tomomomom"
-    );
+    ).toThrow();
     expect(
       qi.questionFromObject({ fragenid: 10, tags: ["tim", "tam"] }).obj
     ).toEqual({
@@ -58,25 +54,19 @@ describe("question Interface test", () => {
         antworten: "kll",
         tags: 12,
       })
-    ).toThrow(
-      "cant update your object, updating object doesnt have right types for: tags, value: 12,antworten"
-    );
+    ).toThrow();
     expect(() =>
       qi.questionFromObject({
         fragenid: 10,
         antworten: ["hi", "ho"],
       })
-    ).toThrow(
-      "cant update your object, updating object doesnt have right types for: antworten, value: hi,ho"
-    );
+    ).toThrow();
     expect(() =>
       qi.questionFromObject({
         fragenid: 10,
         antworten: [{}],
       })
-    ).toThrow(
-      "cant update your object, updating object doesnt have right types for: antworten, value: "
-    );
+    ).toThrow();
     expect(() =>
       qi.questionFromObject({
         fragenid: 10,
@@ -85,9 +75,7 @@ describe("question Interface test", () => {
           { text: "wew", correct: 9 },
         ],
       })
-    ).toThrow(
-      "cant update your object, updating object doesnt have right types for: antworten"
-    );
+    ).toThrow();
     expect(
       qi.questionFromObject({
         fragenid: 10,
@@ -146,7 +134,6 @@ describe("question Interface test", () => {
       tags: ["hi", "jo"],
     };
     let q1 = qi.questionFromObject(obj1).obj;
-    console.log(q1);
     let q2 = qi.addAnswer(q1).obj;
     expect(q2).toEqual({
       ...obj1,
