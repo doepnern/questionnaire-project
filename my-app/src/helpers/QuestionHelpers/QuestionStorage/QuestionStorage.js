@@ -1,6 +1,6 @@
 const qh = require("./../QuestionHistory/questionHistory");
-const { isInt } = require("./questionInterface");
 const qi = require("./questionInterface");
+const _ = require("lodash");
 /**
  * Handles storing and updating of questions
  *
@@ -19,9 +19,15 @@ const qi = require("./questionInterface");
  *  +redo()
  */
 
-function QuestionStorage() {
-  this.questions = [];
-  this.history = new qh.KeepHistory();
+//creates new Question Storage, if an old storage is given, creates a new Storage with a deef copy of the old storage
+function QuestionStorage(oldStorage) {
+  if (oldStorage == null) {
+    this.questions = [];
+    this.history = new qh.KeepHistory();
+  } else {
+    this.questions = _.cloneDeep(oldStorage.questions);
+    this.history = new qh.KeepHistory(oldStorage.history);
+  }
 }
 
 function addQuestion(question) {

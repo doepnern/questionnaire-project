@@ -1,6 +1,8 @@
 import React, { useReducer } from "react";
 import { useContext } from "react";
-import qh, { KeepHistory } from "helpers/QuestionHistory/questionHistory.js";
+import qh, {
+  KeepHistory,
+} from "helpers/QuestionHelpers/QuestionHistory/questionHistory";
 import _ from "lodash";
 
 export const QuestionContext = React.createContext();
