@@ -12,6 +12,7 @@ function QuestionOverview() {
   const { dispatch } = useQuestionContext();
   function getAllUsersHere() {
     getAllUsers().then((users) => {
+      console.log("loaded");
       console.log(users);
       if (users !== undefined && !Object.keys(users).includes("error")) {
         const newQuestions = users[0].fragen;

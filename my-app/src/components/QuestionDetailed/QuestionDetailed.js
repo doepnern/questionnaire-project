@@ -136,26 +136,37 @@ QuestionDetailed.VariableSingleAnswer = function QuestiondetailedSingleVariableA
     active: wasJustAdded ? true : false,
   });
 
-  const style = {
-    animation: `${animation.active ? animation.animation : ""} 0.2s`,
-  };
+  function handleClickTrash(e) {
+    e.stopPropagation();
+    playAnimation((s) => {
+      return {
+        ...s,
+        animation: "collapse",
+        active: true,
+      };
+    });
+    setTimeout(() => {
+      playAnimation((s) => {
+        return {
+          ...s,
+          animation: "",
+          active: false,
+        };
+      });
+      handleClick();
+    }, 250);
+  }
+
   return (
     <>
       {editing ? (
         <QuestionDetailed.SingleAnswerEditing
-          style={style}
-          answer={answer}
-          handleClickTrash={(e) => {
-            e.stopPropagation();
-            playAnimation((s) => {
-              return {
-                ...s,
-                animation: "collapse",
-                active: true,
-              };
-            });
-            setTimeout(() => handleClick(e), 195);
+          style={{
+            animationName: `${animation.active ? animation.animation : ""}`,
+            animationDuration: "0.27s",
           }}
+          answer={answer}
+          handleClickTrash={handleClickTrash}
           handleUpdateAnswer={handleUpdateAnswer}
           handleClickEditButton={(e) => {
             e.stopPropagation();
@@ -168,20 +179,12 @@ QuestionDetailed.VariableSingleAnswer = function QuestiondetailedSingleVariableA
       ) : (
         <QuestionDetailed.SingleAnswerDefault
           handleUpdateAnswer={handleUpdateAnswer}
-          style={style}
-          answer={answer}
-          handleClickTrash={(e) => {
-            e.stopPropagation();
-            playAnimation((s) => {
-              return {
-                ...s,
-                animation: "collapse",
-                active: true,
-              };
-            });
-
-            setTimeout(() => handleClick(e), 195);
+          style={{
+            animationName: `${animation.active ? animation.animation : ""}`,
+            animationDuration: "0.27s",
           }}
+          answer={answer}
+          handleClickTrash={handleClickTrash}
           handleClickEditButton={(e) => {
             e.stopPropagation();
             setEditing((s) => !s);

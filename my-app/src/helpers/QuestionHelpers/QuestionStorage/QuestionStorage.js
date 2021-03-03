@@ -67,6 +67,12 @@ function updateQuestion(fragenid, action) {
     this.history.addToHistory(this.getQuestions());
   //perform Action on question
   switch (action.type) {
+    case UPDATE_QUESTION:
+      let newQ1 = qi.updateQuestion(q.q, action.updatingQuestion);
+      this.replaceQuestion(fragenid, newQ1.obj);
+      //only add to history if something changed
+      if (newQ1.changes > 0) this.history.addToHistory(this.getQuestions());
+      break;
     case ADD_ANSWER:
       this.replaceQuestion(fragenid, qi.addAnswer(q.q).obj);
       this.history.addToHistory(this.getQuestions());
@@ -108,6 +114,7 @@ function findQuestionById(fragenid) {
 const ADD_ANSWER = "addAnswer";
 const REMOVE_ANSWER = "removeAnswer";
 const UPDATE_ANSWER = "updateAnswer";
+const UPDATE_QUESTION = "updateQuestion";
 
 function addAnswer() {
   return { type: ADD_ANSWER };
@@ -119,6 +126,9 @@ function removeAnswer(index) {
 
 function updateAnswer(index, answer) {
   return { type: UPDATE_ANSWER, value: { index: index, answer: answer } };
+}
+function updateQuestionStorage(updatingQuestion) {
+  return { type: UPDATE_QUESTION, updatingQuestion: updatingQuestion };
 }
 
 QuestionStorage.prototype.addQuestion = addQuestion;
@@ -136,11 +146,14 @@ QuestionStorage.prototype.travelForward = function () {
   if (historicQuestions == null) throw "cant go forward to this point in time";
   this.questions = historicQuestions;
 };
-QuestionStorage.canTravelBackward = function () {
+QuestionStorage.prototype.canTravelBackward = function () {
   return this.history.canTravelBackward();
 };
-QuestionStorage.canTravelForward = function () {
+QuestionStorage.prototype.canTravelForward = function () {
   return this.history.canTravelForward();
+};
+QuestionStorage.prototype.clearHistory = function () {
+  this.history = new qh.KeepHistory();
 };
 
 module.exports = {
@@ -148,4 +161,5 @@ module.exports = {
   addAnswer: addAnswer,
   removeAnswer: removeAnswer,
   updateAnswer: updateAnswer,
+  updateQuestionStorage: updateQuestionStorage,
 };

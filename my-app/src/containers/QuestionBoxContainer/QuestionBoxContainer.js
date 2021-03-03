@@ -13,7 +13,6 @@ import {
   deleteQuestionByid,
 } from "services/UserService";
 import _ from "lodash";
-import { AnimatePresence } from "framer-motion";
 
 export default function QuestionBoxContainer({ reloadQuestions }) {
   const [showDetails, setShown] = useState({
@@ -32,16 +31,7 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
           })
         }
         handleDetailViewClose={() => handleDetailViewClose()}
-        questions={{
-          questionArray: questionContext.questions,
-          currentClicked: showDetails.currentQuestion,
-        }}
-        functionality={{
-          removeAnswer: removeAnswer,
-          addAnswer: addAnswer,
-          updateAnswer: updateAnswer,
-          dispatchUpdate: (q) => dispatch(updateQuestion(q)),
-        }}
+        currentQuestionIndex={showDetails.currentQuestion}
       ></QuestionDetailedContainer>
       <QuestionBox
         onClick={() => createQuestionForUser(1).then(() => reloadQuestions())}
@@ -79,46 +69,6 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
     setShown((s) => {
       return { active: !s.active, currentQuestion: questionIndex };
     });
-  }
-
-  function removeAnswer(question, answerIndex, dispatchUpdate) {
-    let newArr = _.cloneDeep(question.antworten);
-    newArr.splice(answerIndex, 1, null);
-    let cpy = _.cloneDeep(question);
-    cpy.antworten = newArr;
-    dispatchUpdate(cpy);
-  }
-
-  function addAnswer(question, newAnswer, dispatchUpdate) {
-    let newArr = _.cloneDeep(question.antworten);
-    if (newArr == null) {
-      newArr = [];
-    }
-    let myNewAnswer = { text: "default", correct: false, new: true };
-    Object.keys(newAnswer).forEach(
-      (key) => (myNewAnswer[key] = newAnswer[key])
-    );
-    newArr.push(myNewAnswer);
-    let cpy = _.cloneDeep(question);
-    cpy.antworten = newArr;
-    dispatchUpdate(cpy);
-  }
-
-  function updateAnswer(question, index, newAnswer, dispatchUpdate) {
-    let newArr = _.cloneDeep(question.antworten);
-    if (newArr == null) {
-      newArr = [];
-    }
-    if (newAnswer !== null) {
-      if (typeof newArr[index] !== undefined) {
-        Object.keys(newArr[index]).forEach((key) => {
-          if (newAnswer[key] != null) newArr[index][key] = newAnswer[key];
-        });
-      }
-    }
-    let cpy = _.cloneDeep(question);
-    cpy.antworten = newArr;
-    dispatchUpdate(cpy);
   }
 
   function handleDetailViewClose() {

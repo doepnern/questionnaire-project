@@ -3,7 +3,6 @@ import {
   useQuestionContext,
   addQuestion,
   updateQuestion,
-  deleteQuestion,
 } from "./QuestionContext";
 import { myDebouncer } from "helpers/debouncer";
 import { myFunctionTimer } from "helpers/functionTimer";
@@ -11,7 +10,7 @@ import { myFunctionTimer } from "helpers/functionTimer";
 export default function TestQuestionContext({}) {
   const { questionContext, dispatch } = useQuestionContext();
   const testRef = useRef(
-    new tests(getExamples(), [addQuestion, updateQuestion, deleteQuestion])
+    new tests(getExamples(), [addQuestion, updateQuestion])
   );
   useEffect(() => {
     console.log("Test for QuestionContext enabled:");
