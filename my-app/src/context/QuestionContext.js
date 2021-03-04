@@ -18,6 +18,7 @@ const initialState = {
   },
   changed: false,
   QuestionStorage: new qs.QuestionStorage(),
+  newAnswer: false,
 };
 
 //actions
@@ -61,6 +62,7 @@ function clearHistory() {
 //Reducer function
 function QuestionContextReducer(state, action) {
   let newQs = new qs.QuestionStorage(state.QuestionStorage);
+  let newAnswer = false;
   switch (action.type) {
     case UPDATE_QUESTION:
       try {
@@ -68,6 +70,9 @@ function QuestionContextReducer(state, action) {
       } catch (e) {
         console.log("error: " + e);
         console.log("error: " + e.stack);
+      }
+      if (action.action.type === "addAnswer") {
+        newAnswer = true;
       }
       break;
     case "replaceArray":
@@ -114,6 +119,7 @@ function QuestionContextReducer(state, action) {
     questions: newQs.getQuestions(),
     changed: !state.changed,
     QuestionStorage: newQs,
+    newAnswer: newAnswer,
   };
 }
 
