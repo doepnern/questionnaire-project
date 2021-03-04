@@ -98,7 +98,7 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
         )}
       </div>
       <div className="qd_bodyContainer">
-        {formatAnswers(question)}
+        {formatAnswers(question, questionContext)}
         <div className="undoRedoContainer">
           <UndoButton
             className={
@@ -121,14 +121,15 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
     </div>
   );
   //converts answers from stringified JSON array to JSX content
-  function formatAnswers(q) {
+  function formatAnswers(q, questionContext) {
     return (
       <QuestionAnswer>
         {!(q.antworten == null) &&
           q.antworten.map((answer, index) => {
             if (!(answer == null)) {
               //check if answer was just added, so it can be in edit mode by default
-              let justAdded = answer.new ? answer.new : false;
+              let justAdded =
+                questionContext.newAnswer && index === q.antworten.length - 1;
               return (
                 <QuestionDetailed.VariableSingleAnswer
                   wasJustAdded={justAdded}
