@@ -5,6 +5,8 @@ import { QuestionBoxContainer } from "containers";
 import { motion } from "framer-motion";
 import TestQuestionContext from "context/Test.QuestionContext";
 import { useQuestionContext, addQuestion } from "context/QuestionContext";
+import NavBar from "components/NavBar/NavBar";
+
 function QuestionOverview() {
   const [fragenLoader, setFragenLoader] = useState({
     isLoading: true,
@@ -30,6 +32,12 @@ function QuestionOverview() {
 
   return (
     <div className="questionOverview">
+      <NavBar>
+        <NavBar.Header shortText={"MyQ"}>MyQuestionnaire</NavBar.Header>
+        <NavBar.Item shortText={"Edit"}>Edit questions</NavBar.Item>
+        <NavBar.Item shortText={"Quiz"}>Questionnaire</NavBar.Item>
+        <NavBar.SearchBar />
+      </NavBar>
       {!fragenLoader.isLoading ? (
         <QuestionBoxContainer
           reloadQuestions={getAllUsersHere}

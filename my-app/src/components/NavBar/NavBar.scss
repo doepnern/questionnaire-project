@@ -1,0 +1,123 @@
+.NavBarContainer {
+  height: 60px;
+  width: 97%;
+  margin: 0 auto;
+  margin-top: 5px;
+  margin-bottom: -3px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #445e90;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.38);
+  color: rgb(240, 243, 255);
+}
+
+.NavHeader {
+  width: 30%;
+  height: 100%;
+  background-color: #314978;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+
+  span {
+    font-size: 30px;
+    font-weight: 300;
+    color: rgb(221, 225, 255);
+  }
+}
+
+.NavItem {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 13px;
+  span {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgb(221, 225, 255);
+  }
+  &:hover {
+    background-color: #354e7e;
+    cursor: pointer;
+    span {
+      color: rgb(233, 244, 255);
+    }
+  }
+}
+
+.NavSearchBar {
+  width: 220px;
+  height: 100%;
+  margin-left: auto;
+  margin-right: 8%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  border: none;
+  border-radius: 50px;
+  background-color: #374c74;
+  height: 60%;
+
+  .inputIconContainer {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    margin-top: 2px;
+    svg {
+      width: 60%;
+      height: 60%;
+      * {
+        fill: rgb(221, 225, 255);
+      }
+    }
+  }
+  .inputContainer {
+    width: 85%;
+    font-family: inherit;
+    height: 100%;
+    font-size: 14px;
+  }
+  input {
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding: none;
+  }
+}
+
+.NavShort {
+  display: none;
+}
+
+.NavFull {
+  display: block;
+}
+
+@media only screen and (max-width: 800px) {
+  .NavBarContainer {
+    height: 45px;
+  }
+  .NavFull {
+    display: none;
+  }
+  .NavShort {
+    display: block !important;
+  }
+}
