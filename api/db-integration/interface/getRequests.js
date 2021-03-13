@@ -1,22 +1,28 @@
 const { getBenutzerFragenViewAggregate } = require("../views/benutzerFragen");
 const { performQuery } = require("../db-actions");
 
-async function performGetBenutzerfragenView(userId) {
-  let res = await performQuery(getBenutzerFragenViewAggregate(userId));
+function performGetBenutzerfragenView(userId) {
+  return performQueryWithHandling(
+    getBenutzerFragenViewAggregate(userId, "frak")
+  );
+}
+
+async function performQueryWithHandling(query) {
+  let res = await performQuery(query);
   if (res !== undefined && !res.error) {
     if (res.rowCount > 0) {
-      //let fRes = formatResult(res.rows);
       res.rows.map((row) =>
         row.fragen ? row.fragen.map((q) => stringToArrayHandler(q)) : null
       );
 
       return res.rows;
     } else {
-      let err = "BenutzerFrageView for user is empty, userid : " + userId;
+      let err =
+        "Result for query is empty, userid : " + userId + "query: " + query;
       return { error: err, message: res };
     }
   } else {
-    let err = "couldnt get BenutzerFrageView for user : " + userId;
+    let err = "Error for query, userid : " + userId + "query: " + query;
     return { error: err, message: res };
   }
 }

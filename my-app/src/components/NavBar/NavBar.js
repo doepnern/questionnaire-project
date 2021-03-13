@@ -4,9 +4,11 @@ import { ReactComponent as SearchIcon } from "svg/search_icon.svg";
 
 export default function NavBar({ children, ...restProps }) {
   return (
-    <div className="NavBarContainer" {...restProps}>
-      {children}
-    </div>
+    <>
+      <div className="NavBarContainer" {...restProps}>
+        {children}
+      </div>
+    </>
   );
 }
 

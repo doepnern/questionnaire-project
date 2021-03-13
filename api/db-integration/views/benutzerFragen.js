@@ -22,17 +22,24 @@ function getBenutzerFragenView(userId) {
 }
 
 /* get all questions for a specified user, if no user is specified, return all users with their qustions */
-function getBenutzerFragenViewAggregate(userId) {
+function getBenutzerFragenViewAggregate(userId, searchString) {
   let error = false;
-  const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags FROM fragen 
+  const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags,  concat_ws(', ', fragen.titel,fragen.antworten,array_agg(fragentagjoin.tagname ORDER BY tagid)) as search
+                          FROM fragen 
                           LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid ORDER BY tags.tagid ASC) AS fragentagjoin 
                           ON fragen.fragenid = fragentagjoin.fragenid
                           GROUP BY fragen.fragenid
+
                           `;
   const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC) as fragenArray
                             FROM benutzerfragen , (${fragenTagsJoin}) AS alleFragen
-                            WHERE benutzerFragen.fragenId = alleFragen.fragenid
+                            WHERE benutzerFragen.fragenId = alleFragen.fragenid  ${
+                              searchString
+                                ? `AND alleFragen.search ILIKE '%${searchString}%'`
+                                : ""
+                            }
                             GROUP BY benutzerFragen.benutzerId
+                            
                             `;
 
   const query = `(
@@ -42,6 +49,7 @@ function getBenutzerFragenViewAggregate(userId) {
                  ON currentUser.benutzerId = benutzerFragenJoin.benutzerId
                  ORDER BY currentUser.benutzerId ASC
                  );`;
+  //array_to_string(benutzerFragenJoin.fragenArray, ' , ') as SearchString
 
   if (error) return undefined;
   return query;

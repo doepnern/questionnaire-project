@@ -1,6 +1,7 @@
-const { exception } = require("console");
 const express = require("express");
 const path = require("path");
+const routes = require("./controller/routeFunctions");
+
 const app = express(),
   bodyParser = require("body-parser");
 port = 3080;
@@ -18,17 +19,13 @@ if (process.env.NODE_ENV !== "production") {
 }
 //initialize db
 initDB();
-// place holder for the data
-const users = [];
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../my-app/build")));
 
 app.get("/api/users/:id", (req, res) => {
-  console.log("api/users called with id : " + req.params.id + "!");
-  console.log("returning:");
   try {
-    getUserView(req.params.id).then((ret) => {
+    routes.getUserQuestions(req.params.id).then((ret) => {
       console.log(ret);
       res.json(ret);
     });
@@ -44,9 +41,8 @@ app.get("/api/users", (req, res) => {
   console.log("api/users called without id");
   console.log("returning:");
   try {
-    getUserView().then((ret) => {
+    routes.getUserQuestions(req.params.id).then((ret) => {
       console.log(ret);
-      console.log(ret[0].fragen[0].tags);
       res.json(ret);
     });
   } catch (err) {
