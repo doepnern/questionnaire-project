@@ -1,4 +1,4 @@
-const { performQuery } = require("../db-actions");
+const { performQuery } = require("../service/db-actions");
 
 //adds question for specified user
 async function createNewQuestion(userId) {
@@ -6,7 +6,9 @@ async function createNewQuestion(userId) {
   if (!isNaN(parseInt(userId))) {
     let res = await performQuery(...addQuestionSQL(userId));
     if (!res.error)
-      performQuery(...addQuestionToUser(userId, res.rows[0].fragenid));
+      res = await performQuery(
+        ...addQuestionToUser(userId, res.rows[0].fragenid)
+      );
     return res;
   } else {
     return {

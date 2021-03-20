@@ -1,0 +1,49 @@
+function quizzesFromBenutzer(benutzerId) {
+  query = ` 
+  SELECT currBenutzer.benutzerid, currBenutzer.benutzername, json_agg(json_build_object('quizid',fullQuiz.quizid,'beendet',fullQuiz.beendet,'fragen',fullQuiz.fragen_arr)) FILTER (WHERE fullQuiz.quizId IS NOT NULL) as quizzes
+  FROM (SELECT * FROM benutzer ${
+    benutzerId ? "WHERE benutzer.benutzerid = $1 " : ""
+  }) as currBenutzer
+  LEFT JOIN benutzerQuiz ON currBenutzer.benutzerId = benutzerQuiz.benutzerid 
+  LEFT JOIN (${
+    quizWithQuestions()[0]
+  }) as fullQuiz ON fullQuiz.quizid = benutzerQuiz.quizId
+  GROUP BY currBenutzer.benutzerid, currBenutzer.benutzername
+`;
+  params = benutzerId ? [benutzerId] : [];
+  return [query, params];
+}
+
+function questionsWithTags() {
+  query = `
+  SELECT fragen.fragenid, fragen.titel,fragen.antworten, json_agg(
+    json_build_object('tagid',tags.tagid,'tagName', tags.tagName) ORDER BY tags.tagid ASC) 
+    FILTER (WHERE tags.tagid IS NOT null) as tag_arr
+  FROM fragen
+  LEFT JOIN fragenTags ON fragen.fragenid = fragenTags.fragenid
+  LEFT JOIN Tags ON fragenTags.tagid = Tags.tagid
+  GROUP BY fragen.fragenid
+  `;
+  return [query, []];
+}
+
+function quizWithQuestions() {
+  query = `
+  SELECT quiz.quizid, quiz.beendet, json_agg(
+    json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tag_arr) ORDER BY questionsWithTags.fragenid ASC) 
+    FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen_arr
+  FROM quiz
+  LEFT JOIN quizFragen ON quiz.quizid = quizFragen.quizid
+  LEFT JOIN (${
+    questionsWithTags()[0]
+  }) as questionsWithTags ON quizFragen.fragenid = questionsWithTags.fragenid
+  GROUP BY quiz.quizid
+  `;
+  return [query, []];
+}
+
+module.exports = {
+  quizzesFromBenutzer,
+  questionsWithTags,
+  quizWithQuestions,
+};

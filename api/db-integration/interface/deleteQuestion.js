@@ -1,4 +1,4 @@
-const { performQuery } = require("../db-actions");
+const { performQuery } = require("../service/db-actions");
 
 //adds question for specified user
 async function deleteQuestionById(questionId) {

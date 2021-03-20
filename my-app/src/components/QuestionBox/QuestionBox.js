@@ -3,6 +3,7 @@ import "./questionBox.scss";
 import { motion } from "framer-motion";
 import { ReactComponent as AddButton } from "svg/plus_button.svg";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";
+import { CustomTag } from "./CustomTag";
 
 /**
  * QuestionBoxLayout:
@@ -110,13 +111,29 @@ QuestionBox.TextEditing = function QuestionBoxTextEditing({
   );
 };
 
-QuestionBox.Tags = function QuestionBoxTags({ children, tags, ...restProps }) {
+QuestionBox.Tags = function QuestionBoxTags({
+  handleRemoveTagClicked,
+  handleAddingTag,
+  children,
+  tags,
+  ...restProps
+}) {
   return (
     <div className="QuestionBoxTagsContainer">
       <div className="TagsTitle">Tags:</div>
       <div className="TagsContainer">
+        <CustomTag.AddTag handleAddingTag={handleAddingTag}></CustomTag.AddTag>
         {tags.map((tag, index) => {
-          return tag && <CustomTag key={index}>{tag.tagname}</CustomTag>;
+          return (
+            tag && (
+              <CustomTag
+                handleRemoveTagClicked={() => handleRemoveTagClicked(tag.tagid)}
+                key={tag.tagid}
+              >
+                {tag.tagname}
+              </CustomTag>
+            )
+          );
         })}
       </div>
     </div>
@@ -144,7 +161,3 @@ QuestionBox.DeleteContainer = function QuestionBoxDeleteContainer({
     </div>
   );
 };
-
-function CustomTag({ children, ...restProps }) {
-  return <div className="CustomTag">{children}</div>;
-}

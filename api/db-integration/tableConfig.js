@@ -6,16 +6,19 @@ const tableNames = [
   "BenutzerFragen",
   "Tags",
   "FragenTags",
+  "Quiz",
+  "BenutzerQuiz",
+  "QuizFragen",
 ];
 const createTableBenutzer = `
-CREATE TABLE ${tableNames[0]} (
+CREATE TABLE IF NOT EXISTS ${tableNames[0]} (
     benutzerId serial NOT NULL,
     benutzername varchar NOT NULL,
     PRIMARY KEY (benutzerId)
 );
 `;
 const createTableFragen = `
-CREATE TABLE ${tableNames[1]} (
+CREATE TABLE IF NOT EXISTS ${tableNames[1]} (
     fragenId serial NOT NULL,
     titel varchar NOT NULL,
     antworten varchar,
@@ -24,28 +27,53 @@ CREATE TABLE ${tableNames[1]} (
 `;
 
 const createTableBenutzerfragen = `
-CREATE TABLE ${tableNames[2]} (
+CREATE TABLE IF NOT EXISTS ${tableNames[2]} (
     benutzerId int NOT NULL REFERENCES benutzer,
     fragenId int NOT NULL REFERENCES fragen
 );
 `;
 const createTableTags = `
-CREATE TABLE ${tableNames[3]} (
+CREATE TABLE IF NOT EXISTS ${tableNames[3]} (
     tagId serial NOT NULL,
     tagName varchar NOT NULL,
     PRIMARY KEY (tagId)
 );
 `;
 const createTableFragenTags = `
-CREATE TABLE ${tableNames[4]} (
+CREATE TABLE IF NOT EXISTS ${tableNames[4]} (
     fragenId int NOT NULL REFERENCES fragen,
-    tagId int NOT NULL REFERENCES tags
+    tagId int NOT NULL REFERENCES tags,
+    UNIQUE(fragenId,tagId)
+);
+`;
+
+const createTableQuiz = `
+  CREATE TABLE IF NOT EXISTS ${tableNames[5]} (
+  quizId serial NOT NULL,
+  beendet boolean Not NULL,
+  PRIMARY KEY(quizId)
+  );
+`;
+
+const createTableBenutzerQuiz = `
+CREATE TABLE IF NOT EXISTS ${tableNames[6]} (
+    benutzerId int NOT NULL REFERENCES benutzer,
+    quizId int NOT NULL REFERENCES quiz,
+    UNIQUE(benutzerId,quizId)
+);
+`;
+
+const createTableQuizFragen = `
+CREATE TABLE IF NOT EXISTS ${tableNames[7]} (
+    quizId int NOT NULL REFERENCES quiz,
+    fragenId int NOT NULL REFERENCES fragen,
+    UNIQUE(quizId,fragenId)
 );
 `;
 
 const deleteQuerys = [];
 tableNames.forEach((tableName) =>
-  deleteQuerys.push(`drop table ${tableName};`)
+  deleteQuerys.push(`DROP TABLE IF EXISTS ${tableName};`)
 );
 //reverse so dependencys are not a problem
 deleteQuerys.reverse();
@@ -57,6 +85,9 @@ function getCreateQuerys() {
     createTableBenutzerfragen,
     createTableTags,
     createTableFragenTags,
+    createTableQuiz,
+    createTableBenutzerQuiz,
+    createTableQuizFragen,
   ];
   return querys;
 }

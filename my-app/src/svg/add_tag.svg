@@ -1,0 +1,6 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="add_tag">
+<circle id="outerCircle" cx="45" cy="45" r="45" fill="#AAC7EA"/>
+<path id="minusLine" d="M48 42V14H42V42H14V48H42V76H48V48H76V42H48Z" fill="#5D6592"/>
+</g>
+</svg>

@@ -30,14 +30,14 @@ NavBar.Item = function NavBarItem({ children, shortText, ...restProps }) {
   );
 };
 
-NavBar.SearchBar = function NavBarSearchBar({ ...restProps }) {
+NavBar.SearchBar = function NavBarSearchBar({ handleChange, ...restProps }) {
   return (
     <div className="NavSearchBar" {...restProps}>
       <div className="inputIconContainer">
         <SearchIcon />
       </div>
       <div className="inputContainer">
-        <input type="text" placeholder="search" />
+        <input type="text" placeholder="search" onChange={handleChange} />
       </div>
     </div>
   );

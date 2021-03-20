@@ -1,9 +1,9 @@
 const { getBenutzerFragenViewAggregate } = require("../views/benutzerFragen");
-const { performQuery } = require("../db-actions");
+const { performQuery } = require("./db-actions");
 
-function performGetBenutzerfragenView(userId) {
+function performGetBenutzerfragenView(userId, filter = "") {
   return performQueryWithHandling(
-    getBenutzerFragenViewAggregate(userId, "frak")
+    getBenutzerFragenViewAggregate(userId, filter)
   );
 }
 
@@ -14,7 +14,6 @@ async function performQueryWithHandling(query) {
       res.rows.map((row) =>
         row.fragen ? row.fragen.map((q) => stringToArrayHandler(q)) : null
       );
-
       return res.rows;
     } else {
       let err =
@@ -25,19 +24,6 @@ async function performQueryWithHandling(query) {
     let err = "Error for query, userid : " + userId + "query: " + query;
     return { error: err, message: res };
   }
-}
-
-function formatResult(arr) {
-  //get different objects without connecting them
-  const tags = findAndFillObject(arr, tag, "tagid");
-  const questions = findAndFillObject(arr, frage, "fragenid");
-  //turn answer string into array
-  questions.map((q) => stringToArrayHandler(q));
-  const users = findAndFillObject(arr, user, "benutzerid");
-  //connnect according to foreign keys
-  appendByForeignKey(arr, questions, tags);
-  appendByForeignKey(arr, users, questions);
-  return users;
 }
 
 function stringToArrayHandler(question) {
@@ -57,6 +43,20 @@ function stringToArray(string) {
     }
   }
   return [];
+}
+
+/* //OLD FORMATTING
+function formatResult(arr) {
+  //get different objects without connecting them
+  const tags = findAndFillObject(arr, tag, "tagid");
+  const questions = findAndFillObject(arr, frage, "fragenid");
+  //turn answer string into array
+  questions.map((q) => stringToArrayHandler(q));
+  const users = findAndFillObject(arr, user, "benutzerid");
+  //connnect according to foreign keys
+  appendByForeignKey(arr, questions, tags);
+  appendByForeignKey(arr, users, questions);
+  return users;
 }
 
 function appendByForeignKey(arr, target, source) {
@@ -127,10 +127,10 @@ function findById(list, obj, idName) {
 
 //adds all keys with same name from source to target
 function addValuesByKey(target, source) {
-  /*console.log("adding to target: ");
+  console.log("adding to target: ");
   console.log(source);
   console.log("target beforre: ");
-  console.log(target);*/
+  console.log(target);
   const targetKeys = Object.keys(target);
   for (key of Object.keys(source)) {
     // if target has the same key, add ects value
@@ -138,8 +138,6 @@ function addValuesByKey(target, source) {
       target[key] = source[key];
     }
   }
-  /*console.log("target after");
-  console.log(target);*/
 }
 
 function user(benutzerid) {
@@ -162,6 +160,7 @@ function tag(tagid) {
   this.tagname = "";
   this.idKeyName = "tagid";
 }
+*/
 
 module.exports = {
   performGetBenutzerfragenView: performGetBenutzerfragenView,

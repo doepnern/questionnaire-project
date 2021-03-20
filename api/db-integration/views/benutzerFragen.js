@@ -1,4 +1,5 @@
 /* get all questions for a specified user, if no user is specified, return all users with their qustions */
+/*
 function getBenutzerFragenView(userId) {
   const fragenTagsJoin1 = `SELECT fragen.fragenid as fragentagid, tags.tagid, tagName, titel FROM fragen, tags, fragentags  WHERE fragen.fragenid = fragentags.fragenid AND tags.tagid = fragentags.tagid`;
   const fragenTagsJoin = `SELECT fragen.fragenid, fragen.titel,fragen.antworten, fragentagjoin.tagid,fragentagjoin.tagname FROM fragen 
@@ -19,22 +20,22 @@ function getBenutzerFragenView(userId) {
       return `SELECT * FROM benutzer WHERE benutzer.benutzerId = ${userId}`;
     }
   }
-}
+}*/
 
-/* get all questions for a specified user, if no user is specified, return all users with their qustions */
-function getBenutzerFragenViewAggregate(userId, searchString) {
-  let error = false;
-  const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags,  concat_ws(', ', fragen.titel,fragen.antworten,array_agg(fragentagjoin.tagname ORDER BY tagid)) as search
+const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags,  concat_ws(', ', fragen.titel,fragen.antworten,array_agg(fragentagjoin.tagname ORDER BY tagid)) as search
                           FROM fragen 
                           LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid ORDER BY tags.tagid ASC) AS fragentagjoin 
                           ON fragen.fragenid = fragentagjoin.fragenid
                           GROUP BY fragen.fragenid
+  `;
 
-                          `;
+/* get all questions for a specified user, if no user is specified, return all users with their qustions */
+function getBenutzerFragenViewAggregate(userId, searchString) {
+  let error = false;
   const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC) as fragenArray
                             FROM benutzerfragen , (${fragenTagsJoin}) AS alleFragen
                             WHERE benutzerFragen.fragenId = alleFragen.fragenid  ${
-                              searchString
+                              searchString && searchString.length > 1
                                 ? `AND alleFragen.search ILIKE '%${searchString}%'`
                                 : ""
                             }
@@ -54,7 +55,7 @@ function getBenutzerFragenViewAggregate(userId, searchString) {
   if (error) return undefined;
   return query;
   function benutzerSelection() {
-    if (userId === undefined) {
+    if (userId === undefined || userId == -1) {
       return `SELECT * FROM benutzer`;
     } else {
       if (isNaN(parseInt(userId))) {
@@ -68,6 +69,6 @@ function getBenutzerFragenViewAggregate(userId, searchString) {
 }
 
 module.exports = {
-  getBenutzerFragenView: getBenutzerFragenView,
   getBenutzerFragenViewAggregate: getBenutzerFragenViewAggregate,
+  fragenTagsJoin: fragenTagsJoin,
 };

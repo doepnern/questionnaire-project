@@ -1,16 +1,17 @@
 const express = require("express");
 const path = require("path");
-const routes = require("./controller/routeFunctions");
 
 const app = express(),
   bodyParser = require("body-parser");
 port = 3080;
+const { handleAddingTagToQuestion } = require("./controller/tagHandler");
 const {
   initDB,
-  getUserView,
   updateQuestions,
   createNewQuestion,
   deleteQuestionById,
+  deleteTagById,
+  getQuestions,
 } = require("./db-integration");
 
 //enable env file
@@ -24,8 +25,9 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../my-app/build")));
 
 app.get("/api/users/:id", (req, res) => {
+  const query = req.query.filter ? req.query.filter : "";
   try {
-    routes.getUserQuestions(req.params.id).then((ret) => {
+    getQuestions(req.params.id, query).then((ret) => {
       console.log(ret);
       res.json(ret);
     });
@@ -38,10 +40,11 @@ app.get("/api/users/:id", (req, res) => {
 });
 
 app.get("/api/users", (req, res) => {
+  const query = req.query.filter ? req.query.filter : "";
   console.log("api/users called without id");
   console.log("returning:");
   try {
-    routes.getUserQuestions(req.params.id).then((ret) => {
+    getQuestions(req.params.id, query).then((ret) => {
       console.log(ret);
       res.json(ret);
     });
@@ -50,36 +53,74 @@ app.get("/api/users", (req, res) => {
   }
 });
 
+//updates database with question list given
 app.post("/api/questions", (req, res) => {
   console.log("-----------------------------------");
-  //console.log("updating questions:", newQuestions);
+  console.log("updating questions:", req.body);
   try {
-    updateQuestions(req.body);
+    updateQuestions(req.body).then((ret) => {
+      res.json({ status: "success", ret: ret });
+    });
   } catch (err) {
     res.json({ status: "error", msg: err.message });
   }
-  res.json({ status: "success" });
 });
 
 app.get("/api/users/:id/addQuestion", (req, res) => {
   console.log("requested to add question for user " + req.params.id);
-  createNewQuestion(req.params.id).then((result) => {
-    if (result.error) {
-      res.json(result);
-    } else {
-      res.json({ status: "success" });
-    }
-  });
+  try {
+    createNewQuestion(req.params.id).then((result) => {
+      if (result.error) {
+        res.json(result);
+      } else {
+        res.json({ status: "success", result: result });
+      }
+    });
+  } catch (err) {
+    res.json({ status: "error", msg: err.message });
+  }
 });
 
 app.get("/api/questions/deleteQuestion/:id", (req, res) => {
-  deleteQuestionById(req.params.id).then((result) => {
-    if (result.error) {
-      res.json(result);
-    } else {
-      res.json({ status: "success" });
-    }
-  });
+  try {
+    deleteQuestionById(req.params.id).then((result) => {
+      if (result.error) {
+        res.json(result);
+      } else {
+        res.json({ status: "success", result: result });
+      }
+    });
+  } catch (err) {
+    res.json({ status: "error", msg: err.message });
+  }
+});
+
+app.get("/api/questions/deleteTag/:tagid", (req, res) => {
+  let fragenid = req.query.fragenid;
+  console.log(fragenid);
+  try {
+    deleteTagById(req.params.tagid, fragenid).then((result) => {
+      if (result.error) {
+        res.json(result);
+      } else {
+        res.json({ status: "success", result: result });
+      }
+    });
+  } catch (err) {
+    res.json({ status: "error", msg: err.message });
+  }
+});
+
+app.get(`/api/questions/:questionId/addTag/:tagName`, (req, res) => {
+  handleAddingTagToQuestion(req.params.tagName, req.params.questionId)
+    .then((result) => {
+      if (result.error) {
+        res.json(result);
+      } else {
+        res.json({ status: "success", result: result });
+      }
+    })
+    .catch((err) => res.json({ status: "error", msg: err.message }));
 });
 
 app.get("/", (req, res) => {

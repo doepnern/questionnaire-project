@@ -1,78 +1,149 @@
-export async function getAllUsers() {
-  const response = await fetch("/api/users");
-  return await response.json();
+/**
+ *
+ * Callable functions
+ */
+export function getAllUsers(userId, filter, onSuccess, onError) {
+  return dispatchUserService(
+    getAllUsersRequest(userId, filter),
+    onSuccess,
+    onError
+  );
 }
 
 export async function updateQuestions(newQuestions, onSuccess, onError) {
+  return dispatchUserService(
+    updateQuestionsRequest(newQuestions),
+    onSuccess,
+    onError
+  );
+}
+
+export async function createQuestionForUser(userId, onSuccess, onError) {
+  return dispatchUserService(
+    createQuestionForUserRequest(userId),
+    onSuccess,
+    onError
+  );
+}
+
+export async function deleteQuestionByid(questionId, onSuccess, onError) {
+  return dispatchUserService(
+    deleteQuestionByidRequest(questionId),
+    onSuccess,
+    onError
+  );
+}
+
+export async function deleteTagById(tagId, questionid, onSuccess, onError) {
+  return dispatchUserService(
+    deleteTagByIdRequest(tagId, questionid),
+    onSuccess,
+    onError
+  );
+}
+
+//adds to question, creates new tag if one with name doesnt exist
+export async function addTagForQuestion(
+  tagName,
+  questionId,
+  onSuccess,
+  onError
+) {
+  return dispatchUserService(
+    addTagForQuestionRequest(tagName, questionId),
+    onSuccess,
+    onError
+  );
+}
+
+/**
+ *
+ * Request builders
+ */
+
+function getAllUsersRequest(userId, filter) {
+  return {
+    name: `get user: ${userId}, with filter: ${filter}`,
+    request: () =>
+      fetch(
+        "/api/users" +
+          (userId ? "/" + userId : "") +
+          (filter ? "?filter=" + filter : "")
+      ),
+  };
+}
+
+function updateQuestionsRequest(newQuestions) {
   const options = {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(newQuestions),
   };
-  const response = await fetch("/api/questions", options);
-  const result = await response.json();
-  console.log(result);
-  if (result.status === "success" && onSuccess) {
-    onSuccess();
-  } else {
+  return {
+    name: `updating questions : ` + newQuestions,
+    request: () => fetch("/api/questions", options),
+  };
+}
+
+function createQuestionForUserRequest(userId) {
+  return {
+    name: `creating question for user ${userId}`,
+    request: () => fetch(`/api/users/${userId}/addQuestion`),
+  };
+}
+
+function deleteQuestionByidRequest(questionId) {
+  return {
+    name: `deleting question by id : ` + questionId,
+    request: () => fetch(`/api/questions/deleteQuestion/${questionId}`),
+  };
+}
+
+function deleteTagByIdRequest(tagId, questionid) {
+  return {
+    name: `deleting tag by id: ` + tagId,
+    request: () =>
+      fetch(
+        `/api/questions/deleteTag/${tagId}${
+          questionid ? `?fragenid=${questionid}` : ""
+        }`
+      ),
+  };
+}
+
+function addTagForQuestionRequest(tagName, questionId) {
+  return {
+    name: `creating/adding tag: ${tagName
+      .split(" ")
+      .join("_")} for question with id: ${questionId}`,
+    request: () => fetch(`/api/questions/${questionId}/addTag/${tagName}`),
+  };
+}
+/**
+ *
+ * Basic calling and error handling
+ */
+async function dispatchUserService(action, onSuccess, onError) {
+  try {
+    const response = await action.request();
+    const jsonResponse = await response.json();
+    if (jsonResponse.error || jsonResponse?.status === "error") {
+      console.log(
+        "failed action: " + action.name + ", backend reported error:"
+      );
+      console.log(jsonResponse);
+      if (onError) onError(jsonResponse);
+    } else {
+      if (onSuccess) onSuccess(jsonResponse);
+      return jsonResponse;
+    }
+  } catch (e) {
+    console.log(
+      "failed " +
+        action.name +
+        ", backend unreachable on " +
+        JSON.stringify(action.request())
+    );
     if (onError) onError();
-  }
-  return result;
-}
-
-export async function createQuestionForUser(userId) {
-  try {
-    const response = await fetch(`/api/users/${userId}/addQuestion`);
-    if (response.error) {
-      console.log(
-        "failed to create question for user " +
-          userId +
-          ", backend reported error"
-      );
-      console.log(response);
-      return response;
-    } else {
-      return response;
-    }
-  } catch (e) {
-    console.log(
-      "failed to create question for user " + userId + ", backend unreachable"
-    );
-    return {
-      error:
-        "failed to create question for user " +
-        userId +
-        ", backend unreachable",
-    };
-  }
-}
-
-export async function deleteQuestionByid(questionId) {
-  try {
-    const response = await fetch(`/api/questions/deleteQuestion/${questionId}`);
-    if (response.error) {
-      console.log(
-        "failed to delete question with id " +
-          questionId +
-          ", backend reported error:"
-      );
-      console.log(response);
-      return response;
-    } else {
-      console.log(response);
-      return response;
-    }
-  } catch (e) {
-    console.log(
-      "failed to delete question with id " +
-        questionId +
-        ", backend unreachable"
-    );
-    return {
-      error:
-        "failed to delete question with id " +
-        questionId +
-        ", backend unreachable",
-    };
   }
 }

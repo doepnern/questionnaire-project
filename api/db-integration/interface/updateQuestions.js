@@ -1,14 +1,20 @@
-const { performQuery } = require("../db-actions");
+const { performQuery } = require("../service/db-actions");
 
-function updateQuestions(questions) {
+// updates each question in given array
+async function updateQuestions(questions) {
+  //TODO: allow single question ->check for correct format before inserting
+  if (!questions instanceof Array)
+    throw new Error("questions was no array " + questions);
+  const results = [];
   for (let q of questions) {
     //see if question has valid id
     if (parseInt(questions.fragenid) !== NaN) {
-      performQuery(...updateQuestionSQL(q));
+      results.push(await performQuery(...updateQuestionSQL(q)));
     } else {
-      throw "fragenid was not a valid integer";
+      throw new Error("fragenid was not a valid integer, " + question.fragenid);
     }
   }
+  return results;
 }
 
 function updateQuestionSQL(question) {

@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import { QuestionBox } from "components";
 import { QuestionDetailedContainer } from "containers";
 import "./QuestionBoxContainer.css";
-import {
-  updateQuestion,
-  useQuestionContext,
-  clearHistory,
-} from "context/QuestionContext";
+import { useQuestionContext, clearHistory } from "context/QuestionContext";
 import {
   updateQuestions,
   createQuestionForUser,
   deleteQuestionByid,
+  deleteTagById,
+  addTagForQuestion,
 } from "services/UserService";
 import _ from "lodash";
 
@@ -48,7 +46,15 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
               <QuestionBox.Text>{question.titel}</QuestionBox.Text>
             </QuestionBox.Header>
             <QuestionBox.Body>
-              <QuestionBox.Tags tags={question.tags}></QuestionBox.Tags>
+              <QuestionBox.Tags
+                handleAddingTag={(tagname) =>
+                  handleAddingTag(tagname, question.fragenid)
+                }
+                handleRemoveTagClicked={(tagid) =>
+                  handleRemoveTagClicked(tagid, question.fragenid)
+                }
+                tags={question.tags}
+              ></QuestionBox.Tags>
               <QuestionBox.DeleteContainer
                 handleClick={(e) => {
                   e.stopPropagation();
@@ -78,11 +84,22 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
     setShown((s) => {
       return { ...s, active: !s.active };
     });
-    //TODO: dispatch update to db, when getting response rerender main screen, in case of erreor reload last closed question
+    //update questions in db
     updateQuestions(
       questionContext.questions,
       () => console.log("successfully updated db"),
       () => console.log("db update failed")
     );
+  }
+  function handleRemoveTagClicked(tagid, questionid) {
+    deleteTagById(tagid, questionid, () => {
+      reloadQuestions();
+    });
+  }
+  function handleAddingTag(tagName, questionid) {
+    //see if tagName is a string of leth > 1
+    if (typeof tagName === "string" && tagName.length > 0) {
+      addTagForQuestion(tagName, questionid, () => reloadQuestions());
+    }
   }
 }

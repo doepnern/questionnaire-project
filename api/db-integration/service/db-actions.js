@@ -30,8 +30,9 @@ function selectTable(tableName, keys) {
 async function performQuery(query, optionalParams) {
   if (query instanceof Array) {
     let arrRes = await (async () => {
+      let results = [];
       for (let q of query) {
-        let r = { error: "no query performed of multiple querys" };
+        let r = [{ error: "no query performed of multiple querys" }];
         if (q instanceof Array) {
           r = await performQuery(...q);
         } else {
@@ -40,8 +41,9 @@ async function performQuery(query, optionalParams) {
         if (r.error) {
           return r;
         }
+        results.push(r);
       }
-      return { status: "success" };
+      return { resultsMultiple: results };
     })();
     return arrRes;
   }

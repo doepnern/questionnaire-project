@@ -54,10 +54,37 @@ const fragenTags = [
   { fragenId: "1", tagId: 4 },
   { fragenId: "1", tagId: 5 },
 ];
+
+const quiz = [
+  { quizId: "DEFAULT", completed: "false" },
+  { quizId: "DEFAULT", completed: "false" },
+];
+
+const benutzerQuiz = [
+  {
+    benutzerId: "1",
+    quizId: "1",
+  },
+  {
+    benutzerId: "1",
+    quizId: "2",
+  },
+];
+
+const QuizFragen = [
+  {
+    quizId: "1",
+    fragenId: "1",
+  },
+  { quizId: "1", fragenId: "3" },
+];
 module.exports = {
   benutzer: benutzer,
   fragen: fragen,
   benutzerfragen: benutzerFragen,
   tags: tags,
   fragenTags: fragenTags,
+  quiz,
+  benutzerQuiz,
+  QuizFragen,
 };

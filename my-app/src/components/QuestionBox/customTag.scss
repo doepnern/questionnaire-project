@@ -1,0 +1,66 @@
+.CustomTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  height: 30px;
+  background: #445e90;
+  //border: 1px solid #19435c;
+  border-radius: 30px;
+  box-sizing: border-box;
+  margin: 5px 0 0 5px;
+  p {
+    margin-right: 5px;
+  }
+  svg {
+    height: 120%;
+    width: auto;
+    &:hover g {
+      #outerCircle {
+        fill: #143264;
+      }
+      #minusLine {
+        fill: #bbc4ee;
+        stroke: #bbc4ee;
+      }
+    }
+  }
+}
+.addTag {
+  min-width: 30px;
+  transition: min-width 0.3s;
+  justify-content: flex-start;
+}
+.addTagClicked {
+  min-width: 120px;
+  margin-left: 0px;
+  .inputAddTag {
+    input {
+      width: 80px;
+    }
+  }
+}
+.CustomTag {
+  font-size: 13px;
+  font-weight: 300;
+  color: #dde1ff;
+}
+
+.inputAddTag {
+  border-radius: 20px;
+  margin-left: 0px;
+  max-width: 0;
+  input {
+    margin-left: 7px;
+    transition: all 0.3s;
+    width: 0px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+}
