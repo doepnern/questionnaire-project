@@ -1,3 +1,4 @@
+const { questionsWithTags } = require("./benutzerFragen");
 function quizzesFromBenutzer(benutzerId) {
   query = ` 
   SELECT currBenutzer.benutzerid, currBenutzer.benutzername, json_agg(json_build_object('quizid',fullQuiz.quizid,'beendet',fullQuiz.beendet,'fragen',fullQuiz.fragen_arr)) FILTER (WHERE fullQuiz.quizId IS NOT NULL) as quizzes
@@ -14,24 +15,11 @@ function quizzesFromBenutzer(benutzerId) {
   return [query, params];
 }
 
-function questionsWithTags() {
-  query = `
-  SELECT fragen.fragenid, fragen.titel,fragen.antworten, json_agg(
-    json_build_object('tagid',tags.tagid,'tagName', tags.tagName) ORDER BY tags.tagid ASC) 
-    FILTER (WHERE tags.tagid IS NOT null) as tag_arr
-  FROM fragen
-  LEFT JOIN fragenTags ON fragen.fragenid = fragenTags.fragenid
-  LEFT JOIN Tags ON fragenTags.tagid = Tags.tagid
-  GROUP BY fragen.fragenid
-  `;
-  return [query, []];
-}
-
 function quizWithQuestions() {
   query = `
   SELECT quiz.quizid, quiz.beendet, json_agg(
     json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tag_arr) ORDER BY questionsWithTags.fragenid ASC) 
-    FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen_arr
+    FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen
   FROM quiz
   LEFT JOIN quizFragen ON quiz.quizid = quizFragen.quizid
   LEFT JOIN (${

@@ -1,27 +1,3 @@
-/* get all questions for a specified user, if no user is specified, return all users with their qustions */
-/*
-function getBenutzerFragenView(userId) {
-  const fragenTagsJoin1 = `SELECT fragen.fragenid as fragentagid, tags.tagid, tagName, titel FROM fragen, tags, fragentags  WHERE fragen.fragenid = fragentags.fragenid AND tags.tagid = fragentags.tagid`;
-  const fragenTagsJoin = `SELECT fragen.fragenid, fragen.titel,fragen.antworten, fragentagjoin.tagid,fragentagjoin.tagname FROM fragen 
-                          LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid) AS fragentagjoin 
-                          ON fragen.fragenid = fragentagjoin.fragenid`;
-  const fragenTagsBenutzerJoin = `SELECT benutzerSelection.benutzerid, benutzerSelection.benutzername, fragenid,titel ,fragentagjoin.tagid, tagname FROM (${benutzerSelection()}) AS benutzerSelection, benutzerfragen, (${fragenTagsJoin}) as fragentagjoin WHERE benutzerSelection.benutzerid = benutzerfragen.benutzerid AND fragentagjoin.fragentagid = benutzerfragen.fragenid`;
-  const query = `(
-                 SELECT currentUser.benutzerId, currentUser.benutzername, alleFragen.fragenid, allefragen.titel,allefragen.antworten, alleFragen.tagid, alleFragen.tagname
-                 FROM (${benutzerSelection()}) AS currentUser, (${fragenTagsJoin}) AS alleFragen, benutzerfragen
-                 WHERE currentUser.benutzerId = benutzerFragen.benutzerId AND alleFragen.fragenId = benutzerfragen.fragenid
-                 ORDER BY currentUser.benutzerId
-                 );`;
-  return query;
-  function benutzerSelection() {
-    if (userId === undefined) {
-      return `SELECT * FROM benutzer`;
-    } else {
-      return `SELECT * FROM benutzer WHERE benutzer.benutzerId = ${userId}`;
-    }
-  }
-}*/
-
 const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags,  concat_ws(', ', fragen.titel,fragen.antworten,array_agg(fragentagjoin.tagname ORDER BY tagid)) as search
                           FROM fragen 
                           LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid ORDER BY tags.tagid ASC) AS fragentagjoin 
@@ -68,7 +44,44 @@ function getBenutzerFragenViewAggregate(userId, searchString) {
   }
 }
 
+function benutzerFragenWithTags(benutzerId) {
+  query = `
+  SELECT currentUser.benutzerId, currentUser.benutzername, questionsWithTags.search, json_agg(
+    json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags) ORDER BY questionsWithTags.fragenid ASC) 
+    FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen_arr
+  FROM (SELECT * FROM benutzer ${
+    benutzerId ? "WHERE benutzer.benutzerid = $1 " : ""
+  }) AS currentUser
+  LEFT JOIN benutzerFragen ON currentUser.benutzerid = benutzerFragen.benutzerid
+  LEFT JOIN (${
+    questionsWithTags(true)[0]
+  }) as questionsWithTags ON benutzerFragen.fragenid = questionsWithTags.fragenid
+  GROUP BY currentUser.benutzerId, currentUser.benutzername, questionsWithTags.search
+  ORDER BY currentUser.benutzerId ASC
+  `;
+  return [query, []];
+}
+
+function questionsWithTags(withSearchString = false) {
+  query = `
+  SELECT fragen.fragenid, fragen.titel,fragen.antworten, json_agg(
+    json_build_object('tagid',tags.tagid,'tagName', tags.tagName) ORDER BY tags.tagid ASC) 
+    FILTER (WHERE tags.tagid IS NOT null) as tags ${
+      withSearchString
+        ? ", concat_ws(', ', fragen.titel,fragen.antworten,array_agg(tags.tagname ORDER BY tags.tagid)) as search "
+        : ""
+    }
+  FROM fragen
+  LEFT JOIN fragenTags ON fragen.fragenid = fragenTags.fragenid
+  LEFT JOIN Tags ON fragenTags.tagid = Tags.tagid
+  GROUP BY fragen.fragenid
+  `;
+  return [query, []];
+}
+
 module.exports = {
   getBenutzerFragenViewAggregate: getBenutzerFragenViewAggregate,
   fragenTagsJoin: fragenTagsJoin,
+  questionsWithTags,
+  benutzerFragenWithTags,
 };

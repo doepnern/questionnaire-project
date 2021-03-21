@@ -3,8 +3,9 @@ const dbActions = require("./service/db-actions");
 const { performQuery } = require("./service/db-actions");
 const testData = require("./testData");
 const {
-  getBenutzerFragenView,
   getBenutzerFragenViewAggregate,
+  benutzerFragenWithTags,
+  questionsWithTags,
 } = require("./views/benutzerFragen");
 const quizView = require("./views/quizView");
 const { benutzerfragen } = require("./testData");
@@ -34,7 +35,7 @@ function initDB() {
     .then(() =>
       performQuery(dbActions.insertInto("quizFragen", testData.QuizFragen))
     )
-    .then(() => performQuery(...quizView.quizzesFromBenutzer()))
+    .then(() => performQuery(...benutzerFragenWithTags()))
     .then((res) => console.log(JSON.stringify(res.rows, null, 3)));
 }
 
