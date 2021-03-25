@@ -1,0 +1,117 @@
+$baseWidth: 96.5%;
+.QuizItemBaseContainer {
+  margin: 0 auto 0 auto;
+  width: $baseWidth;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.QuizItemContainer {
+  box-sizing: border-box;
+  overflow: auto;
+  height: 80px;
+  background-color: #ffffff;
+  width: 49.5%;
+  margin: 1.1% 0 0 0;
+  border-radius: 5px;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.267);
+  display: grid;
+  grid-template-columns: [l1] 30% [l3] 30% [l4] auto [l5];
+  grid-template-rows: [r1] 25px [r2] auto[r3] auto [r4];
+  grid-template-areas:
+    " title title button"
+    " main1 main2 button"
+    " main1 main2 button";
+  @media only screen and (max-width: 936px) {
+    width: 100%;
+  }
+}
+
+.QuizTitle {
+  grid-area: title;
+  padding: 0 5px 0 10px;
+  background-color: #314978;
+  width: fit-content;
+  max-width: 100%;
+  overflow: auto;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.38);
+  span {
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #dbe8ff;
+  }
+}
+
+@mixin baseInfo {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  span {
+    margin: 0 10% 0 0;
+    white-space: nowrap;
+  }
+}
+.QuizInfo {
+  grid-area: main1;
+  @include baseInfo;
+}
+
+.secondQuizInfo {
+  grid-area: main2;
+  @include baseInfo;
+}
+
+.buttonArea {
+  grid-area: button;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  .EnterQuizButtonContainer {
+    padding: 4px;
+    height: 24px;
+    min-width: 60px;
+    width: fit-content;
+    background-color: #445e90;
+    border-radius: 5px;
+    &:hover {
+      background-color: #314978;
+      .EnterQuiz {
+        transform: scale(1.02);
+      }
+      cursor: pointer;
+    }
+    .EnterQuiz {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: #dbe8ff;
+    }
+  }
+}
+
+.NewQuizButtonContainer {
+  grid-area: r1 / l1 / r4 / l5;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  span {
+    font-size: 35px;
+    letter-spacing: 5px;
+    color: rgb(4, 17, 41);
+  }
+  svg {
+    height: 60%;
+  }
+  &:hover {
+    background: linear-gradient(180deg, #aad3f3 0%, rgba(255, 255, 255, 0) 60%);
+    cursor: pointer;
+  }
+}

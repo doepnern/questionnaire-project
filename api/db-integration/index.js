@@ -5,6 +5,7 @@ const { deleteQuestionById } = require("./interface/deleteQuestion");
 const { getQuestions } = require("./interface/getQuestions");
 const { deleteTagById, findTag, createTag } = require("./interface/Tags");
 const { performQuery } = require("./service/db-actions");
+const { quizzesFromBenutzer } = require("./views/quizView");
 module.exports = {
   initDB: initDB,
   updateQuestions: updateQuestions,
@@ -15,4 +16,5 @@ module.exports = {
   findTag: findTag,
   createTag,
   performQuery,
+  quizzesFromBenutzer,
 };

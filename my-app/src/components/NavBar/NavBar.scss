@@ -1,6 +1,6 @@
 .NavBarContainer {
   height: 60px;
-  width: 97%;
+  width: 96.5%;
   margin: 0 auto;
   margin-top: 5px;
   margin-bottom: -3px;
@@ -36,17 +36,25 @@
   }
 }
 
+.NavActive {
+  background-color: #355288;
+}
+
 .NavItem {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 13px;
+  text-decoration: none;
+
   span {
+    text-decoration: none;
     font-size: 18px;
     font-weight: 300;
     color: rgb(221, 225, 255);
   }
+
   &:hover {
     background-color: #354e7e;
     cursor: pointer;

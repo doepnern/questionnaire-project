@@ -44,34 +44,42 @@ function getBenutzerFragenViewAggregate(userId, searchString) {
   }
 }
 
-function benutzerFragenWithTags(benutzerId) {
+function benutzerFragenWithTags(benutzerId, searchString) {
+  if (!benutzerId || benutzerId < 0) benutzerId = undefined;
   query = `
-  SELECT currentUser.benutzerId, currentUser.benutzername, questionsWithTags.search, json_agg(
-    json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags) ORDER BY questionsWithTags.fragenid ASC) 
-    FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen_arr
+  SELECT currentUser.benutzerId, currentUser.benutzername, json_agg(
+    CASE WHEN questionsWithTags.fragenid IS NULL THEN null ELSE
+    json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags) END ORDER BY questionsWithTags.fragenid ASC) 
+    as fragen
   FROM (SELECT * FROM benutzer ${
     benutzerId ? "WHERE benutzer.benutzerid = $1 " : ""
   }) AS currentUser
   LEFT JOIN benutzerFragen ON currentUser.benutzerid = benutzerFragen.benutzerid
   LEFT JOIN (${
     questionsWithTags(true)[0]
-  }) as questionsWithTags ON benutzerFragen.fragenid = questionsWithTags.fragenid
-  GROUP BY currentUser.benutzerId, currentUser.benutzername, questionsWithTags.search
+  }) as questionsWithTags ON benutzerFragen.fragenid = questionsWithTags.fragenid ${
+    searchString && searchString.length > 1
+      ? `AND questionsWithTags.search ILIKE '%${searchString}%'`
+      : ""
+  }
+  GROUP BY currentUser.benutzerId, currentUser.benutzername
   ORDER BY currentUser.benutzerId ASC
   `;
-  return [query, []];
+  const params = benutzerId ? [benutzerId] : [];
+  return [query, params];
 }
 
 function questionsWithTags(withSearchString = false) {
   query = `
   SELECT fragen.fragenid, fragen.titel,fragen.antworten, json_agg(
-    json_build_object('tagid',tags.tagid,'tagName', tags.tagName) ORDER BY tags.tagid ASC) 
-    FILTER (WHERE tags.tagid IS NOT null) as tags ${
+    CASE WHEN tags.tagid IS NULL THEN null ELSE
+    json_build_object('tagid',tags.tagid,'tagname', tags.tagName, 'fragenid', fragen.fragenid) END ORDER BY tags.tagid ASC) 
+    as tags ${
       withSearchString
         ? ", concat_ws(', ', fragen.titel,fragen.antworten,array_agg(tags.tagname ORDER BY tags.tagid)) as search "
         : ""
     }
-  FROM fragen
+  FROM fragen 
   LEFT JOIN fragenTags ON fragen.fragenid = fragenTags.fragenid
   LEFT JOIN Tags ON fragenTags.tagid = Tags.tagid
   GROUP BY fragen.fragenid

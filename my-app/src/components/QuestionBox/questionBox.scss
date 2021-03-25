@@ -1,13 +1,27 @@
+@function calcSize($num) {
+  $res: (100% - $num * 1.75%-1.75%) / $num;
+  @return $res;
+}
 .Container {
-  width: 320px;
+  //width: 320px;
+  width: calcSize(4);
   height: 220px;
   background-color: #ffffff;
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.38);
   border-radius: 21px;
-  margin: 24px 0 0 24px;
+  margin: 1.75% 0 0 1.75%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  @media only screen and (max-width: 1200px) {
+    width: calcSize(3);
+  }
+  @media only screen and (max-width: 800px) {
+    width: calcSize(2);
+  }
+  @media only screen and (max-width: 500px) {
+    width: calcSize(1);
+  }
 }
 .HeaderContainer {
   width: 100%;

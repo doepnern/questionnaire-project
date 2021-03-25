@@ -1,27 +1,35 @@
-const { getBenutzerFragenViewAggregate } = require("../views/benutzerFragen");
+const {
+  getBenutzerFragenViewAggregate,
+  benutzerFragenWithTags,
+} = require("../views/benutzerFragen");
 const { performQuery } = require("./db-actions");
 
 function performGetBenutzerfragenView(userId, filter = "") {
-  return performQueryWithHandling(
-    getBenutzerFragenViewAggregate(userId, filter)
-  );
+  return performQueryWithHandling(() => benutzerFragenWithTags(userId, filter));
 }
 
 async function performQueryWithHandling(query) {
-  let res = await performQuery(query);
+  let res = await performQuery(...query());
   if (res !== undefined && !res.error) {
     if (res.rowCount > 0) {
       res.rows.map((row) =>
-        row.fragen ? row.fragen.map((q) => stringToArrayHandler(q)) : null
+        row.fragen
+          ? row.fragen.map((q) => (q ? stringToArrayHandler(q) : null))
+          : []
       );
+      //remove null values from fragen array
+      res.rows = res.rows.map((r) => {
+        return r.fragen
+          ? { ...r, fragen: r.fragen.filter((x) => x != null) }
+          : r;
+      });
       return res.rows;
     } else {
-      let err =
-        "Result for query is empty, userid : " + userId + "query: " + query;
+      let err = "Result for query is empty, query : " + query;
       return { error: err, message: res };
     }
   } else {
-    let err = "Error for query, userid : " + userId + "query: " + query;
+    let err = "Result for query is empty, query : " + query;
     return { error: err, message: res };
   }
 }

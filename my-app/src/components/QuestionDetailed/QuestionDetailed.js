@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./questionDetailed.scss";
 import { motion, AnimatePresence } from "framer-motion";
 import QuestionAnswer from "./QuestionAnswer";
 import { ReactComponent as EditAnswerButton } from "svg/edit_button.svg";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import "components/Animations/Fade/styles.css";
+import { Modal } from "components";
 
 export default function QuestionDetailed() {
   return <></>;
@@ -18,52 +19,22 @@ QuestionDetailed.Container = function QuestionDetailedContainer({
 }) {
   return (
     <>
-      <AnimatePresence>
-        {isShown && (
-          <motion.div
-            className="Modal"
-            onClick={toggleShown}
-            transition={{ duration: 0.1 }}
-            animate="shown"
-            initial="hidden"
-            exit={{ opacity: "0%" }}
-            variants={animationModalVariants()}
-          >
-            <motion.div
-              onClick={(e) => e.stopPropagation()}
-              className="questionDetailedContainer"
-              animate={{ opacity: "100%" }}
-              initial={{
-                opacity: "0%",
-              }}
-              exit={{ opacity: "0%" }}
-            >
-              {children}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Modal isShown={isShown} toggleShown={toggleShown}>
+        <motion.div
+          onClick={(e) => e.stopPropagation()}
+          className="questionDetailedContainer"
+          animate={{ opacity: "100%" }}
+          initial={{
+            opacity: "0%",
+          }}
+          exit={{ opacity: "0%" }}
+          {...restProps}
+        >
+          {children}
+        </motion.div>
+      </Modal>
     </>
   );
-
-  function animationModalVariants() {
-    return {
-      hidden: {
-        opacity: "0%",
-        width: "0%",
-        height: "0%",
-        top: "0%",
-        left: "50%",
-      },
-      shown: {
-        opacity: "100%",
-        width: "100%",
-        height: "100%",
-        top: "50%",
-        left: "50%",
-      },
-    };
-  }
 };
 
 QuestionDetailed.SingleAnswerDefault = function QuestionDetailedSingleAnswer({

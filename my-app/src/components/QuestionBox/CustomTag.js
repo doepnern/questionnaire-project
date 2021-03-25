@@ -19,9 +19,7 @@ CustomTag.AddTag = function CustomTagAddTag({ handleAddingTag, ...restProps }) {
     disabled: false,
     value: "",
   });
-  useEffect(() => {
-    console.log(open);
-  }, [open]);
+
   return (
     <div
       className={
@@ -70,7 +68,6 @@ CustomTag.AddTag = function CustomTagAddTag({ handleAddingTag, ...restProps }) {
     });
     //prevent click on plus to trigger another open
     setTimeout(() => {
-      console.log("reenabled");
       setOpen((o) => {
         return { ...o, disabled: false };
       });

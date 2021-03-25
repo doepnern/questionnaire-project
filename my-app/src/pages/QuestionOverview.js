@@ -1,20 +1,27 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./QuestionOverview.css";
 import { getAllUsers } from "services/UserService";
-import { QuestionBoxContainer } from "containers";
+import { QuestionBoxContainer, NavBar } from "containers";
 import { motion } from "framer-motion";
 import TestQuestionContext from "context/Test.QuestionContext";
 import { useQuestionContext, addQuestion } from "context/QuestionContext";
-import NavBar from "components/NavBar/NavBar";
 import { myDebouncer } from "helpers/debouncer";
 
 function QuestionOverview() {
   const [fragenLoader, setFragenLoader] = useState({
     isLoading: true,
   });
+  //so search in searchbar doesnt get overridden
+  const lastSearch = useRef("");
+
   const { dispatch } = useQuestionContext();
+
   function getAllUsersHere(userId, filter) {
-    getAllUsers(userId, filter).then((users) => {
+    if (filter != null) lastSearch.current = filter;
+    getAllUsers(userId, lastSearch.current, (res) =>
+      setNewQuestions(res.result)
+    );
+    function setNewQuestions(users) {
       console.log("loaded");
       console.log(users);
       if (users !== undefined && !Object.keys(users).includes("error")) {
@@ -25,9 +32,9 @@ function QuestionOverview() {
         });
         dispatch(addQuestion(newQuestions != null ? newQuestions : []));
       } else {
-        getAllUsersHere();
+        setTimeout(() => getAllUsersHere(), 1000);
       }
-    });
+    }
   }
   const debouncedGetUsers = useCallback(myDebouncer(getAllUsersHere, 150), [
     getAllUsersHere,
@@ -36,14 +43,10 @@ function QuestionOverview() {
 
   return (
     <div className="questionOverview">
-      <NavBar>
-        <NavBar.Header shortText={"MyQ"}>MyQuestionnaire</NavBar.Header>
-        <NavBar.Item shortText={"Edit"}>Edit questions</NavBar.Item>
-        <NavBar.Item shortText={"Quiz"}>Questionnaire</NavBar.Item>
-        <NavBar.SearchBar
-          handleChange={(e) => debouncedGetUsers(undefined, e.target.value)}
-        />
-      </NavBar>
+      <NavBar
+        withSearch={true}
+        searchFunction={(e) => debouncedGetUsers(undefined, e.target.value)}
+      />
       {!fragenLoader.isLoading ? (
         <QuestionBoxContainer
           reloadQuestions={getAllUsersHere}

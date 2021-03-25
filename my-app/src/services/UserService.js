@@ -10,6 +10,10 @@ export function getAllUsers(userId, filter, onSuccess, onError) {
   );
 }
 
+export function getQuiz(userId, onSuccess, onError) {
+  return dispatchUserService(getQuizRequest(userId), onSuccess, onError);
+}
+
 export async function updateQuestions(newQuestions, onSuccess, onError) {
   return dispatchUserService(
     updateQuestionsRequest(newQuestions),
@@ -70,6 +74,13 @@ function getAllUsersRequest(userId, filter) {
           (userId ? "/" + userId : "") +
           (filter ? "?filter=" + filter : "")
       ),
+  };
+}
+
+function getQuizRequest(userId) {
+  return {
+    name: `get quiz for user ${userId}`,
+    request: () => fetch(`/api/quiz${userId ? `?userId=${userId}` : ""}`),
   };
 }
 
@@ -142,8 +153,9 @@ async function dispatchUserService(action, onSuccess, onError) {
       "failed " +
         action.name +
         ", backend unreachable on " +
-        JSON.stringify(action.request())
+        JSON.stringify(action)
     );
-    if (onError) onError();
+    console.log(e);
+    if (onError) onError(e);
   }
 }
