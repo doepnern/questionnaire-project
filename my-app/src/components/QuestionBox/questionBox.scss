@@ -3,8 +3,7 @@
   @return $res;
 }
 .Container {
-  //width: 320px;
-  width: calcSize(4);
+  width: calcSize(5);
   height: 220px;
   background-color: #ffffff;
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.38);
@@ -13,6 +12,9 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  @media only screen and (max-width: 1500px) {
+    width: calcSize(4);
+  }
   @media only screen and (max-width: 1200px) {
     width: calcSize(3);
   }
