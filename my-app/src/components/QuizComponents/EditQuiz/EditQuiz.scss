@@ -52,6 +52,7 @@
 .qc_editQuestionDiv {
   @include buttonFix();
   margin-top: 10px;
+  height: 50px;
 }
 
 .qc_info {
@@ -80,7 +81,53 @@
     @include roundedBorderPseudoElement(-1, 0);
   }
   .qc_singleQuestion {
-    display: none;
+    height: (100%/6);
+    width: 99%;
+    margin: 0 auto 0 auto;
+    background-color: rgb(202, 191, 191);
+    border-bottom: 1px solid gray;
+    display: flex;
+    align-items: center;
+    position: relative;
+    span {
+      width: 100%;
+      overflow: hidden;
+      font-size: 15px;
+      white-space: nowrap;
+      padding: 0;
+      margin: 0 0 0 10px;
+    }
+    &::-webkit-scrollbar {
+      width: 0; /* Remove scrollbar space */
+      background: transparent; /* Optional: just make scrollbar invisible */
+    }
+    /* Optional: show position indicator in red */
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
+    .qc_singleQuestionTrash {
+      position: absolute;
+      right: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 87%;
+      width: auto;
+      transition: transform 0.2s linear;
+
+      svg {
+        height: 100%;
+        width: auto;
+        * {
+          fill: rgb(100, 97, 97);
+        }
+      }
+      &:hover {
+        transform: translateY(-50%) scale(1.03);
+        * {
+          fill: rgb(70, 67, 67);
+        }
+      }
+    }
   }
 }
 
@@ -90,7 +137,6 @@
   align-items: center;
   justify-content: center;
   span {
-    margin: 0;
     padding: 0;
     font-size: 16px;
     color: rgb(94, 92, 92);

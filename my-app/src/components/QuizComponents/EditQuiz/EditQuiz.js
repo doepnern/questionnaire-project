@@ -12,7 +12,7 @@ export default function EditQuiz({ editingQuiz, toggleShown }) {
       style={{
         width: "40%",
         height: "50%",
-        minWidth: "380px",
+        minWidth: "540px",
         minHeight: "377px",
       }}
     >

@@ -1,5 +1,6 @@
 import React from "react";
 import { TextField, Button } from "@material-ui/core";
+import { ReactComponent as ThrashButton } from "svg/trash_button.svg";
 export default function EditQuizComponents({ children }) {
   return (
     <div className="EditQuizContainer">
@@ -38,17 +39,28 @@ EditQuizComponents.EditButton = function EditQuizComponentsEditButton() {
 };
 
 EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
-  questions = [],
+  questions = [
+    { titel: "question 1 is an example question with quite some length" },
+    {
+      titel:
+        "question 2 is an example question with qeven more length than question 1",
+    },
+  ],
 }) {
   return (
     <div className="qc_QuestionList">
-      {getEmptyPlaceholder()}
-      <div className="qc_singleQuestion">
-        <span>
-          Frage nr 1 ist gar keine so lange frage, sollte aber trotzdem
-          reinpassen fgalls noch längere kommen
-        </span>
-      </div>
+      {questions.length < 1
+        ? getEmptyPlaceholder()
+        : questions.map((q, index) => (
+            <div className="qc_singleQuestion" key={index}>
+              <span>
+                {index + 1}: {q.titel}
+              </span>
+              <div className="qc_singleQuestionTrash">
+                <ThrashButton></ThrashButton>
+              </div>
+            </div>
+          ))}
     </div>
   );
 
