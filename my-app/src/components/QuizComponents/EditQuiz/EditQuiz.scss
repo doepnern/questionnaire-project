@@ -70,6 +70,9 @@
   margin-top: 20px;
   width: 68%;
   height: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
   //border-left: 3px solid rgb(168, 154, 154);
   //border-right: 3px solid rgb(168, 154, 154);
   background-color: rgb(235, 223, 223);
@@ -141,4 +144,14 @@
     font-size: 16px;
     color: rgb(94, 92, 92);
   }
+}
+
+//Dragging styling
+
+.draggable {
+  cursor: move;
+}
+
+.draggable.dragging {
+  opacity: 0.5;
 }
