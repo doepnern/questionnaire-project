@@ -1,3 +1,4 @@
+$singleQuestionHeight: (100%/6);
 @mixin buttonFix {
   button {
     width: inherit;
@@ -9,7 +10,8 @@
 }
 @mixin roundedBorderPseudoElement($lVal, $rVal) {
   content: "";
-  position: absolute;
+  position: fixed;
+  float: left;
   width: 3px;
   top: 0px;
   @if $lVal >= 0 {
@@ -22,6 +24,17 @@
   height: 100%;
   border-radius: 7px;
 }
+
+@mixin removeScrollbar {
+  &::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
+  /* Optional: show position indicator in red */
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+}
 .EditQuizContainer {
   width: 100%;
   height: 100%;
@@ -29,6 +42,7 @@
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
+  position: relative;
   span {
     padding: 15px 10px 0 20px;
     font-size: 25px;
@@ -45,8 +59,10 @@
 .qc_submitButton {
   width: 130px;
   height: 50px;
-  margin: auto 20px 20px auto;
   @include buttonFix;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }
 
 .qc_editQuestionDiv {
@@ -70,52 +86,50 @@
   margin-top: 20px;
   width: 68%;
   height: 200px;
-  overflow-x: hidden;
+  overflow-x: visible;
   overflow-y: auto;
-
-  //border-left: 3px solid rgb(168, 154, 154);
-  //border-right: 3px solid rgb(168, 154, 154);
+  border-left: 3px solid rgb(168, 154, 154);
+  border-right: 3px solid rgb(168, 154, 154);
+  //border-radius: 2px;
   background-color: rgb(235, 223, 223);
   position: relative;
-  &::before {
-    @include roundedBorderPseudoElement(0, -1);
-  }
-  &::after {
-    @include roundedBorderPseudoElement(-1, 0);
-  }
+  @include removeScrollbar();
+
   .qc_singleQuestion {
-    height: (100%/6);
-    width: 99%;
+    box-sizing: border-box;
+    height: ($singleQuestionHeight);
+    width: 97%;
     margin: 0 auto 0 auto;
-    background-color: rgb(202, 191, 191);
-    border-bottom: 1px solid gray;
+    background-color: #f4f4ff;
+    border-bottom: 1px solid rgb(35, 30, 65);
+    &:first-child {
+      border-top: 1px solid rgb(35, 30, 65);
+    }
+    border-radius: 5px;
     display: flex;
     align-items: center;
     position: relative;
+    overflow-y: hidden;
+    overflow-x: hidden;
     span {
-      width: 100%;
+      width: 90%;
       overflow: hidden;
       font-size: 15px;
+      font-weight: 100;
       white-space: nowrap;
       padding: 0;
       margin: 0 0 0 10px;
     }
-    &::-webkit-scrollbar {
-      width: 0; /* Remove scrollbar space */
-      background: transparent; /* Optional: just make scrollbar invisible */
-    }
-    /* Optional: show position indicator in red */
-    &::-webkit-scrollbar-thumb {
-      background: transparent;
-    }
+
     .qc_singleQuestionTrash {
       position: absolute;
-      right: -30px;
+      right: 0px;
       top: 50%;
       transform: translateY(-50%);
-      height: 87%;
+      height: 70%;
       width: auto;
       transition: transform 0.2s linear;
+      cursor: pointer;
 
       svg {
         height: 100%;
@@ -153,5 +167,5 @@
 }
 
 .draggable.dragging {
-  opacity: 0.5;
+  background-color: rgb(234, 234, 255);
 }

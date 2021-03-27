@@ -120,6 +120,8 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
                   key={q.id}
                   onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd}
+                  onTouchStart={handleDragStart}
+                  onTouchEnd={handleDragEnd}
                   draggable="true"
                   ref={(el) => (draggables.current[index] = el)}
                   data-pos={q.pos}

@@ -13,7 +13,7 @@ export default function EditQuiz({ editingQuiz, toggleShown }) {
         width: "40%",
         height: "50%",
         minWidth: "540px",
-        minHeight: "377px",
+        minHeight: "420px",
       }}
     >
       <EditQuizComponents></EditQuizComponents>
