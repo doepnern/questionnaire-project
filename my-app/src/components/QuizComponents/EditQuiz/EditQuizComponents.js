@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { ReactComponent as ThrashButton } from "svg/trash_button.svg";
-import Draggable from "react-draggable";
 
 export default function EditQuizComponents({ children }) {
   return (
@@ -48,13 +47,45 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
       pos: 2,
     },
     {
-      id: 15,
+      id: 1588,
       titel:
         "question 2 is an example question with qeven more length than question 1",
       pos: 3,
     },
     {
-      id: 1,
+      id: 199,
+      titel: "question last is an example question with quite some length",
+      pos: 1,
+    },
+    {
+      id: 78,
+      titel: "question 1 is an example question with quite some length",
+      pos: 2,
+    },
+    {
+      id: 158,
+      titel:
+        "question 2 is an example question with qeven more length than question 1",
+      pos: 39,
+    },
+    {
+      id: 1422,
+      titel: "question last is an example question with quite some length",
+      pos: 1,
+    },
+    {
+      id: 74,
+      titel: "question 1 is an example question with quite some length",
+      pos: 2,
+    },
+    {
+      id: 153,
+      titel:
+        "question 2 is an example question with qeven more length than question 1",
+      pos: 3,
+    },
+    {
+      id: 14,
       titel: "question last is an example question with quite some length",
       pos: 1,
     },
@@ -67,6 +98,8 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
   const draggables = useRef([]);
   const container = useRef(null);
   const currentlyDraggingRef = useRef(null);
+  //for performance reasons save last after element, so recalculating of positions only needs to be done if afterElement changes
+  const lastAfterElement = useRef(null);
 
   return (
     <div
@@ -119,11 +152,17 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
 
   function handleDragEnd(e) {
     e.target.classList.remove("dragging");
+    lastAfterElement.current = null;
   }
 
   function handleDragOver(e) {
     e.preventDefault();
     const afterElement = getDragAfterElement(e.clientY);
+    if (lastAfterElement.current === afterElement) {
+      console.log("no need to recalc");
+      return;
+    }
+    lastAfterElement.current = afterElement;
     //find element to remove
     const removed = questionState.find(
       (e) =>
