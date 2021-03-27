@@ -84,5 +84,8 @@ function handleRequest(request, res) {
         res.json({ status: "success", result: result });
       }
     })
-    .catch((err) => res.json({ status: "error", msg: err.message }));
+    .catch((err) => {
+      console.warn(err);
+      res.json({ status: "error", msg: err.message });
+    });
 }

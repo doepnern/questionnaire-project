@@ -7,8 +7,12 @@ export default function EditQuiz({
   editingQuiz,
   toggleShown,
   showQuestionSelection = () => undefined,
+  quizzes,
 }) {
-  useEffect(() => console.log(editingQuiz));
+  useEffect(() => {
+    console.log(editingQuiz);
+    console.log(quizzes);
+  });
   return (
     <QuestionDetailed.Container
       isShown={editingQuiz.isEditing}
@@ -21,11 +25,25 @@ export default function EditQuiz({
       }}
     >
       <EditQuizComponents
-        questions={exampleQuestions()}
+        questions={
+          quizzes && quizzes.length > 0
+            ? preventUndefined(
+                quizzes.filter((q) => q.quizid === editingQuiz.quizEditing)
+              )
+            : []
+        }
         handleEditClick={() => showQuestionSelection()}
       ></EditQuizComponents>
     </QuestionDetailed.Container>
   );
+}
+
+function preventUndefined(x) {
+  console.log(x);
+  if (x == null || x.length < 1 || x[0].fragen == null) return [];
+  return x[0].fragen.map((q, index) => {
+    return { ...q, pos: index };
+  });
 }
 
 function exampleQuestions() {

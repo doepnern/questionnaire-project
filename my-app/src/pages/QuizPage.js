@@ -9,16 +9,18 @@ export default function QuizPage() {
     getQuizzes(1);
   }, []);
 
-  const [quizzes, setQuizzes] = useState();
+  const [quizzes, setQuizzes] = useState([]);
   const [editingQuiz, setEditingQuiz] = useState({
     isEditing: false,
     quizEditing: -1,
   });
   const [questionSelection, setQuestionSelection] = useState({
-    isShown: true,
+    isShown: false,
   });
   function getQuizzes(userId) {
-    getQuiz(userId, (res) => setQuizzes(res.result[0]?.quizzes));
+    getQuiz(userId, (res) => {
+      setQuizzes(res.result[0]?.quizzes);
+    });
   }
   return (
     <>
@@ -26,6 +28,7 @@ export default function QuizPage() {
       <EditQuiz
         editingQuiz={editingQuiz}
         toggleShown={toggleEditingQuiz}
+        quizzes={quizzes}
       ></EditQuiz>
       <QuestionSelection
         questionSelection={questionSelection}
@@ -34,9 +37,14 @@ export default function QuizPage() {
       ></QuestionSelection>
       <QuizItem.QuizContainer>
         <QuizItem.NewQuizItem handleClick={handleNewQuizClick} />
-        <QuizItem></QuizItem>
-        <QuizItem></QuizItem>
-        <QuizItem></QuizItem>
+        {quizzes.map((quiz) => (
+          <QuizItem
+            key={quiz.id}
+            handleEditClick={() => toggleEditingQuiz(quiz.quizid)}
+            quiz={quiz}
+            {...quiz}
+          />
+        ))}
       </QuizItem.QuizContainer>
     </>
   );

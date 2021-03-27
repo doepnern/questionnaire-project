@@ -7,11 +7,12 @@ export default function EditQuizComponents({
   handleEditClick,
   children,
 }) {
+  console.log(questions);
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">
         <TextField
-          id="qc_titleInput"
+          fragenid="qc_titleInput"
           label="Title"
           variant="filled"
         ></TextField>
@@ -71,31 +72,27 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
         ? getEmptyPlaceholder()
         : questionState
             .sort((a, b) => (a.pos <= b.pos ? -1 : 1))
-            .map((q, index) =>
-              q.placeholder ? (
-                placeHolder(index)
-              ) : (
-                <div
-                  className="qc_singleQuestion draggable"
-                  key={q.id}
-                  onDragStart={handleDragStart}
-                  onDragEnd={handleDragEnd}
-                  onTouchStart={handleDragStart}
-                  onTouchEnd={handleDragEnd}
-                  draggable="true"
-                  ref={(el) => (draggables.current[index] = el)}
-                  data-pos={q.pos}
-                  data-id={q.id}
-                >
-                  <span>
-                    {index + 1}: {q.titel}
-                  </span>
-                  <div className="qc_singleQuestionTrash">
-                    <ThrashButton></ThrashButton>
-                  </div>
+            .map((q, index) => (
+              <div
+                className="qc_singleQuestion draggable"
+                key={q.fragenid}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onTouchStart={handleDragStart}
+                onTouchEnd={handleDragEnd}
+                draggable="true"
+                ref={(el) => (draggables.current[index] = el)}
+                data-pos={q.pos}
+                data-id={q.fragenid}
+              >
+                <span>
+                  {index + 1}: {q.titel}
+                </span>
+                <div className="qc_singleQuestionTrash">
+                  <ThrashButton></ThrashButton>
                 </div>
-              )
-            )}
+              </div>
+            ))}
     </div>
   );
 
@@ -128,13 +125,14 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
     //find element to remove
     const removed = questionState.find(
       (e) =>
-        e.id === parseInt(currentlyDraggingRef.current.getAttribute("data-id"))
+        e.fragenid ===
+        parseInt(currentlyDraggingRef.current.getAttribute("data-id"))
     );
     //find new array with correct ordering without changing current state
     const resultingArray = insertBefore(
       questionState.filter(
         (e) =>
-          e.id !==
+          e.fragenid !==
           parseInt(currentlyDraggingRef.current.getAttribute("data-id"))
       ),
       afterElement

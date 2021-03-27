@@ -56,8 +56,8 @@ const fragenTags = [
 ];
 
 const quiz = [
-  { quizId: "DEFAULT", completed: "false" },
-  { quizId: "DEFAULT", completed: "false" },
+  { quizId: "DEFAULT", completed: "false", titel: `'pharma'` },
+  { quizId: "DEFAULT", completed: "false", titel: `'2. random quiz'` },
 ];
 
 const benutzerQuiz = [

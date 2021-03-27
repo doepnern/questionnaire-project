@@ -1,7 +1,7 @@
 const { questionsWithTags } = require("./benutzerFragen");
 function quizzesFromBenutzer(benutzerId) {
   query = ` 
-  SELECT currBenutzer.benutzerid, currBenutzer.benutzername, json_agg(json_build_object('quizid',fullQuiz.quizid,'beendet',fullQuiz.beendet,'fragen',fullQuiz.fragen)) FILTER (WHERE fullQuiz.quizId IS NOT NULL) as quizzes
+  SELECT currBenutzer.benutzerid, currBenutzer.benutzername, json_agg(json_build_object('quizid',fullQuiz.quizid,'beendet',fullQuiz.beendet,'titel',fullQuiz.titel,'fragen',fullQuiz.fragen)) FILTER (WHERE fullQuiz.quizId IS NOT NULL) as quizzes
   FROM (SELECT * FROM benutzer ${
     benutzerId ? "WHERE benutzer.benutzerid = $1 " : ""
   }) as currBenutzer
@@ -17,7 +17,7 @@ function quizzesFromBenutzer(benutzerId) {
 
 function quizWithQuestions() {
   query = `
-  SELECT quiz.quizid, quiz.beendet, json_agg(
+  SELECT quiz.quizid, quiz.beendet, quiz.titel ,json_agg(
     json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags) ORDER BY questionsWithTags.fragenid ASC) 
     FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen
   FROM quiz

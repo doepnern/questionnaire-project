@@ -2,22 +2,27 @@ import React from "react";
 import "./QuizItem.scss";
 import { ReactComponent as PlusButton } from "svg/plus_button.svg";
 
-export default function QuizItem({ handleClick }) {
+export default function QuizItem({
+  titel,
+  completed,
+  handleEditClick,
+  fragen = [],
+}) {
   return (
-    <div className="QuizItemContainer" onClick={handleClick}>
+    <div className="QuizItemContainer">
       <div className="QuizTitle">
-        <span>pharmakologie 1sadasdasdas</span>
+        <span>{titel}</span>
       </div>
       <div className="QuizInfo">
-        <span>Status: In progress</span>
+        <span>Status: {completed ? "finished" : "In progres.."}</span>
         <span>Result: -</span>
       </div>
       <div className="secondQuizInfo">
-        <span>Question: 20</span>
-        <span>Answered: 18</span>
+        <span>Question: {fragen.length}</span>
+        <span>Answered: 0</span>
       </div>
       <div className="buttonArea">
-        <div className="EnterQuizButtonContainer">
+        <div className="EnterQuizButtonContainer" onClick={handleEditClick}>
           <div className="EnterQuiz">Edit Quiz</div>
         </div>
         <div className="EnterQuizButtonContainer">

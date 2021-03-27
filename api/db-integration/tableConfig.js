@@ -51,6 +51,7 @@ const createTableQuiz = `
   CREATE TABLE IF NOT EXISTS ${tableNames[5]} (
   quizId serial NOT NULL,
   beendet boolean Not NULL,
+  titel varchar NOT NULL,
   PRIMARY KEY(quizId)
   );
 `;
