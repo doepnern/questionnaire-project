@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { QuestionBox } from "components";
 import { QuestionDetailedContainer } from "containers";
 import "./QuestionBoxContainer.css";
@@ -12,7 +12,10 @@ import {
 } from "services/UserService";
 import _ from "lodash";
 
-export default function QuestionBoxContainer({ reloadQuestions }) {
+export default function QuestionBoxContainer({
+  reloadQuestions,
+  handleHeaderClick = undefined,
+}) {
   const [showDetails, setShown] = useState({
     active: false,
     currentQuestion: 0,
@@ -40,7 +43,7 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
         return (
           <QuestionBox key={index}>
             <QuestionBox.Header
-              onClick={() => handleQuestionBoxHeaderClick(index)}
+              onClick={() => handleQuestionBoxHeaderClick(index, question)}
             >
               <QuestionBox.Title>{question.fragenid}</QuestionBox.Title>
               <QuestionBox.Text>{question.titel}</QuestionBox.Text>
@@ -70,7 +73,8 @@ export default function QuestionBoxContainer({ reloadQuestions }) {
     </div>
   );
 
-  function handleQuestionBoxHeaderClick(questionIndex) {
+  function handleQuestionBoxHeaderClick(questionIndex, question) {
+    if (handleHeaderClick) return handleHeaderClick(question);
     // fill Question Details with informations, then
     setShown((s) => {
       return { active: !s.active, currentQuestion: questionIndex };

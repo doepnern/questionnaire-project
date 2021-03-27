@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavBar } from "containers";
 import { getQuiz } from "services/UserService";
 import { QuizItem, EditQuiz } from "components";
+import QuestionSelection from "containers/QuestionSelection/QuestionSelection";
 
 export default function QuizPage() {
   useEffect(() => {
@@ -13,6 +14,9 @@ export default function QuizPage() {
     isEditing: false,
     quizEditing: -1,
   });
+  const [questionSelection, setQuestionSelection] = useState({
+    isShown: true,
+  });
   function getQuizzes(userId) {
     getQuiz(userId, (res) => setQuizzes(res.result[0]?.quizzes));
   }
@@ -23,6 +27,11 @@ export default function QuizPage() {
         editingQuiz={editingQuiz}
         toggleShown={toggleEditingQuiz}
       ></EditQuiz>
+      <QuestionSelection
+        questionSelection={questionSelection}
+        toggleShown={toggleQuestionSelection}
+        handleQuizAdding={handleQuizAdding}
+      ></QuestionSelection>
       <QuizItem.QuizContainer>
         <QuizItem.NewQuizItem handleClick={handleNewQuizClick} />
         <QuizItem></QuizItem>
@@ -32,12 +41,20 @@ export default function QuizPage() {
     </>
   );
   //<a>{JSON.stringify(quizzes, null, 4)}</a>
-  function toggleEditingQuiz() {
+  function toggleEditingQuiz(id) {
     setEditingQuiz((s) => {
       return {
         ...s,
         isEditing: !s.isEditing,
-        quizEditing: -1,
+        quizEditing: id ? id : -1,
+      };
+    });
+  }
+  function toggleQuestionSelection() {
+    setQuestionSelection((s) => {
+      return {
+        ...s,
+        isShown: !s.isShown,
       };
     });
   }
@@ -50,5 +67,14 @@ export default function QuizPage() {
         quizEditing: -1,
       };
     });
+  }
+
+  function handleQuizAdding(question) {
+    console.log(
+      "TODO: add question: " +
+        JSON.stringify(question, null, 4) +
+        " to quiz " +
+        editingQuiz.quizEditing
+    );
   }
 }

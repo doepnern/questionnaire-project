@@ -2,7 +2,11 @@ import React, { useState, useRef } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { ReactComponent as ThrashButton } from "svg/trash_button.svg";
 
-export default function EditQuizComponents({ children }) {
+export default function EditQuizComponents({
+  questions,
+  handleEditClick,
+  children,
+}) {
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">
@@ -12,8 +16,12 @@ export default function EditQuizComponents({ children }) {
           variant="filled"
         ></TextField>
       </div>
-      <EditQuizComponents.QuestionList></EditQuizComponents.QuestionList>
-      <EditQuizComponents.EditButton></EditQuizComponents.EditButton>
+      <EditQuizComponents.QuestionList
+        questions={questions}
+      ></EditQuizComponents.QuestionList>
+      <EditQuizComponents.EditButton
+        handleEditClick={handleEditClick}
+      ></EditQuizComponents.EditButton>
       <div className="qc_submitButton">
         <Button variant="contained" color="primary">
           Submit
@@ -23,16 +31,17 @@ export default function EditQuizComponents({ children }) {
   );
 }
 
-/*
- <div className="qc_info">
-        <span>Questions: 20</span>
-      </div>
-      */
-
-EditQuizComponents.EditButton = function EditQuizComponentsEditButton() {
+EditQuizComponents.EditButton = function EditQuizComponentsEditButton({
+  handleEditClick,
+}) {
   return (
     <div className="qc_editQuestionDiv">
-      <Button id="qc_editQuestion" variant="outlined" color="primary">
+      <Button
+        id="qc_editQuestion"
+        variant="outlined"
+        color="primary"
+        onClick={handleEditClick}
+      >
         ADD
       </Button>
     </div>
@@ -40,56 +49,7 @@ EditQuizComponents.EditButton = function EditQuizComponentsEditButton() {
 };
 
 EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
-  questions = [
-    {
-      id: 7,
-      titel: "question 1 is an example question with quite some length",
-      pos: 2,
-    },
-    {
-      id: 1588,
-      titel:
-        "question 2 is an example question with qeven more length than question 1",
-      pos: 3,
-    },
-    {
-      id: 199,
-      titel: "question last is an example question with quite some length",
-      pos: 1,
-    },
-    {
-      id: 78,
-      titel: "question 1 is an example question with quite some length",
-      pos: 2,
-    },
-    {
-      id: 158,
-      titel:
-        "question 2 is an example question with qeven more length than question 1",
-      pos: 39,
-    },
-    {
-      id: 1422,
-      titel: "question last is an example question with quite some length",
-      pos: 1,
-    },
-    {
-      id: 74,
-      titel: "question 1 is an example question with quite some length",
-      pos: 2,
-    },
-    {
-      id: 153,
-      titel:
-        "question 2 is an example question with qeven more length than question 1",
-      pos: 3,
-    },
-    {
-      id: 14,
-      titel: "question last is an example question with quite some length",
-      pos: 1,
-    },
-  ],
+  questions = [],
 }) {
   const [questionState, setQuestions] = useState(questions);
   const placeHolder = (index) => (

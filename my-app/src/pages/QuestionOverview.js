@@ -7,7 +7,7 @@ import TestQuestionContext from "context/Test.QuestionContext";
 import { useQuestionContext, addQuestion } from "context/QuestionContext";
 import { myDebouncer } from "helpers/debouncer";
 
-function QuestionOverview() {
+function QuestionOverview({ mode = "default", handleQuizAdding }) {
   const [fragenLoader, setFragenLoader] = useState({
     isLoading: true,
   });
@@ -50,6 +50,9 @@ function QuestionOverview() {
       {!fragenLoader.isLoading ? (
         <QuestionBoxContainer
           reloadQuestions={getAllUsersHere}
+          handleHeaderClick={
+            mode === "quizAdding" ? handleQuizAdding : undefined
+          }
         ></QuestionBoxContainer>
       ) : (
         <motion.div
