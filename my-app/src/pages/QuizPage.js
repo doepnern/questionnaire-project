@@ -39,7 +39,7 @@ export default function QuizPage() {
         <QuizItem.NewQuizItem handleClick={handleNewQuizClick} />
         {quizzes.map((quiz) => (
           <QuizItem
-            key={quiz.id}
+            key={quiz.quizid}
             handleEditClick={() => toggleEditingQuiz(quiz.quizid)}
             quiz={quiz}
             {...quiz}

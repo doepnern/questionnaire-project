@@ -83,6 +83,7 @@ $singleQuestionHeight: (100%/6);
 }
 
 .qc_QuestionList {
+  box-shadow: inset 0px 0px 20px 0px rgba(0, 0, 0, 0.19);
   margin-top: 20px;
   width: 68%;
   height: 200px;
@@ -90,7 +91,6 @@ $singleQuestionHeight: (100%/6);
   overflow-y: auto;
   border-left: 3px solid rgb(168, 154, 154);
   border-right: 3px solid rgb(168, 154, 154);
-  //border-radius: 2px;
   background-color: rgb(235, 223, 223);
   position: relative;
   @include removeScrollbar();
@@ -99,11 +99,10 @@ $singleQuestionHeight: (100%/6);
     box-sizing: border-box;
     height: ($singleQuestionHeight);
     width: 97%;
-    margin: 0 auto 0 auto;
-    background-color: #f4f4ff;
-    border-bottom: 1px solid rgb(35, 30, 65);
+    margin: 0 auto 3px auto;
+    background-color: #babad0;
     &:first-child {
-      border-top: 1px solid rgb(35, 30, 65);
+      margin-top: 3px;
     }
     border-radius: 5px;
     display: flex;
@@ -167,5 +166,5 @@ $singleQuestionHeight: (100%/6);
 }
 
 .draggable.dragging {
-  background-color: rgb(234, 234, 255);
+  opacity: 0.4;
 }
