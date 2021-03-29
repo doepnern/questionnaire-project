@@ -1,14 +1,21 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TextField, Button } from "@material-ui/core";
-import { ReactComponent as ThrashButton } from "svg/trash_button.svg";
+import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import ListDrag from "../../Misc/ListDrag/ListDrag";
+import _ from "lodash";
 
 export default function EditQuizComponents({
-  questions,
-  handleEditClick,
+  currentQuiz,
+  handleAddClick,
+  handleTrashClick,
   children,
 }) {
-  console.log(questions);
+  const questions = currentQuiz.questions;
+  const titel = currentQuiz.titel;
+  useEffect(() => {
+    console.log("rerendered quizComponents page");
+    console.log(questions);
+  });
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">
@@ -16,13 +23,15 @@ export default function EditQuizComponents({
           fragenid="qc_titleInput"
           label="Title"
           variant="filled"
+          value={titel}
         ></TextField>
       </div>
       <EditQuizComponents.QuestionList
         questions={questions}
+        handleTrashClick={handleTrashClick}
       ></EditQuizComponents.QuestionList>
       <EditQuizComponents.EditButton
-        handleEditClick={handleEditClick}
+        handleAddClick={handleAddClick}
       ></EditQuizComponents.EditButton>
       <div className="qc_submitButton">
         <Button variant="contained" color="primary">
@@ -34,7 +43,7 @@ export default function EditQuizComponents({
 }
 
 EditQuizComponents.EditButton = function EditQuizComponentsEditButton({
-  handleEditClick,
+  handleAddClick,
 }) {
   return (
     <div className="qc_editQuestionDiv">
@@ -42,7 +51,7 @@ EditQuizComponents.EditButton = function EditQuizComponentsEditButton({
         id="qc_editQuestion"
         variant="outlined"
         color="primary"
-        onClick={handleEditClick}
+        onClick={handleAddClick}
       >
         ADD
       </Button>
@@ -52,9 +61,16 @@ EditQuizComponents.EditButton = function EditQuizComponentsEditButton({
 
 EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
   questions = [],
+  handleTrashClick,
 }) {
+  //reload state when questions change
   const [questionState, setQuestions] = useState(questions);
-
+  const previousQuestions = useRef(questions);
+  useEffect(() => {
+    if (questions === previousQuestions.current) return;
+    previousQuestions.current = questions;
+    setQuestions(() => questions);
+  }, [questions]);
   return (
     <ListDrag
       className="qc_QuestionList"
@@ -78,7 +94,9 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
                   {index + 1}: {q.titel}
                 </span>
                 <div className="qc_singleQuestionTrash">
-                  <ThrashButton></ThrashButton>
+                  <TrashButton
+                    onClick={() => handleTrashClick(q)}
+                  ></TrashButton>
                 </div>
               </ListDrag.Item>
             ))}

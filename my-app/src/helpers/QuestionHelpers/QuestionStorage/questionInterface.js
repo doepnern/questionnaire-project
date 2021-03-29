@@ -99,6 +99,22 @@ function updateQuestion(question, update) {
   return newQ;
 }
 
+//inserts into an array of questions the question q only if no question with the same id exists
+function insertIfNotContained(arr, q) {
+  if (arr === null) return [q];
+  if (arr.every((e) => e.fragenid !== q.fragenid)) {
+    return [...arr, q];
+  }
+  return arr;
+}
+
+function removeIfContained(arr, q) {
+  if (arr === null) return [];
+  let target = arr.findIndex((e) => e.fragenid === q.fragenid);
+  if (target < 0) return [...arr];
+  return [...arr.slice(0, target), ...arr.slice(target + 1)];
+}
+
 /**
  *
  * HElPER FUNCTIONS
@@ -205,4 +221,6 @@ module.exports = {
   createAnswer: createAnswer,
   typesQuestion: typesQuestion,
   typesAnswer: typesAnswer,
+  insertIfNotContained,
+  removeIfContained,
 };

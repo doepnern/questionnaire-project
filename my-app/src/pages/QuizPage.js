@@ -3,6 +3,10 @@ import { NavBar } from "containers";
 import { getQuiz } from "services/UserService";
 import { QuizItem, EditQuiz } from "components";
 import QuestionSelection from "containers/QuestionSelection/QuestionSelection";
+import {
+  insertIfNotContained,
+  removeIfContained,
+} from "helpers/QuestionHelpers/QuestionStorage/questionInterface";
 
 export default function QuizPage() {
   useEffect(() => {
@@ -22,6 +26,7 @@ export default function QuizPage() {
       setQuizzes(res.result[0]?.quizzes);
     });
   }
+
   return (
     <>
       <NavBar />
@@ -29,6 +34,8 @@ export default function QuizPage() {
         editingQuiz={editingQuiz}
         toggleShown={toggleEditingQuiz}
         quizzes={quizzes}
+        handleAddClick={toggleQuestionSelection}
+        handleTrashClick={handleDeletingQuestion}
       ></EditQuiz>
       <QuestionSelection
         questionSelection={questionSelection}
@@ -48,7 +55,8 @@ export default function QuizPage() {
       </QuizItem.QuizContainer>
     </>
   );
-  //<a>{JSON.stringify(quizzes, null, 4)}</a>
+
+  // toggles editing screen and sets currently editing id to quizid
   function toggleEditingQuiz(id) {
     setEditingQuiz((s) => {
       return {
@@ -58,6 +66,8 @@ export default function QuizPage() {
       };
     });
   }
+
+  // toggles screen to add questions
   function toggleQuestionSelection() {
     setQuestionSelection((s) => {
       return {
@@ -66,6 +76,8 @@ export default function QuizPage() {
       };
     });
   }
+
+  // opens edit quiz dialogue and sets quizEditing to -1 -> if that is id at close -> need to let db create new quiz
   function handleNewQuizClick() {
     //TODO: create new quiz and get new quizzes id
     setEditingQuiz((s) => {
@@ -77,12 +89,43 @@ export default function QuizPage() {
     });
   }
 
+  //adds a question to a quiz
   function handleQuizAdding(question) {
-    console.log(
+    /* console.log(
       "TODO: add question: " +
         JSON.stringify(question, null, 4) +
         " to quiz " +
         editingQuiz.quizEditing
+    ); */
+    if (editingQuiz.quizEditing === -1) return;
+    let currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
+    setQuizzes((s) =>
+      replaceQuizWithId(s, {
+        ...currentQuiz,
+        fragen: insertIfNotContained(currentQuiz.fragen, question),
+      })
+    );
+    console.log(JSON.stringify(quizzes, null, 3));
+  }
+
+  //deletes given question from currently editing quiz
+  function handleDeletingQuestion(question) {
+    if (question == null) return;
+    let currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
+    setQuizzes((s) =>
+      replaceQuizWithId(s, {
+        ...currentQuiz,
+        fragen: removeIfContained(currentQuiz.fragen, question),
+      })
     );
   }
+}
+
+function findQuiz(arr, quizid) {
+  return arr.find((e) => e.quizid === quizid);
+}
+function replaceQuizWithId(arr, quiz) {
+  let target = arr.findIndex((e) => e.quizid === quiz.quizid);
+  if (target < 0) return [...arr];
+  return [...arr.slice(0, target), quiz, ...arr.slice(target + 1)];
 }
