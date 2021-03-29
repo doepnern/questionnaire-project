@@ -57,13 +57,19 @@ function questionStateReducer(state, action) {
 //available actions
 const ADD_QUESTION_QUIZ = "addQuestion";
 const DELETE_QUESTION_QUIZ = "deleteQuestion";
-
+// adds a question to the currently editing quiz
 export function addQuestionQuiz(question) {
   return { type: ADD_QUESTION_QUIZ, value: question };
 }
+// adds a question from the currently editing quiz
 export function deleteQuestionQuiz(question) {
   return { type: DELETE_QUESTION_QUIZ, value: question };
 }
+
+/*
+ *   HELPER functions
+ */
+
 //adds a question to a quiz
 function handleQuizAdding(quizzes, currentlyEditing, question) {
   if (currentlyEditing === -1) return;
