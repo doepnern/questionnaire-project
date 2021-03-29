@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { NavBar } from "containers";
-import { getQuiz } from "services/UserService";
 import { QuizItem, EditQuiz } from "components";
 import QuestionSelection from "containers/QuestionSelection/QuestionSelection";
 import {
-  insertIfNotContained,
-  removeIfContained,
-} from "helpers/QuestionHelpers/QuestionStorage/questionInterface";
+  useQuizState,
+  addQuestionQuiz,
+  deleteQuestionQuiz,
+} from "hooks/useQuizState";
 
 export default function QuizPage() {
   useEffect(() => {
-    getQuizzes(1);
+    refreshQuizzes(1);
   }, []);
 
-  const [quizzes, setQuizzes] = useState([]);
-  const [editingQuiz, setEditingQuiz] = useState({
-    isEditing: false,
-    quizEditing: -1,
-  });
+  const [
+    quizzes,
+    dispatch,
+    refreshQuizzes,
+    editingQuiz,
+    setEditingQuiz,
+  ] = useQuizState();
   const [questionSelection, setQuestionSelection] = useState({
     isShown: false,
   });
-  function getQuizzes(userId) {
-    getQuiz(userId, (res) => {
-      setQuizzes(res.result[0]?.quizzes);
-    });
-  }
 
   return (
     <>
@@ -91,41 +88,9 @@ export default function QuizPage() {
 
   //adds a question to a quiz
   function handleQuizAdding(question) {
-    /* console.log(
-      "TODO: add question: " +
-        JSON.stringify(question, null, 4) +
-        " to quiz " +
-        editingQuiz.quizEditing
-    ); */
-    if (editingQuiz.quizEditing === -1) return;
-    let currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
-    setQuizzes((s) =>
-      replaceQuizWithId(s, {
-        ...currentQuiz,
-        fragen: insertIfNotContained(currentQuiz.fragen, question),
-      })
-    );
-    console.log(JSON.stringify(quizzes, null, 3));
+    dispatch(addQuestionQuiz(question));
   }
-
-  //deletes given question from currently editing quiz
   function handleDeletingQuestion(question) {
-    if (question == null) return;
-    let currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
-    setQuizzes((s) =>
-      replaceQuizWithId(s, {
-        ...currentQuiz,
-        fragen: removeIfContained(currentQuiz.fragen, question),
-      })
-    );
+    dispatch(deleteQuestionQuiz(question));
   }
-}
-
-function findQuiz(arr, quizid) {
-  return arr.find((e) => e.quizid === quizid);
-}
-function replaceQuizWithId(arr, quiz) {
-  let target = arr.findIndex((e) => e.quizid === quiz.quizid);
-  if (target < 0) return [...arr];
-  return [...arr.slice(0, target), quiz, ...arr.slice(target + 1)];
 }
