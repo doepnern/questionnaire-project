@@ -7,14 +7,66 @@ import {
   addQuestionQuiz,
   deleteQuestionQuiz,
 } from "hooks/useQuizState";
+import { updateQuiz } from "services/UserService";
 
 export default function QuizPage() {
   useEffect(() => {
+    updateQuiz(
+      {
+        quizid: 1,
+        beendet: false,
+        titel: "timmmothey",
+        fragen: [
+          {
+            titel: "Welches Medikament bei Verdacht auf meningitis?",
+            antworten:
+              '[{"text":"antwort 1 it jetzt eine sehr sehr lange antwort ","correct":true},{"text":"antwort 2","correct":false},{"text":"antwort 3","correct":false},{"text":"antwort 4","correct":false}]',
+            tags: [
+              {
+                tagid: 1,
+                tagname: "medizin",
+                fragenid: 1,
+              },
+              {
+                tagid: 2,
+                tagname: "pharmakologie",
+                fragenid: 1,
+              },
+              {
+                tagid: 3,
+                tagname: "alle fragen",
+                fragenid: 1,
+              },
+              {
+                tagid: 4,
+                tagname: "einfach",
+                fragenid: 1,
+              },
+              {
+                tagid: 5,
+                tagname: "coole sachen",
+                fragenid: 1,
+              },
+            ],
+            pos: 1,
+          },
+          {
+            fragenid: 9,
+            titel: "frage 3",
+            antworten: null,
+            tags: [null],
+            pos: 0,
+          },
+        ],
+      },
+      1
+    );
     refreshQuizzes(1);
   }, []);
 
   const [
     quizzes,
+    setQuizzes,
     dispatch,
     refreshQuizzes,
     editingQuiz,

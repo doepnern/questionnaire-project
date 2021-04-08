@@ -10,6 +10,7 @@ export default function EditQuiz({
   handleTrashClick,
   quizzes,
 }) {
+  console.log(quizzes);
   return (
     <QuestionDetailed.Container
       isShown={editingQuiz.isEditing}

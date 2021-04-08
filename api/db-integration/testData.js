@@ -75,8 +75,9 @@ const QuizFragen = [
   {
     quizId: "1",
     fragenId: "1",
+    pos: "1",
   },
-  { quizId: "1", fragenId: "3" },
+  { quizId: "1", fragenId: "3", pos: "0" },
 ];
 module.exports = {
   benutzer: benutzer,

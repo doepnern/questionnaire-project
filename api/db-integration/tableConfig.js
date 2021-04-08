@@ -68,6 +68,7 @@ const createTableQuizFragen = `
 CREATE TABLE IF NOT EXISTS ${tableNames[7]} (
     quizId int NOT NULL REFERENCES quiz,
     fragenId int NOT NULL REFERENCES fragen,
+    fragenPos int NOT NULL,
     UNIQUE(quizId,fragenId)
 );
 `;

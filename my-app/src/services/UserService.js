@@ -46,6 +46,14 @@ export async function deleteTagById(tagId, questionid, onSuccess, onError) {
   );
 }
 
+export async function updateQuiz(quiz, benutzerid, onSuccess, onError) {
+  return dispatchUserService(
+    updateQuizRequest(quiz, benutzerid),
+    onSuccess,
+    onError
+  );
+}
+
 //adds to question, creates new tag if one with name doesnt exist
 export async function addTagForQuestion(
   tagName,
@@ -128,6 +136,21 @@ function addTagForQuestionRequest(tagName, questionId) {
       .split(" ")
       .join("_")} for question with id: ${questionId}`,
     request: () => fetch(`/api/questions/${questionId}/addTag/${tagName}`),
+  };
+}
+
+function updateQuizRequest(quiz, benutzerId) {
+  const user = benutzerId ? { benutzerId: benutzerId } : {};
+  const options = {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({ ...quiz, ...user }),
+  };
+  return {
+    name: `
+    updating quiz: ${quiz.quizid} with data: ${JSON.stringify(quiz, null, 3)}
+    `,
+    request: () => fetch("/api/quiz", options),
   };
 }
 /**

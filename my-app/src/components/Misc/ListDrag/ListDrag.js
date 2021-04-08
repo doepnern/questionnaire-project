@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { debugCall } from "helpers/debugPrint";
 /**
- * Create draggable autosorting list by passing in a stae consisting of objects where each object has a pos key and an id key, whose name can be specified in stateId property
+ * Create draggable autosorting list by passing in a state consisting of objects where each object has a pos key and an id key, whose name can be specified in stateId property
  * As Children only ListDrag.Items are valid to be dragged, give those their respective id as dataId, their pos as dataPos and their index in the current state as index property
  * the state will be set whenever the ordering changes and all pos attributes will be updated respectively without duplicates( they will have form: pos: 0 -> pos: 1 ...)
  * */
@@ -10,27 +11,69 @@ export default function ListDrag({
   state,
   setState,
   stateId = "id",
+  nodeRef,
 }) {
+  const currentState = useRef(state);
   const draggables = useRef([]);
   const container = useRef(null);
   const currentlyDraggingRef = useRef(null);
   //for performance reasons save last after element, so recalculating of positions only needs to be done if afterElement changes
   const lastAfterElement = useRef(null);
+  const myProps = {
+    onDragOver: handleDragOver,
+    ref: container,
+    className: className,
+  };
+
+  useEffect(() => {
+    if (nodeRef && nodeRef.current) {
+      console.log("node got passed, using this instead of creating div");
+      nodeRef.current.addEventListener("dragover", handleDragOver);
+      myProps["ref"] = nodeRef;
+      if (className) nodeRef.current.classList.add(className);
+      //turn every child div into draggable element, each child div has to have data-pos and data-id defined
+      nodeRef.current.childNodes.forEach((cn) => {
+        draggables.current.push(cn);
+        cn.addEventListener("dragstart", handleDragStart);
+        cn.addEventListener("dragend", handleDragEnd);
+        cn.setAttribute("draggable", true);
+        cn.classList.add("draggable");
+      });
+      return () => {
+        draggables.current = [];
+        nodeRef.current.removeEventListener("dragover", handleDragOver);
+        nodeRef.current.childNodes.forEach((cn) => {
+          cn.removeEventListener("dragstart", handleDragStart);
+          cn.removeEventListener("dragend", handleDragEnd);
+          cn.classList.remove("draggable");
+        });
+      };
+    }
+  }, [state]);
+  useEffect(() => {
+    currentState.current = state;
+  }, [state]);
   return (
-    <div onDragOver={handleDragOver} ref={container} className={className}>
-      {addPropsToChildren(children, {
-        draggables: draggables,
-        handleDragStart,
-        handleDragEnd,
-      })}
-    </div>
+    <>
+      {!nodeRef && (
+        <div {...myProps}>
+          {addPropsToChildren(children, {
+            draggables: draggables,
+            handleDragStart,
+            handleDragEnd,
+          })}
+        </div>
+      )}
+      {nodeRef && <>{children}</>}
+    </>
   );
 
+  //adds needed props to ListDragItems
   function addPropsToChildren(childs, props) {
     if (!childs || !(childs instanceof Array)) return childs;
     return childs.map((child) => {
       if (child.type === ListDrag.Item) {
-        // checking isValidElement is the safe way and avoids a typescript error too
+        // checking isValidElement
         if (React.isValidElement(child)) {
           return React.cloneElement(child, props);
         }
@@ -57,7 +100,7 @@ export default function ListDrag({
     }
     lastAfterElement.current = afterElement;
     //find element to remove
-    const removed = state.find(
+    const removed = currentState.current.find(
       (e) =>
         e[stateId] ===
         parseInt(currentlyDraggingRef.current.getAttribute("data-id"))
@@ -71,7 +114,7 @@ export default function ListDrag({
     }
     //find new array with correct ordering without changing current state
     const resultingArray = insertBefore(
-      state.filter(
+      currentState.current.filter(
         (e) =>
           e[stateId] !==
           parseInt(currentlyDraggingRef.current.getAttribute("data-id"))
@@ -134,18 +177,18 @@ ListDrag.Item = function ListDragItem({
   handleDragEnd,
   draggable = "true",
   draggables,
+  ...restProps
 }) {
-  return (
-    <div
-      ref={(el) => (draggables.current[index] = el)}
-      className={className + " draggable"}
-      draggable={draggable}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      data-pos={dataPos}
-      data-id={dataId}
-    >
-      {children}
-    </div>
-  );
+  const myProps = {
+    ref: draggables ? (el) => (draggables.current[index] = el) : undefined,
+    className: className + " draggable",
+    draggable: draggable,
+    onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd,
+    ...restProps,
+  };
+  myProps["data-id"] = dataId;
+  myProps["data-pos"] = dataPos;
+
+  return <div {...myProps}>{children}</div>;
 };

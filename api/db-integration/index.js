@@ -6,6 +6,12 @@ const { getQuestions } = require("./interface/getQuestions");
 const { deleteTagById, findTag, createTag } = require("./interface/Tags");
 const { performQuery } = require("./service/db-actions");
 const { quizzesFromBenutzer } = require("./views/quizView");
+const { upsertQuizSQL } = require("./interface/Quiz/upsertQuiz");
+const { addQuizToUserSQL } = require("./interface/Quiz/addQuizToUser");
+const { addFrageToQuizSQL } = require("./interface/Quiz/addFrageToQuiz");
+const {
+  removeFragenFromQuizSQL,
+} = require("./interface/Quiz/removeFragenFromQuiz");
 module.exports = {
   initDB: initDB,
   updateQuestions: updateQuestions,
@@ -17,4 +23,8 @@ module.exports = {
   createTag,
   performQuery,
   quizzesFromBenutzer,
+  upsertQuizSQL,
+  addQuizToUserSQL,
+  addFrageToQuizSQL,
+  removeFragenFromQuizSQL,
 };

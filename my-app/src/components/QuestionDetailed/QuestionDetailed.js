@@ -5,7 +5,7 @@ import QuestionAnswer from "./QuestionAnswer";
 import { ReactComponent as EditAnswerButton } from "svg/edit_button.svg";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import "components/Animations/Fade/styles.css";
-import { Modal } from "components";
+import { Modal, ListDrag } from "components";
 
 export default function QuestionDetailed() {
   return <></>;
@@ -146,6 +146,7 @@ QuestionDetailed.VariableSingleAnswer = function QuestiondetailedSingleVariableA
               return { ...s, animation: "", active: "false" };
             });
           }}
+          {...restProps}
         ></QuestionDetailed.SingleAnswerEditing>
       ) : (
         <QuestionDetailed.SingleAnswerDefault
@@ -160,6 +161,7 @@ QuestionDetailed.VariableSingleAnswer = function QuestiondetailedSingleVariableA
             e.stopPropagation();
             setEditing((s) => !s);
           }}
+          {...restProps}
         ></QuestionDetailed.SingleAnswerDefault>
       )}
     </>

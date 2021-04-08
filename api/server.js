@@ -4,7 +4,11 @@ const path = require("path");
 const app = express(),
   bodyParser = require("body-parser");
 port = 3080;
-const { handleAddingTagToQuestion, getQuiz } = require("./controller");
+const {
+  handleAddingTagToQuestion,
+  getQuiz,
+  upsertQuiz,
+} = require("./controller");
 const {
   initDB,
   updateQuestions,
@@ -65,6 +69,14 @@ app.get(`/api/questions/:questionId/addTag/:tagName`, (req, res) => {
 
 app.get("/api/quiz", (req, res) => {
   handleRequest(() => getQuiz(req.query.userId), res);
+});
+
+/**
+ * modifys a quiz, has to have keys: quizid :: int ,beendet :: bool, titel :: string, benutzerId :: int (user to which quiz should be added) , optional: fragen :: [{fragenid::int , pos :: int}]
+ * if fragen is an array, all questions are removed from the quiz and replaced with new given array
+ */
+app.post("/api/quiz", (req, res) => {
+  handleRequest(() => upsertQuiz(req.body), res);
 });
 
 app.get("/", (req, res) => {

@@ -2,10 +2,13 @@ import { Checkbox } from "components";
 import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as PlusButton } from "svg/plus_button.svg";
 import "./questionAnswer.scss";
-import { motion } from "framer-motion";
 
-export default function QuestionAnswer({ children, ...restProps }) {
-  return <div className="qa_container">{children}</div>;
+export default function QuestionAnswer({ children, innerRef, ...restProps }) {
+  return (
+    <div className="qa_container" ref={innerRef}>
+      {children}
+    </div>
+  );
 }
 
 //S
@@ -83,6 +86,24 @@ QuestionAnswer.EditAnswerTextContainer = function AnswerTextContainer({
 };
 
 QuestionAnswer.SingleAnswerContainer = function SingleAnswerContainer({
+  handleClick,
+  children,
+  ...restprops
+}) {
+  return (
+    <>
+      <div
+        className="qa_singleAnswerContainer"
+        onClick={handleClick}
+        {...restprops}
+      >
+        {children}
+      </div>
+    </>
+  );
+};
+
+QuestionAnswer.SingleAnswerContainerOld = function SingleAnswerContainerOld({
   handleClick,
   children,
   ...restprops

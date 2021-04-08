@@ -6,3 +6,4 @@ export { default as NavBar } from "./NavBar/NavBar";
 export { default as QuizItem } from "./QuizComponents/QuizItem";
 export { default as Modal } from "./Misc/Modal/Modal";
 export { default as EditQuiz } from "./QuizComponents/EditQuiz/EditQuiz";
+export { default as ListDrag } from "./Misc/ListDrag/ListDrag";

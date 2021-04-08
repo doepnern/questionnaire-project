@@ -12,10 +12,6 @@ export default function EditQuizComponents({
 }) {
   const questions = currentQuiz.questions;
   const titel = currentQuiz.titel;
-  useEffect(() => {
-    console.log("rerendered quizComponents page");
-    console.log(questions);
-  });
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">
@@ -73,10 +69,10 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
   }, [questions]);
   return (
     <ListDrag
-      className="qc_QuestionList"
       state={questionState}
       setState={setQuestions}
       stateId={"fragenid"}
+      className="qc_QuestionList"
     >
       {questionState.length < 1
         ? getEmptyPlaceholder()
