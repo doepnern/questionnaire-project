@@ -7,60 +7,9 @@ import {
   addQuestionQuiz,
   deleteQuestionQuiz,
 } from "hooks/useQuizState";
-import { updateQuiz } from "services/UserService";
 
 export default function QuizPage() {
   useEffect(() => {
-    updateQuiz(
-      {
-        quizid: 1,
-        beendet: false,
-        titel: "timmmothey",
-        fragen: [
-          {
-            titel: "Welches Medikament bei Verdacht auf meningitis?",
-            antworten:
-              '[{"text":"antwort 1 it jetzt eine sehr sehr lange antwort ","correct":true},{"text":"antwort 2","correct":false},{"text":"antwort 3","correct":false},{"text":"antwort 4","correct":false}]',
-            tags: [
-              {
-                tagid: 1,
-                tagname: "medizin",
-                fragenid: 1,
-              },
-              {
-                tagid: 2,
-                tagname: "pharmakologie",
-                fragenid: 1,
-              },
-              {
-                tagid: 3,
-                tagname: "alle fragen",
-                fragenid: 1,
-              },
-              {
-                tagid: 4,
-                tagname: "einfach",
-                fragenid: 1,
-              },
-              {
-                tagid: 5,
-                tagname: "coole sachen",
-                fragenid: 1,
-              },
-            ],
-            pos: 1,
-          },
-          {
-            fragenid: 9,
-            titel: "frage 3",
-            antworten: null,
-            tags: [null],
-            pos: 0,
-          },
-        ],
-      },
-      1
-    );
     refreshQuizzes(1);
   }, []);
 
@@ -71,6 +20,7 @@ export default function QuizPage() {
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
+    { updateCurrentlyEditingQuiz, updateQuiz },
   ] = useQuizState();
   const [questionSelection, setQuestionSelection] = useState({
     isShown: false,
@@ -85,6 +35,7 @@ export default function QuizPage() {
         quizzes={quizzes}
         handleAddClick={toggleQuestionSelection}
         handleTrashClick={handleDeletingQuestion}
+        updateCurrentlyEditingQuiz={updateCurrentlyEditingQuiz}
       ></EditQuiz>
       <QuestionSelection
         questionSelection={questionSelection}
@@ -129,12 +80,21 @@ export default function QuizPage() {
   // opens edit quiz dialogue and sets quizEditing to -1 -> if that is id at close -> need to let db create new quiz
   function handleNewQuizClick() {
     //TODO: create new quiz and get new quizzes id
-    setEditingQuiz((s) => {
-      return {
-        ...s,
-        isEditing: true,
-        quizEditing: -1,
-      };
+    updateQuiz({ quizid: -1, beendet: false, titel: "new quiz" }, 1, (res) => {
+      console.log(res);
+      if (
+        res.status === "success" &&
+        res.result &&
+        res.result[0]?.rows[0]?.quizid
+      ) {
+        setEditingQuiz((s) => {
+          return {
+            ...s,
+            isEditing: true,
+            quizEditing: res.result[0].rows[0].quizid,
+          };
+        });
+      } else console.log("newly created quiz cant be found");
     });
   }
 

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { getQuiz } from "services/UserService";
+import {
+  getQuiz,
+  updateQuiz as dispatchUpdateQuiz,
+} from "services/UserService";
 import {
   insertIfNotContained,
   removeIfContained,
@@ -18,6 +21,23 @@ export function useQuizState() {
     });
   }
 
+  //updates the quizData in the db with the passed quizData, if quizId is -1, quiz is newly created, also quiz is added to userIds quizzes
+  function updateQuiz(quizData, userId, callback = () => undefined) {
+    dispatchUpdateQuiz(quizData, userId, (res) => {
+      refreshQuizzes(userId);
+      callback(res);
+    });
+  }
+
+  function updateCurrentlyEditingQuiz(updatingObj = {}, userId) {
+    updateQuiz(
+      editingQuiz.quizEditing >= 0
+        ? { ...findQuiz(quizzes, editingQuiz.quizEditing), ...updatingObj }
+        : { quizid: -1, beendet: false, titel: "new quiz" },
+      userId
+    );
+  }
+
   function dispatch(action) {
     const nextState = questionStateReducer(
       { quizzes: quizzes, currentlyEditing: editingQuiz.quizEditing },
@@ -32,6 +52,7 @@ export function useQuizState() {
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
+    { updateQuiz, updateCurrentlyEditingQuiz },
   ];
 }
 
@@ -57,6 +78,7 @@ function questionStateReducer(state, action) {
 //available actions
 const ADD_QUESTION_QUIZ = "addQuestion";
 const DELETE_QUESTION_QUIZ = "deleteQuestion";
+const UPDATE_QUIZ = "updateQuiz";
 // adds a question to the currently editing quiz
 export function addQuestionQuiz(question) {
   return { type: ADD_QUESTION_QUIZ, value: question };
@@ -66,13 +88,17 @@ export function deleteQuestionQuiz(question) {
   return { type: DELETE_QUESTION_QUIZ, value: question };
 }
 
+export function updateQuiz(quiz, user) {
+  return { type: UPDATE_QUIZ, value: { quiz, user } };
+}
+
 /*
  *   HELPER functions
  */
 
 //adds a question to a quiz
 function handleQuizAdding(quizzes, currentlyEditing, question) {
-  if (currentlyEditing === -1) return;
+  if (currentlyEditing === -1) return quizzes;
   let currentQuiz = findQuiz(quizzes, currentlyEditing);
   return replaceQuizWithId(quizzes, {
     ...currentQuiz,

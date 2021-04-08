@@ -9,6 +9,7 @@ export default function EditQuiz({
   handleAddClick,
   handleTrashClick,
   quizzes,
+  updateCurrentlyEditingQuiz,
 }) {
   console.log(quizzes);
   return (
@@ -33,11 +34,18 @@ export default function EditQuiz({
         }
         handleAddClick={handleAddClick}
         handleTrashClick={handleTrashClick}
+        handleSubmitClick={handleSubmitQuiz}
       ></EditQuizComponents>
     </QuestionDetailed.Container>
   );
   function findQuiz() {
     return quizzes.filter((q) => q.quizid === editingQuiz.quizEditing);
+  }
+
+  function handleSubmitQuiz(newQuiz) {
+    //for user 1
+    updateCurrentlyEditingQuiz(newQuiz, 1);
+    toggleShown();
   }
 }
 

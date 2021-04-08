@@ -8,10 +8,30 @@ export default function EditQuizComponents({
   currentQuiz,
   handleAddClick,
   handleTrashClick,
+  handleSubmitClick,
   children,
 }) {
-  const questions = currentQuiz.questions;
-  const titel = currentQuiz.titel;
+  const questions = currentQuiz.questions ? currentQuiz.questions : [];
+  const titel = currentQuiz.titel ? currentQuiz.titel : "undefined";
+  //reload state when questions change
+  const [questionState, setQuestions] = useState(questions);
+  const previousQuestions = useRef(questions);
+  const [titelState, setTitel] = useState(titel);
+
+  //if questions are changed putside this component, update question
+  useEffect(() => {
+    if (questions === previousQuestions.current) return;
+    previousQuestions.current = questions;
+    setQuestions(() => questions);
+  }, [currentQuiz]);
+
+  //if title is changed outside this component, update title
+  useEffect(() => {
+    if (currentQuiz.titel && !(titelState === currentQuiz.titel)) {
+      setTitel(currentQuiz.titel);
+    }
+  }, [currentQuiz.titel]);
+
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">
@@ -19,18 +39,26 @@ export default function EditQuizComponents({
           fragenid="qc_titleInput"
           label="Title"
           variant="filled"
-          value={titel}
+          value={titelState}
+          onChange={(e) => setTitel(e.target.value)}
         ></TextField>
       </div>
       <EditQuizComponents.QuestionList
-        questions={questions}
+        questionState={questionState}
+        setQuestions={setQuestions}
         handleTrashClick={handleTrashClick}
       ></EditQuizComponents.QuestionList>
       <EditQuizComponents.EditButton
         handleAddClick={handleAddClick}
       ></EditQuizComponents.EditButton>
       <div className="qc_submitButton">
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() =>
+            handleSubmitClick({ fragen: questionState, titel: titelState })
+          }
+        >
           Submit
         </Button>
       </div>
@@ -56,17 +84,10 @@ EditQuizComponents.EditButton = function EditQuizComponentsEditButton({
 };
 
 EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
-  questions = [],
+  questionState,
+  setQuestions,
   handleTrashClick,
 }) {
-  //reload state when questions change
-  const [questionState, setQuestions] = useState(questions);
-  const previousQuestions = useRef(questions);
-  useEffect(() => {
-    if (questions === previousQuestions.current) return;
-    previousQuestions.current = questions;
-    setQuestions(() => questions);
-  }, [questions]);
   return (
     <ListDrag
       state={questionState}
@@ -74,7 +95,7 @@ EditQuizComponents.QuestionList = function EditQuizComponentsQuestionList({
       stateId={"fragenid"}
       className="qc_QuestionList"
     >
-      {questionState.length < 1
+      {!questionState || questionState.length < 1
         ? getEmptyPlaceholder()
         : questionState
             .sort((a, b) => (a.pos <= b.pos ? -1 : 1))
