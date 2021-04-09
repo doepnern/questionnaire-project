@@ -4,6 +4,7 @@ import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import ListDrag from "../../Misc/ListDrag/ListDrag";
 import _ from "lodash";
 
+//The edit quiz has own state, so changes are only applied once the submit button is pressed
 export default function EditQuizComponents({
   currentQuiz,
   handleAddClick,

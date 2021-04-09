@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import EditQuizComponents from "./EditQuizComponents";
 import "./EditQuiz.scss";
 import QuestionDetailed from "../../QuestionDetailed/QuestionDetailed";
@@ -11,7 +11,6 @@ export default function EditQuiz({
   quizzes,
   updateCurrentlyEditingQuiz,
 }) {
-  console.log(quizzes);
   return (
     <QuestionDetailed.Container
       isShown={editingQuiz.isEditing}
@@ -53,6 +52,7 @@ function preventUndefined(x) {
   if (x == null || x.length < 1 || x[0].fragen == null) return [];
   return x[0];
 }
+//makes sure every question has a position, which is needed for the draggable list, gives preference to innate position, if no position is present, takes index as position
 function formatFragenWithPos(x) {
   let x1 = preventUndefined(x);
   if (x1.length < 1) return;

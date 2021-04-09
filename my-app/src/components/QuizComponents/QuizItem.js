@@ -6,6 +6,7 @@ export default function QuizItem({
   titel,
   completed,
   handleEditClick,
+  handleDeleteClick,
   fragen = [],
 }) {
   return (
@@ -22,11 +23,19 @@ export default function QuizItem({
         <span>Answered: 0</span>
       </div>
       <div className="buttonArea">
-        <div className="EnterQuizButtonContainer" onClick={handleEditClick}>
+        <div
+          className="QuizButtonContainer default_qbc "
+          onClick={handleEditClick}
+        >
           <div className="EnterQuiz">Edit Quiz</div>
         </div>
-        <div className="EnterQuizButtonContainer">
+        <div className="QuizButtonContainer default_qbc">
           <div className="EnterQuiz">Continue</div>
+        </div>
+        <div className="QuizButtonContainer delete_qbc">
+          <div className="EnterQuiz" onClick={handleDeleteClick}>
+            Delete
+          </div>
         </div>
       </div>
     </div>

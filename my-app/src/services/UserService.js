@@ -54,6 +54,10 @@ export async function updateQuiz(quiz, benutzerid, onSuccess, onError) {
   );
 }
 
+export async function deleteQuiz(quizid, onSuccess, onError) {
+  return dispatchUserService(deleteQuizRequest(quizid), onSuccess, onError);
+}
+
 //adds to question, creates new tag if one with name doesnt exist
 export async function addTagForQuestion(
   tagName,
@@ -151,6 +155,14 @@ function updateQuizRequest(quiz, benutzerId) {
     updating quiz: ${quiz.quizid} with data: ${JSON.stringify(quiz, null, 3)}
     `,
     request: () => fetch("/api/quiz", options),
+  };
+}
+
+function deleteQuizRequest(quizid) {
+  return {
+    name: `
+  deleting quiz: ${quizid} `,
+    request: () => fetch(`/api/quiz/delete/${quizid}`),
   };
 }
 /**

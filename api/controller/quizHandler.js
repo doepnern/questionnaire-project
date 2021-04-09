@@ -5,7 +5,9 @@ const {
   addQuizToUserSQL,
   addFrageToQuizSQL,
   removeFragenFromQuizSQL,
+  deleteQuizSQL,
 } = require("../db-integration");
+const { isInt } = require("../my_util");
 async function getQuiz(userId) {
   const res = await performQuery(...quizzesFromBenutzer(userId));
   if (!res.error) {
@@ -46,10 +48,19 @@ async function upsertQuiz(quizData) {
   return res;
 }
 
+//deletes quiz with quizid
+async function deleteQuiz(quizid) {
+  if (!isInt(quizid))
+    throw new Error("quizid given is not a valid int: " + quizid);
+  const res = await performQuery(deleteQuizSQL(quizid));
+  return res;
+}
+
 function removeNulls(obj, key) {
   if (obj[key] == null) obj[key] = [];
 }
 module.exports = {
   getQuiz,
   upsertQuiz,
+  deleteQuiz,
 };

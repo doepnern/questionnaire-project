@@ -12,6 +12,7 @@ const { addFrageToQuizSQL } = require("./interface/Quiz/addFrageToQuiz");
 const {
   removeFragenFromQuizSQL,
 } = require("./interface/Quiz/removeFragenFromQuiz");
+const { deleteQuizSQL } = require("./interface/Quiz/deleteQuiz");
 module.exports = {
   initDB: initDB,
   updateQuestions: updateQuestions,
@@ -27,4 +28,5 @@ module.exports = {
   addQuizToUserSQL,
   addFrageToQuizSQL,
   removeFragenFromQuizSQL,
+  deleteQuizSQL,
 };

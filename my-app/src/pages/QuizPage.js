@@ -7,6 +7,7 @@ import {
   addQuestionQuiz,
   deleteQuestionQuiz,
 } from "hooks/useQuizState";
+import { deleteQuiz as dispatchDeleteQuiz } from "services/UserService";
 
 export default function QuizPage() {
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function QuizPage() {
         {quizzes.map((quiz) => (
           <QuizItem
             key={quiz.quizid}
+            handleDeleteClick={() => handleDeletingQuiz(quiz.quizid)}
             handleEditClick={() => toggleEditingQuiz(quiz.quizid)}
             quiz={quiz}
             {...quiz}
@@ -59,6 +61,7 @@ export default function QuizPage() {
   // toggles editing screen and sets currently editing id to quizid
   function toggleEditingQuiz(id) {
     setEditingQuiz((s) => {
+      if (s.isEditing) refreshQuizzes(1);
       return {
         ...s,
         isEditing: !s.isEditing,
@@ -96,6 +99,10 @@ export default function QuizPage() {
         });
       } else console.log("newly created quiz cant be found");
     });
+  }
+
+  function handleDeletingQuiz(quizid) {
+    dispatchDeleteQuiz(quizid, () => refreshQuizzes(1));
   }
 
   //adds a question to a quiz

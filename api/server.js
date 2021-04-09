@@ -8,6 +8,7 @@ const {
   handleAddingTagToQuestion,
   getQuiz,
   upsertQuiz,
+  deleteQuiz,
 } = require("./controller");
 const {
   initDB,
@@ -69,6 +70,11 @@ app.get(`/api/questions/:questionId/addTag/:tagName`, (req, res) => {
 
 app.get("/api/quiz", (req, res) => {
   handleRequest(() => getQuiz(req.query.userId), res);
+});
+
+app.get("/api/quiz/delete/:quizid", (req, res) => {
+  console.log(req.params.quizid);
+  handleRequest(() => deleteQuiz(req.params.quizid), res);
 });
 
 /**

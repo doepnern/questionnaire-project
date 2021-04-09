@@ -17,7 +17,7 @@ $baseWidth: 96.5%;
   border-radius: 5px;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.267);
   display: grid;
-  grid-template-columns: [l1] 30% [l3] 30% [l4] auto [l5];
+  grid-template-columns: [l1] 30% [l3] auto [l4] 200px [l5];
   grid-template-rows: [r1] 25px [r2] auto[r3] auto [r4];
   grid-template-areas:
     " title title button"
@@ -71,18 +71,16 @@ $baseWidth: 96.5%;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  .EnterQuizButtonContainer {
+  overflow: hidden;
+  flex-wrap: wrap;
+  .QuizButtonContainer {
     padding: 4px;
     height: 24px;
-    min-width: 60px;
+    min-width: 75 px;
     width: fit-content;
-    background-color: #445e90;
     border-radius: 5px;
     &:hover {
-      background-color: #314978;
-      .EnterQuiz {
-        transform: scale(1.02);
-      }
+      transform: scale(1.005);
       cursor: pointer;
     }
     .EnterQuiz {
@@ -91,8 +89,22 @@ $baseWidth: 96.5%;
       justify-content: center;
       align-items: center;
       font-size: 20px;
-      color: #dbe8ff;
+      font-weight: 400;
+      color: #e8effc;
     }
+  }
+}
+
+.default_qbc {
+  background-color: #3d588a;
+  &:hover {
+    background-color: #314979;
+  }
+}
+.delete_qbc {
+  background-color: #920002;
+  &:hover {
+    background-color: #850204;
   }
 }
 
