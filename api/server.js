@@ -68,6 +68,7 @@ app.get(`/api/questions/:questionId/addTag/:tagName`, (req, res) => {
   );
 });
 
+//returns all quizzes for user: userid
 app.get("/api/quiz", (req, res) => {
   handleRequest(() => getQuiz(req.query.userId), res);
 });

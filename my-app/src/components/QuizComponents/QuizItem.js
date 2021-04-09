@@ -15,7 +15,7 @@ export default function QuizItem({
         <span>{titel}</span>
       </div>
       <div className="QuizInfo">
-        <span>Status: {completed ? "finished" : "In progres.."}</span>
+        <span>Status: {completed ? "finished" : "In progress.."}</span>
         <span>Result: -</span>
       </div>
       <div className="secondQuizInfo">

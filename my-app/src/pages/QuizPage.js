@@ -48,6 +48,7 @@ export default function QuizPage() {
         {quizzes.map((quiz) => (
           <QuizItem
             key={quiz.quizid}
+            completed={quiz.beendet}
             handleDeleteClick={() => handleDeletingQuiz(quiz.quizid)}
             handleEditClick={() => toggleEditingQuiz(quiz.quizid)}
             quiz={quiz}
