@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./index.scss";
 import QuestionOverview from "./pages/QuestionOverview";
 import QuizPage from "./pages/QuizPage";
 import TakeQuiz from "./pages/TakeQuiz";
