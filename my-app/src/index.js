@@ -7,17 +7,11 @@ import TakeQuiz from "./pages/TakeQuiz";
 import * as serviceWorker from "./serviceWorker";
 import { QuestionContextProvider } from "context/QuestionContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { NotificationContextProvider } from "context/NotificationContext";
-import {
-  InformationOverlayContainer,
-  DialogueContainer,
-} from "containers/Notifications";
+import { NotificationComponent } from "components";
 
 ReactDOM.render(
   <React.StrictMode>
-    <NotificationContextProvider>
-      <InformationOverlayContainer />
-      <DialogueContainer />
+    <NotificationComponent>
       <Router>
         <Switch>
           <Route path="/quiz/try/:quizid">
@@ -33,7 +27,7 @@ ReactDOM.render(
           </Route>
         </Switch>
       </Router>
-    </NotificationContextProvider>
+    </NotificationComponent>
   </React.StrictMode>,
   document.getElementById("root")
 );

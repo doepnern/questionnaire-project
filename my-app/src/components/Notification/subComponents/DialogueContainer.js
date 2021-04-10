@@ -1,7 +1,7 @@
 import React from "react";
-import { InformationOverlayDiv, Fade } from "components";
-import { useNotificationContext } from "context/NotificationContext";
-import "./styles/dialogue.css";
+import Fade from "../../Misc/Fade/Fade";
+import { useNotificationContext } from "../NotificationContext";
+import "../styles/dialogue.css";
 export default function InformationOverlayContainer() {
   const { notificationContext } = useNotificationContext();
   return (

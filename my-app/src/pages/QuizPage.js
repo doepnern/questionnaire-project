@@ -8,10 +8,7 @@ import {
   deleteQuestionQuiz,
 } from "hooks/useQuizState";
 import { deleteQuiz as dispatchDeleteQuiz } from "services/UserService";
-import {
-  useNotificationContext,
-  displayMessage,
-} from "context/NotificationContext";
+import { useNotificationContext, displayMessage } from "components";
 
 export default function QuizPage() {
   const { dispatch: dispatchNotification } = useNotificationContext();

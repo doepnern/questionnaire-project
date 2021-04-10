@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { InformationOverlayDiv, Fade } from "components";
-import { useNotificationContext } from "context/NotificationContext";
+import Fade from "../../Misc/Fade/Fade";
+import InformationOverlayDiv from "./InformationOverlayDiv";
+import { useNotificationContext } from "components";
 export default function InformationOverlayContainer() {
   const { notificationContext } = useNotificationContext();
   useEffect(() => {
