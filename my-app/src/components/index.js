@@ -8,3 +8,5 @@ export { default as Modal } from "./Misc/Modal/Modal";
 export { default as EditQuiz } from "./QuizComponents/EditQuiz/EditQuiz";
 export { default as ListDrag } from "./Misc/ListDrag/ListDrag";
 export { default as QuizSmallOverview } from "./QuizSmallOverview/QuizSmallOverview";
+export { default as Fade } from "./Misc/Fade/Fade";
+export { default as InformationOverlayDiv } from "./Misc/InformationOverlayDiv";

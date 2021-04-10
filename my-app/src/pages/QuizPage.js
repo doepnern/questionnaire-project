@@ -8,10 +8,23 @@ import {
   deleteQuestionQuiz,
 } from "hooks/useQuizState";
 import { deleteQuiz as dispatchDeleteQuiz } from "services/UserService";
+import {
+  useNotificationContext,
+  displayMessage,
+} from "context/NotificationContext";
 
 export default function QuizPage() {
+  const { dispatch: dispatchNotification } = useNotificationContext();
   useEffect(() => {
     refreshQuizzes(1);
+    dispatchNotification(
+      displayMessage(
+        "successfully did something you wanted",
+        "error",
+        dispatchNotification,
+        20000
+      )
+    );
   }, []);
 
   const [

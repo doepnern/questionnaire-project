@@ -1,9 +1,9 @@
 @import "../../globalVars.scss";
 $baseWidth: 200px;
 $baseHeight: 350px;
-$singleQuestionMargin: 5px;
+$singleQuestionMargin: 3%;
 $itemsPerRow: 4;
-$itemsPerColumn: 6;
+$itemsPerColumn: 5;
 .qso_container {
   height: $baseHeight;
   width: $baseWidth;
@@ -25,10 +25,15 @@ $itemsPerColumn: 6;
 }
 
 .qso_singleQuestionContainer {
-  width: ($baseWidth - ($singleQuestionMargin * ($itemsPerRow + 1))) /
+  /*width: ($baseWidth - ($singleQuestionMargin * ($itemsPerRow + 1))) /
     $itemsPerRow;
   height: ($baseHeight - $singleQuestionMargin * ($itemsPerColumn + 1)) /
-    $itemsPerColumn;
+    $itemsPerColumn;*/
+  box-sizing: border-box;
+  width: ((100% - (($itemsPerRow + 1) * $singleQuestionMargin)) / $itemsPerRow);
+  height: (
+    (100% - (($itemsPerColumn + 1) * $singleQuestionMargin)) / $itemsPerColumn
+  );
   background-color: $colorPrimaryLight;
   margin-left: $singleQuestionMargin;
   margin-top: $singleQuestionMargin;

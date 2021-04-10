@@ -7,24 +7,33 @@ import TakeQuiz from "./pages/TakeQuiz";
 import * as serviceWorker from "./serviceWorker";
 import { QuestionContextProvider } from "context/QuestionContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { NotificationContextProvider } from "context/NotificationContext";
+import {
+  InformationOverlayContainer,
+  DialogueContainer,
+} from "containers/Notifications";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Switch>
-        <Route path="/quiz/try/:quizid">
-          <TakeQuiz></TakeQuiz>
-        </Route>
-        <Route path="/quiz">
-          <QuizPage></QuizPage>
-        </Route>
-        <Route path="/">
-          <QuestionContextProvider>
-            <QuestionOverview />
-          </QuestionContextProvider>
-        </Route>
-      </Switch>
-    </Router>
+    <NotificationContextProvider>
+      <InformationOverlayContainer />
+      <DialogueContainer />
+      <Router>
+        <Switch>
+          <Route path="/quiz/try/:quizid">
+            <TakeQuiz></TakeQuiz>
+          </Route>
+          <Route path="/quiz">
+            <QuizPage></QuizPage>
+          </Route>
+          <Route path="/">
+            <QuestionContextProvider>
+              <QuestionOverview />
+            </QuestionContextProvider>
+          </Route>
+        </Switch>
+      </Router>
+    </NotificationContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
