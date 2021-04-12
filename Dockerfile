@@ -10,6 +10,9 @@ COPY api/package*.json ./api/
 RUN cd api && npm install
 COPY api/server.js ./api/
 COPY api/db-integration ./api/db-integration
+COPY api/controller ./api/controller
+COPY api/my_util ./api/my_util
+
 
 EXPOSE 3080
 

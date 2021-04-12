@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { useContext } from "react";
-import qs from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage";
-import QuestionStorage, {
+import {
+  QuestionStorage,
   addAnswer,
   removeAnswer,
   updateAnswer,
@@ -17,7 +17,7 @@ const initialState = {
     questionOpened: 0,
   },
   changed: false,
-  QuestionStorage: new qs.QuestionStorage(),
+  QuestionStorage: new QuestionStorage(),
   newAnswer: false,
 };
 
@@ -61,7 +61,7 @@ function clearHistory() {
 
 //Reducer function
 function QuestionContextReducer(state, action) {
-  let newQs = new qs.QuestionStorage(state.QuestionStorage);
+  let newQs = new QuestionStorage(state.QuestionStorage);
   let newAnswer = false;
   switch (action.type) {
     case UPDATE_QUESTION:
@@ -76,7 +76,7 @@ function QuestionContextReducer(state, action) {
       }
       break;
     case "replaceArray":
-      newQs = new qs.QuestionStorage();
+      newQs = new QuestionStorage();
       for (let q of action.questions) {
         try {
           newQs.addQuestion(q);

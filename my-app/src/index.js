@@ -17,9 +17,11 @@ ReactDOM.render(
           <Route path="/quiz/try/:quizid">
             <TakeQuiz></TakeQuiz>
           </Route>
+
           <Route path="/quiz">
             <QuizPage></QuizPage>
           </Route>
+
           <Route path="/">
             <QuestionContextProvider>
               <QuestionOverview />

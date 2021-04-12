@@ -16,7 +16,7 @@ import {
   updateQuestionStorage,
   addAnswer,
   updateAnswer,
-} from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage";
+} from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage.js";
 import { ListDrag } from "components";
 
 export default function QuestionDetailedContainer({
@@ -148,7 +148,7 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
                     }
                   />
                 );
-              }
+              } else return <></>;
             })}
           <QuestionAnswer.AddAnswerContainer
             handleClick={(e) => {

@@ -3,7 +3,9 @@ WORKDIR /api
 COPY api/package*.json ./
 RUN npm install
 COPY api/server.js ./
-COPY api/db-integration ./
+COPY api/db-integration ./db-integration
+COPY api/controller ./controller
+COPY api/my_util ./my_util
 
 EXPOSE 3080
 

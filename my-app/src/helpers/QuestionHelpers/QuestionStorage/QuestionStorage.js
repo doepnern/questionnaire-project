@@ -20,7 +20,7 @@ const _ = require("lodash");
  */
 
 //creates new Question Storage, if an old storage is given, creates a new Storage with a deef copy of the old storage
-function QuestionStorage(oldStorage) {
+export function QuestionStorage(oldStorage) {
   if (oldStorage == null) {
     this.questions = [];
     this.history = new qh.KeepHistory();
@@ -30,7 +30,7 @@ function QuestionStorage(oldStorage) {
   }
 }
 
-function addQuestion(question) {
+export function addQuestion(question) {
   let answers = new qi.createQuestion(1).antworten;
   //remove additional keys from answers
   if (question.hasOwnProperty("antworten")) {
@@ -45,7 +45,7 @@ function addQuestion(question) {
   this.questions.push(q.obj);
 }
 
-function replaceQuestion(fragenid, question) {
+export function replaceQuestion(fragenid, question) {
   const q = this.findQuestionById(fragenid);
   //replace question by index
   const newQuestions = [
@@ -60,7 +60,7 @@ function getQuestions() {
   return this.questions;
 }
 
-function updateQuestion(fragenid, action) {
+export function updateQuestion(fragenid, action) {
   const q = this.findQuestionById(fragenid);
   // if history is empty, save state before updating
   if (!this.history.canTravelBackward() && !this.history.canTravelForward())
@@ -93,7 +93,7 @@ function updateQuestion(fragenid, action) {
 }
 
 //finds first appearance of question with fragenid === fragenid
-function findQuestionById(fragenid) {
+export function findQuestionById(fragenid) {
   if (!qi.isInt(fragenid))
     throw "need to provide valid fragenid to find question";
   //find right question
@@ -116,18 +116,18 @@ const REMOVE_ANSWER = "removeAnswer";
 const UPDATE_ANSWER = "updateAnswer";
 const UPDATE_QUESTION = "updateQuestion";
 
-function addAnswer() {
+export function addAnswer() {
   return { type: ADD_ANSWER };
 }
 
-function removeAnswer(index) {
+export function removeAnswer(index) {
   return { type: REMOVE_ANSWER, value: index };
 }
 
-function updateAnswer(index, answer) {
+export function updateAnswer(index, answer) {
   return { type: UPDATE_ANSWER, value: { index: index, answer: answer } };
 }
-function updateQuestionStorage(updatingQuestion) {
+export function updateQuestionStorage(updatingQuestion) {
   return { type: UPDATE_QUESTION, updatingQuestion: updatingQuestion };
 }
 
@@ -156,10 +156,11 @@ QuestionStorage.prototype.clearHistory = function () {
   this.history = new qh.KeepHistory();
 };
 
+/*
 module.exports = {
-  QuestionStorage: QuestionStorage,
-  addAnswer: addAnswer,
-  removeAnswer: removeAnswer,
-  updateAnswer: updateAnswer,
-  updateQuestionStorage: updateQuestionStorage,
-};
+  QuestionStorage,
+  addAnswer,
+  removeAnswer,
+  updateAnswer,
+  updateQuestionStorage,
+};*/

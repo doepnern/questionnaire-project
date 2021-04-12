@@ -27,7 +27,7 @@ services:
       - PGPORT=5432
     volumes:
       - "./api:/api"
-      - "./api/node_modules"
+      - "/api/node_modules"
     networks:
       - backend
     depends_on:
@@ -44,8 +44,8 @@ services:
       - REACT_APP_DOCKER=true
       - REACT_APP_API_ROUTE=http://server_api:3080/
     volumes:
-      - "./my-app:/my-app"
-      - "./my-app/node_modules"
+      - "./my-app/:/my-app/"
+      - "/my-app/node_modules"
     networks:
       - backend
     depends_on:

@@ -2,15 +2,11 @@ const { getCreateQuerys, deleteQuerys } = require("./tableConfig");
 const dbActions = require("./service/db-actions");
 const { performQuery } = require("./service/db-actions");
 const testData = require("./testData");
-const {
-  getBenutzerFragenViewAggregate,
-  benutzerFragenWithTags,
-  questionsWithTags,
-} = require("./views/benutzerFragen");
+const { benutzerFragenWithTags } = require("./views/benutzerFragen");
 const quizView = require("./views/quizView");
-const { benutzerfragen } = require("./testData");
 
 function initDB() {
+  console.log("initializibg");
   //create all needed tables
   const createQuerys = getCreateQuerys();
   performQuery(deleteQuerys)

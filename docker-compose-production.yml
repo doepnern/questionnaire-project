@@ -22,6 +22,8 @@ services:
       - PGPASSWORD=postgres
       - PGDATABASE=test1
       - PGPORT=5432
+    depends_on:
+      - "db"
 
 volumes:
   db-data:

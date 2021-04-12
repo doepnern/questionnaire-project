@@ -11,7 +11,7 @@ const _ = require("lodash");
  */
 
 //valid types for Question Keys:
-const typesQuestion = {
+export const typesQuestion = {
   fragenid: (x) => isInt(x),
   titel: (x) => typeof x === "string",
   tags: (x) =>
@@ -36,13 +36,13 @@ const typesQuestion = {
 };
 
 //valid types for Answer Keys
-const typesAnswer = {
+export const typesAnswer = {
   text: (x) => typeof x === "string",
   correct: (x) => typeof x === "boolean",
 };
 
 //makes sure returned object has all needed keys to be a question and none, not belonging to question, also checks for correct format of updated keys, throws error in case of unfitting format, object needs at least key: fragenid
-function questionFromObject(obj) {
+export function questionFromObject(obj) {
   // obj at least needs a fragenId
   if (!obj.fragenid || !isInt(obj.fragenid)) {
     throw "not a valid fragenid, make sure object for questionFromObject has key: fragenid with valid Integer value";
@@ -59,13 +59,13 @@ function questionFromObject(obj) {
   return finalQuestion;
 }
 
-function addAnswer(question) {
+export function addAnswer(question) {
   let q = _.cloneDeep(question);
   q.antworten.push(new createAnswer());
   return { obj: q, changes: 1 };
 }
 
-function updateAnswer(question, index, antwort) {
+export function updateAnswer(question, index, antwort) {
   let q = _.cloneDeep(question);
   if (!q.antworten[index])
     throw "antworten array not available at position index";
@@ -78,7 +78,7 @@ function updateAnswer(question, index, antwort) {
   return { obj: q, changes: newAnswer.changes };
 }
 
-function deleteAnswer(question, index) {
+export function deleteAnswer(question, index) {
   let q = _.cloneDeep(question);
   if (!q.antworten[index])
     throw "antworten array not available at position index";
@@ -90,7 +90,7 @@ function deleteAnswer(question, index) {
 }
 
 //updates given keys of question, only returns new question if question is valid format afterwards
-function updateQuestion(question, update) {
+export function updateQuestion(question, update) {
   const newQ = updateObjectKeysWithTypeChecking(
     question,
     update,
@@ -100,7 +100,7 @@ function updateQuestion(question, update) {
 }
 
 //inserts into an array of questions the question q only if no question with the same id exists
-function insertIfNotContained(arr, q) {
+export function insertIfNotContained(arr, q) {
   if (arr === null) return [q];
   if (arr.every((e) => e.fragenid !== q.fragenid)) {
     return [...arr, q];
@@ -108,7 +108,7 @@ function insertIfNotContained(arr, q) {
   return arr;
 }
 
-function removeIfContained(arr, q) {
+export function removeIfContained(arr, q) {
   if (arr === null) return [];
   let target = arr.findIndex((e) => e.fragenid === q.fragenid);
   if (target < 0) return [...arr];
@@ -121,7 +121,7 @@ function removeIfContained(arr, q) {
  */
 
 //checks whether for given object, keys from type exist and are valid format, returns the result and keys with wron keys
-function keyTypesAreValid(obj, type) {
+export function keyTypesAreValid(obj, type) {
   const failures = [];
   const result = Object.keys(type).reduce(
     (agg, key) => {
@@ -141,25 +141,25 @@ function keyTypesAreValid(obj, type) {
   return result;
 }
 //checks whether obj and type have exactly the same keys, doesnt check for correct types
-function hasExactlySameKeys(obj, type) {
+export function hasExactlySameKeys(obj, type) {
   return _.isEqual(Object.keys(obj), Object.keys(type));
 }
 
 //dont use this constructor directly, use questionFromObject instead
-const createQuestion = function (id) {
+export const createQuestion = function (id) {
   this.fragenid = id;
   this.titel = "default";
   this.tags = [];
   this.antworten = [];
 };
 //dont use directly, use addAnswer instead
-const createAnswer = function () {
+export const createAnswer = function () {
   this.text = "new answer";
   this.correct = false;
 };
 
 //finds keys, which are in both objects
-function keysInBoth(obj1, obj2) {
+export function keysInBoth(obj1, obj2) {
   let obj1Keys = Object.keys(obj1);
   let obj2Keys = Object.keys(obj2);
   let keysInBoth = obj1Keys.reduce(
@@ -170,7 +170,7 @@ function keysInBoth(obj1, obj2) {
   return keysInBoth;
 }
 
-function updateObjectKeysWithTypeChecking(objIn, updatingObj, type) {
+export function updateObjectKeysWithTypeChecking(objIn, updatingObj, type) {
   const newObj = updateObjectKeys(objIn, updatingObj);
   const check = keyTypesAreValid(newObj.obj, type);
   if (check.res) return newObj;
@@ -182,7 +182,7 @@ function updateObjectKeysWithTypeChecking(objIn, updatingObj, type) {
 }
 
 //updates objectIn with all same keys of updatingObj
-function updateObjectKeys(objIn, updatingObj) {
+export function updateObjectKeys(objIn, updatingObj) {
   const keys = keysInBoth(objIn, updatingObj);
   let changes = 0;
   const obj = _.cloneDeep(objIn);
@@ -200,7 +200,7 @@ function updateObjectKeys(objIn, updatingObj) {
   return { obj: obj, changes: changes };
 }
 
-function isInt(value) {
+export function isInt(value) {
   return (
     !isNaN(value) &&
     parseInt(Number(value)) == value &&
@@ -208,6 +208,7 @@ function isInt(value) {
   );
 }
 
+/*
 module.exports = {
   questionFromObject: questionFromObject,
   createQuestion: createQuestion,
@@ -223,4 +224,4 @@ module.exports = {
   typesAnswer: typesAnswer,
   insertIfNotContained,
   removeIfContained,
-};
+};*/

@@ -8,7 +8,7 @@ const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, ar
 /* get all questions for a specified user, if no user is specified, return all users with their qustions */
 function getBenutzerFragenViewAggregate(userId, searchString) {
   let error = false;
-  const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC) as fragenArray
+  const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC LIMIT 10) as fragenArray
                             FROM benutzerfragen , (${fragenTagsJoin}) AS alleFragen
                             WHERE benutzerFragen.fragenId = alleFragen.fragenid  ${
                               searchString && searchString.length > 1
