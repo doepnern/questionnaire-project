@@ -13,6 +13,10 @@ const {
   removeFragenFromQuizSQL,
 } = require("./interface/Quiz/removeFragenFromQuiz");
 const { deleteQuizSQL } = require("./interface/Quiz/deleteQuiz");
+const {
+  getQuestionsForUserSQL,
+} = require("./interface/Questions/getQuestionsForUser");
+const { getUserInfoSQL } = require("./interface/User/getUserInfo");
 module.exports = {
   initDB: initDB,
   updateQuestions: updateQuestions,
@@ -29,4 +33,6 @@ module.exports = {
   addFrageToQuizSQL,
   removeFragenFromQuizSQL,
   deleteQuizSQL,
+  getUserInfoSQL,
+  getQuestionsForUserSQL,
 };

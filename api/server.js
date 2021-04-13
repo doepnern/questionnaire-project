@@ -8,6 +8,7 @@ const {
   getQuiz,
   upsertQuiz,
   deleteQuiz,
+  getQuestionsFromUser,
 } = require("./controller");
 const {
   initDB,
@@ -28,16 +29,10 @@ initDB();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../my-app/build")));
 
-app.get("/api/users/:id", (req, res) => {
-  const query = req.query.filter ? req.query.filter : "";
-  handleRequest(() => getQuestions(req.params.id, query), res);
-});
-
 app.get("/api/users", (req, res) => {
   const query = req.query.filter ? req.query.filter : "";
-  console.log("api/users called without id");
-  console.log("returning:");
-  handleRequest(() => getQuestions(req.params.id, query), res);
+  const userId = req.query.userid ? req.query.userid : undefined;
+  handleRequest(() => getQuestionsFromUser(1, query, 20, 0), res);
 });
 
 //updates database with question list given

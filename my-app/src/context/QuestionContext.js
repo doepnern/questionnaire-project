@@ -82,6 +82,7 @@ function QuestionContextReducer(state, action) {
           newQs.addQuestion(q);
         } catch (e) {
           console.log("error: " + e);
+          console.log(e.stack);
         }
       }
       break;

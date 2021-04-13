@@ -1,7 +1,4 @@
-const {
-  getBenutzerFragenViewAggregate,
-  benutzerFragenWithTags,
-} = require("../views/benutzerFragen");
+const { benutzerFragenWithTags } = require("../views/benutzerFragen");
 const { performQuery } = require("./db-actions");
 
 function performGetBenutzerfragenView(userId, filter = "") {

@@ -2,8 +2,11 @@ const { getCreateQuerys, deleteQuerys } = require("./tableConfig");
 const dbActions = require("./service/db-actions");
 const { performQuery } = require("./service/db-actions");
 const testData = require("./testData");
-const { benutzerFragenWithTags } = require("./views/benutzerFragen");
-const quizView = require("./views/quizView");
+const {
+  questionsFromUser,
+  benutzerFragenWithTags,
+} = require("./views/benutzerFragen");
+const { getQuestionsFromUser } = require("../controller/questionHandler");
 
 function initDB() {
   console.log("initializibg");
@@ -30,9 +33,9 @@ function initDB() {
     )
     .then(() =>
       performQuery(dbActions.insertInto("quizFragen", testData.QuizFragen))
-    )
-    .then(() => performQuery(...benutzerFragenWithTags()))
-    .then((res) => console.log(JSON.stringify(res.rows, null, 3)));
+    );
+  //.then(() => getQuestionsFromUser(1, "men", 10, 0));
+  //.then((res) => console.log(JSON.stringify(res.rows, null, 3)));
 }
 
 module.exports = {

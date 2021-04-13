@@ -1,3 +1,4 @@
+const { isInt } = require("../../my_util/index");
 const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, array_agg(row_to_json(fragentagjoin) ORDER BY tagid) as tags,  concat_ws(', ', fragen.titel,fragen.antworten,array_agg(fragentagjoin.tagname ORDER BY tagid)) as search
                           FROM fragen 
                           LEFT JOIN (SELECT fragentags.fragenid ,tags.tagid, tags.tagname FROM tags, fragentags WHERE tags.tagId = fragentags.tagid ORDER BY tags.tagid ASC) AS fragentagjoin 
@@ -8,7 +9,7 @@ const fragenTagsJoin = `SELECT fragen.fragenid,fragen.titel,fragen.antworten, ar
 /* get all questions for a specified user, if no user is specified, return all users with their qustions */
 function getBenutzerFragenViewAggregate(userId, searchString) {
   let error = false;
-  const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC LIMIT 10) as fragenArray
+  const benutzerFragenJoin = `SELECT benutzerfragen.benutzerid, array_agg(row_to_json(alleFragen) ORDER BY alleFragen.fragenid ASC) as fragenArray
                             FROM benutzerfragen , (${fragenTagsJoin}) AS alleFragen
                             WHERE benutzerFragen.fragenId = alleFragen.fragenid  ${
                               searchString && searchString.length > 1
@@ -44,26 +45,25 @@ function getBenutzerFragenViewAggregate(userId, searchString) {
   }
 }
 
-function benutzerFragenWithTags(benutzerId, searchString) {
+function benutzerFragenWithTags(benutzerId, searchString, limit, offset) {
   if (!benutzerId || benutzerId < 0) benutzerId = undefined;
   query = `
-  SELECT currentUser.benutzerId, currentUser.benutzername, json_agg(
+  SELECT currentUserQuestionIds.benutzerId, currentUserQuestionIds.benutzername, json_agg(
     CASE WHEN questionsWithTags.fragenid IS NULL THEN null ELSE
     json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags) END ORDER BY questionsWithTags.fragenid ASC) 
-    as fragen
-  FROM (SELECT * FROM benutzer ${
-    benutzerId ? "WHERE benutzer.benutzerid = $1 " : ""
-  }) AS currentUser
-  LEFT JOIN benutzerFragen ON currentUser.benutzerid = benutzerFragen.benutzerid
-  LEFT JOIN (${
+    as fragen, Count(*) as numQuestion
+  FROM (${
+    questionsFromUser(benutzerId, limit, offset)[0]
+  }) AS currentUserQuestionIds
+  INNER JOIN (${
     questionsWithTags(true)[0]
-  }) as questionsWithTags ON benutzerFragen.fragenid = questionsWithTags.fragenid ${
+  }) as questionsWithTags ON currentUserQuestionIds.fragenid = questionsWithTags.fragenid ${
     searchString && searchString.length > 1
       ? `AND questionsWithTags.search ILIKE '%${searchString}%'`
       : ""
   }
-  GROUP BY currentUser.benutzerId, currentUser.benutzername
-  ORDER BY currentUser.benutzerId ASC
+  GROUP BY currentUserQuestionIds.benutzerId, currentUserQuestionIds.benutzername
+  ORDER BY currentUserQuestionIds.benutzerId ASC
   `;
   const params = benutzerId ? [benutzerId] : [];
   return [query, params];
@@ -79,7 +79,7 @@ function questionsWithTags(withSearchString = false) {
         ? ", concat_ws(', ', fragen.titel,fragen.antworten,array_agg(tags.tagname ORDER BY tags.tagid)) as search "
         : ""
     }
-  FROM fragen 
+  FROM fragen
   LEFT JOIN fragenTags ON fragen.fragenid = fragenTags.fragenid
   LEFT JOIN Tags ON fragenTags.tagid = Tags.tagid
   GROUP BY fragen.fragenid
@@ -87,9 +87,27 @@ function questionsWithTags(withSearchString = false) {
   return [query, []];
 }
 
+//returns query to get all questionIds for given userId
+function questionsFromUser(userId, limit, offset) {
+  const query = `
+  SELECT currentBenutzerFragen.fragenid
+  FROM (SELECT * FROM benutzer ${
+    isInt(userId) ? "WHERE benutzer.benutzerid = $1 " : ""
+  }) AS currentUser
+  LEFT JOIN benutzerFragen as currentBenutzerFragen ON currentUser.benutzerid = currentBenutzerFragen.benutzerid 
+  ORDER BY currentBenutzerFragen.fragenid
+  ${isInt(limit) && isInt(offset) ? `LIMIT ${limit} OFFSET ${offset}` : ""}
+  `;
+  //still need to group by user and aggregate questions
+  const params = [];
+  if (isInt(userId)) params.push(userId);
+  return [query, params];
+}
+
 module.exports = {
   getBenutzerFragenViewAggregate: getBenutzerFragenViewAggregate,
   fragenTagsJoin: fragenTagsJoin,
   questionsWithTags,
   benutzerFragenWithTags,
+  questionsFromUser,
 };

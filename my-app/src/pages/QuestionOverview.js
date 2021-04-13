@@ -21,11 +21,11 @@ function QuestionOverview({ mode = "default", handleQuizAdding }) {
     getAllUsers(userId, lastSearch.current, (res) =>
       setNewQuestions(res.result)
     );
-    function setNewQuestions(users) {
+    function setNewQuestions(user) {
       console.log("loaded");
-      console.log(users);
-      if (users !== undefined && !Object.keys(users).includes("error")) {
-        const newQuestions = users[0].fragen;
+      console.log(user);
+      if (user !== undefined && !Object.keys(user).includes("error")) {
+        const newQuestions = user.fragen;
         setFragenLoader({
           ...fragenLoader,
           isLoading: false,

@@ -82,9 +82,9 @@ function getAllUsersRequest(userId, filter) {
     name: `get user: ${userId}, with filter: ${filter}`,
     request: () =>
       fetch(
-        "/api/users" +
-          (userId ? "/" + userId : "") +
-          (filter ? "?filter=" + filter : "")
+        "/api/users?" +
+          (userId ? "userid=" + userId : "") +
+          (filter ? "&filter=" + filter : "")
       ),
   };
 }
