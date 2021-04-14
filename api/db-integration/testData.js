@@ -31,6 +31,8 @@ const fragen = [
   { id: "DEFAULT", titel: `'frage 6'` },
   { id: "DEFAULT", titel: `'frage 7'` },
   { id: "DEFAULT", titel: `'frage 8'` },
+  { id: "DEFAULT", titel: `'frage 9'` },
+  { id: "DEFAULT", titel: `'frage 10'` },
 ];
 const benutzerFragen = [
   { benutzerId: "1", fragenId: "1" },
@@ -38,6 +40,10 @@ const benutzerFragen = [
   { benutzerId: "2", fragenId: "2" },
   { benutzerId: "1", fragenId: "4" },
   { benutzerId: "1", fragenId: "5" },
+  { benutzerId: "1", fragenId: "6" },
+  { benutzerId: "1", fragenId: "7" },
+  { benutzerId: "1", fragenId: "8" },
+  { benutzerId: "1", fragenId: "9" },
 ];
 
 const tags = [

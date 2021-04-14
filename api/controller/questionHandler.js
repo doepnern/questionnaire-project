@@ -1,12 +1,9 @@
 const { isInt } = require("../my_util");
-const { performQuery } = require("../db-integration/service/db-actions");
 const {
+  performQuery,
   getUserInfoSQL,
-} = require("../db-integration/interface/User/getUserInfo");
-
-const {
   getQuestionsForUserSQL,
-} = require("../db-integration/interface/Questions/getQuestionsForUser");
+} = require("../db-integration");
 
 async function getQuestionsFromUser(userId, filter, limit, offset) {
   if (!isInt(userId))
@@ -29,7 +26,7 @@ async function getQuestionsFromUser(userId, filter, limit, offset) {
   console.log("questions for user " + userId + ":");
   console.log("numQuestions:" + questions.rowCount);
   console.log(questions.rows);
-  //build user object with questions
+  //build user object with questions, make sure antworten is an array
   const userObj = {
     ...user.rows[0],
     fragen: questions.rows.map((q) => ({

@@ -32,7 +32,12 @@ app.use(express.static(path.join(__dirname, "../my-app/build")));
 app.get("/api/users", (req, res) => {
   const query = req.query.filter ? req.query.filter : "";
   const userId = req.query.userid ? req.query.userid : undefined;
-  handleRequest(() => getQuestionsFromUser(1, query, 20, 0), res);
+  const limit = req.query.limit ? req.query.limit : 10000;
+  const page = req.query.page ? req.query.page : 0;
+  handleRequest(
+    () => getQuestionsFromUser(userId, query, limit, page * limit),
+    res
+  );
 });
 
 //updates database with question list given

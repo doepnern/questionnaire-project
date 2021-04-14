@@ -2,9 +2,10 @@
  *
  * Callable functions
  */
-export function getAllUsers(userId, filter, onSuccess, onError) {
+//get user with questions, possible attributes for settings: filter : String , limit : int , page : int
+export function getAllUsers(userId, settings = {}, onSuccess, onError) {
   return dispatchUserService(
-    getAllUsersRequest(userId, filter),
+    getAllUsersRequest(userId, settings),
     onSuccess,
     onError
   );
@@ -77,14 +78,20 @@ export async function addTagForQuestion(
  * Request builders
  */
 
-function getAllUsersRequest(userId, filter) {
+function getAllUsersRequest(userId, settings) {
   return {
-    name: `get user: ${userId}, with filter: ${filter}`,
+    name: `get user: ${userId}, with settings: ${JSON.stringify(
+      settings,
+      null,
+      1
+    )}`,
     request: () =>
       fetch(
         "/api/users?" +
           (userId ? "userid=" + userId : "") +
-          (filter ? "&filter=" + filter : "")
+          (settings.filter ? "&filter=" + settings.filter : "") +
+          (settings.limit ? "&limit=" + settings.limit : "") +
+          (settings.page ? "&page=" + settings.page : "")
       ),
   };
 }
