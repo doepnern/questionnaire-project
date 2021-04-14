@@ -19,3 +19,4 @@ export {
   displayDialogue,
   closeDialogue,
 } from "./Notification/NotificationContext";
+export { default as PaginationSelection } from "./PaginationSelection/PaginationSelection";

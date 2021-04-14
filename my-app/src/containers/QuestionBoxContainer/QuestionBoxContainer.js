@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { QuestionBox } from "components";
+import React, { useState } from "react";
+import { QuestionBox, PaginationSelection } from "components";
 import { QuestionDetailedContainer } from "containers";
 import "./QuestionBoxContainer.css";
 import { useQuestionContext, clearHistory } from "context/QuestionContext";
@@ -15,6 +15,9 @@ import _ from "lodash";
 export default function QuestionBoxContainer({
   reloadQuestions,
   handleHeaderClick = undefined,
+  setNewPage,
+  getPaginationDisplayList,
+  setNewLimit,
 }) {
   const [showDetails, setShown] = useState({
     active: false,
@@ -23,53 +26,72 @@ export default function QuestionBoxContainer({
   const { questionContext, dispatch } = useQuestionContext();
 
   return (
-    <div className="QuestionBoxContainer">
-      <QuestionDetailedContainer
-        isShown={showDetails.active}
-        toggleShown={() =>
-          setShown((s) => {
-            return { ...s, active: !s.active };
-          })
-        }
-        handleDetailViewClose={() => handleDetailViewClose()}
-        currentQuestionIndex={showDetails.currentQuestion}
-      ></QuestionDetailedContainer>
-      <QuestionBox
-        onClick={() => createQuestionForUser(1).then(() => reloadQuestions())}
-      >
-        <QuestionBox.NewQuestion />
-      </QuestionBox>
-      {questionContext.questions.map((question, index) => {
-        return (
-          <QuestionBox key={index}>
-            <QuestionBox.Header
-              onClick={() => handleQuestionBoxHeaderClick(index, question)}
-            >
-              <QuestionBox.Title>{question.fragenid}</QuestionBox.Title>
-              <QuestionBox.Text>{question.titel}</QuestionBox.Text>
-            </QuestionBox.Header>
-            <QuestionBox.Body>
-              <QuestionBox.Tags
-                handleAddingTag={(tagname) =>
-                  handleAddingTag(tagname, question.fragenid)
-                }
-                handleRemoveTagClicked={(tagid) =>
-                  handleRemoveTagClicked(tagid, question.fragenid)
-                }
-                tags={question.tags}
-              ></QuestionBox.Tags>
-              <QuestionBox.DeleteContainer
-                handleClick={(e) => {
-                  e.stopPropagation();
-                  deleteQuestionByid(question.fragenid).then(() =>
-                    reloadQuestions()
-                  );
-                }}
-              />
-            </QuestionBox.Body>
-          </QuestionBox>
-        );
-      })}
+    <div className="QuestionBoxWrapper">
+      <div className="QuestionBoxContainer">
+        <QuestionDetailedContainer
+          isShown={showDetails.active}
+          toggleShown={() =>
+            setShown((s) => {
+              return { ...s, active: !s.active };
+            })
+          }
+          handleDetailViewClose={() => handleDetailViewClose()}
+          currentQuestionIndex={showDetails.currentQuestion}
+        ></QuestionDetailedContainer>
+        <QuestionBox
+          onClick={() => createQuestionForUser(1).then(() => reloadQuestions())}
+        >
+          <QuestionBox.NewQuestion />
+        </QuestionBox>
+        {questionContext.questions.map((question, index) => {
+          return (
+            <QuestionBox key={index}>
+              <QuestionBox.Header
+                onClick={() => handleQuestionBoxHeaderClick(index, question)}
+              >
+                <QuestionBox.Title>{question.fragenid}</QuestionBox.Title>
+                <QuestionBox.Text>{question.titel}</QuestionBox.Text>
+              </QuestionBox.Header>
+              <QuestionBox.Body>
+                <QuestionBox.Tags
+                  handleAddingTag={(tagname) =>
+                    handleAddingTag(tagname, question.fragenid)
+                  }
+                  handleRemoveTagClicked={(tagid) =>
+                    handleRemoveTagClicked(tagid, question.fragenid)
+                  }
+                  tags={question.tags}
+                ></QuestionBox.Tags>
+                <QuestionBox.DeleteContainer
+                  handleClick={(e) => {
+                    e.stopPropagation();
+                    deleteQuestionByid(question.fragenid).then(() =>
+                      reloadQuestions()
+                    );
+                  }}
+                />
+              </QuestionBox.Body>
+            </QuestionBox>
+          );
+        })}
+      </div>
+      <div className="paginationContainer">
+        <PaginationSelection
+          pages={
+            getPaginationDisplayList
+              ? getPaginationDisplayList().pagesListPretty
+              : []
+          }
+          currentPage={
+            getPaginationDisplayList
+              ? getPaginationDisplayList().currentPage
+              : -100
+          }
+          handlePageClick={setNewPage}
+          handleLimitChange={(e) => setNewLimit(e.target.value)}
+          limitList={getPaginationDisplayList()?.limitList}
+        ></PaginationSelection>
+      </div>
     </div>
   );
 
