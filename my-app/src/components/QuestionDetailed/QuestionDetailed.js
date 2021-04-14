@@ -5,7 +5,7 @@ import QuestionAnswer from "./QuestionAnswer";
 import { ReactComponent as EditAnswerButton } from "svg/edit_button.svg";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import "components/Animations/Fade/styles.css";
-import { Modal, ListDrag } from "components";
+import { Modal } from "components";
 
 export default function QuestionDetailed() {
   return <></>;

@@ -17,7 +17,6 @@ import {
   addAnswer,
   updateAnswer,
 } from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage.js";
-import { ListDrag } from "components";
 
 export default function QuestionDetailedContainer({
   children,
@@ -125,39 +124,35 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
   //converts answers from stringified JSON array to JSX content
   function formatAnswers(q, questionContext) {
     return (
-      <ListDrag nodeRef={draggingContainer}>
-        <QuestionAnswer innerRef={draggingContainer}>
-          {!(q.antworten == null) &&
-            q.antworten.map((answer, index) => {
-              if (!(answer == null)) {
-                //check if answer was just added, so it can be in edit mode by default
-                let justAdded =
-                  questionContext.newAnswer && index === q.antworten.length - 1;
-                return (
-                  <QuestionDetailed.VariableSingleAnswer
-                    wasJustAdded={justAdded}
-                    key={index}
-                    answer={answer}
-                    handleClick={() => {
-                      dispatch(updateQuestion(q.fragenid, removeAnswer(index)));
-                    }}
-                    handleUpdateAnswer={(e) =>
-                      dispatch(
-                        updateQuestion(q.fragenid, updateAnswer(index, e))
-                      )
-                    }
-                  />
-                );
-              } else return <></>;
-            })}
-          <QuestionAnswer.AddAnswerContainer
-            handleClick={(e) => {
-              e.stopPropagation();
-              dispatch(updateQuestion(q.fragenid, addAnswer()));
-            }}
-          />
-        </QuestionAnswer>
-      </ListDrag>
+      <QuestionAnswer>
+        {!(q.antworten == null) &&
+          q.antworten.map((answer, index) => {
+            if (!(answer == null)) {
+              //check if answer was just added, so it can be in edit mode by default
+              let justAdded =
+                questionContext.newAnswer && index === q.antworten.length - 1;
+              return (
+                <QuestionDetailed.VariableSingleAnswer
+                  wasJustAdded={justAdded}
+                  key={index}
+                  answer={answer}
+                  handleClick={() => {
+                    dispatch(updateQuestion(q.fragenid, removeAnswer(index)));
+                  }}
+                  handleUpdateAnswer={(e) =>
+                    dispatch(updateQuestion(q.fragenid, updateAnswer(index, e)))
+                  }
+                />
+              );
+            } else return <></>;
+          })}
+        <QuestionAnswer.AddAnswerContainer
+          handleClick={(e) => {
+            e.stopPropagation();
+            dispatch(updateQuestion(q.fragenid, addAnswer()));
+          }}
+        />
+      </QuestionAnswer>
     );
   }
 };
