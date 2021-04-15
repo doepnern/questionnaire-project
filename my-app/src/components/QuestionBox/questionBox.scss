@@ -26,8 +26,8 @@
   }
 }
 
-.disabled_container {
-  opacity: 50%;
+.disabled_question_container {
+  opacity: 0.4;
   pointer-events: none;
   cursor: not-allowed;
 }

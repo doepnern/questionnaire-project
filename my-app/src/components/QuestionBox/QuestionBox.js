@@ -21,7 +21,7 @@ export default function QuestionBox({
   return (
     <div
       ref={innerRef}
-      className={`Container ${disabled ? "disabled_container" : ""}`}
+      className={`Container ${disabled ? "disabled_question_container" : ""}`}
       {...restProps}
     >
       {children}

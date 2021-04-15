@@ -41,6 +41,7 @@ export function useQuizState() {
   function getQuestionsInQuiz() {
     if (editingQuiz.quizEditing < 0) return [];
     const currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
+    if (currentQuiz == null) return [];
     return currentQuiz.fragen;
   }
 
