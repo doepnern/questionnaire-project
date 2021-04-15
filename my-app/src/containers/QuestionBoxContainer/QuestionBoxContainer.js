@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { QuestionBox, PaginationSelection } from "components";
 import { QuestionDetailedContainer } from "containers";
 import "./QuestionBoxContainer.css";
@@ -24,6 +24,7 @@ export default function QuestionBoxContainer({
     currentQuestion: 0,
   });
   const { questionContext, dispatch } = useQuestionContext();
+  const questionBoxes = useRef(new Array(50));
 
   return (
     <div className="QuestionBoxWrapper">
@@ -44,8 +45,13 @@ export default function QuestionBoxContainer({
           <QuestionBox.NewQuestion />
         </QuestionBox>
         {questionContext.questions.map((question, index) => {
+          console.log(question);
           return (
-            <QuestionBox key={index}>
+            <QuestionBox
+              key={question.fragenid}
+              innerRef={(e) => (questionBoxes.current[question.fragenid] = e)}
+              disabled={question.added}
+            >
               <QuestionBox.Header
                 onClick={() => handleQuestionBoxHeaderClick(index, question)}
               >
@@ -65,9 +71,14 @@ export default function QuestionBoxContainer({
                 <QuestionBox.DeleteContainer
                   handleClick={(e) => {
                     e.stopPropagation();
-                    deleteQuestionByid(question.fragenid).then(() =>
-                      reloadQuestions()
-                    );
+                    questionBoxes.current[question.fragenid].style.animation =
+                      "fadeOut 0.15s ease-out forwards, shrink 1s ease-out forwards";
+                    questionBoxes.current[
+                      question.fragenid
+                    ].onanimationend = () =>
+                      deleteQuestionByid(question.fragenid).then(() =>
+                        reloadQuestions()
+                      );
                   }}
                 />
               </QuestionBox.Body>

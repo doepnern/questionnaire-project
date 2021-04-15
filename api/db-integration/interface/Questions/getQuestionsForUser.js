@@ -20,6 +20,7 @@ function getQuestionsForUserSQL(userId, filter, limit, offset) {
                     ? `AND questionsWithTags.search ILIKE '%${filter}%'`
                     : ""
                 }
+                ORDER BY questionList.fragenid DESC
                 ${limit ? ` LIMIT $2 ${offset ? `OFFSET $3 ` : ``}` : ``}
 `;
 

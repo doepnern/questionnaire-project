@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   getQuiz,
   updateQuiz as dispatchUpdateQuiz,
@@ -38,6 +38,12 @@ export function useQuizState() {
     );
   }
 
+  function getQuestionsInQuiz() {
+    if (editingQuiz.quizEditing < 0) return [];
+    const currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
+    return currentQuiz.fragen;
+  }
+
   function dispatch(action) {
     const nextState = questionStateReducer(
       { quizzes: quizzes, currentlyEditing: editingQuiz.quizEditing },
@@ -52,7 +58,7 @@ export function useQuizState() {
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
-    { updateQuiz, updateCurrentlyEditingQuiz },
+    { updateQuiz, updateCurrentlyEditingQuiz, getQuestionsInQuiz },
   ];
 }
 

@@ -6,9 +6,11 @@ export function usePagination(initialLimit) {
     page: 0,
     maxPage: 0,
   });
+
   //changes currently viewed page
   const setNewPage = (newIndex) =>
     setPages((p) => ({ ...p, page: Math.min(newIndex, p.maxPage) }));
+
   //updates the maximum viewable page according to new content
   const setNewMaxPage = (newContent) => {
     setPages((p) => {
@@ -16,6 +18,7 @@ export function usePagination(initialLimit) {
         newContent.length > 0
           ? Math.floor((newContent[0].totalcount - 1) / p.limit)
           : 0;
+      console.log({ newMax });
       return {
         ...p,
         maxPage: newMax,

@@ -151,6 +151,7 @@ export const createQuestion = function (id) {
   this.titel = "default";
   this.tags = [];
   this.antworten = [];
+  this.added = false;
 };
 //dont use directly, use addAnswer instead
 export const createAnswer = function () {

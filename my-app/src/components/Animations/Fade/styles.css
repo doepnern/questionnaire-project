@@ -16,6 +16,15 @@
   }
 }
 
+@keyframes shrink {
+  0% {
+    transform: scale(1) rotateY(0deg);
+  }
+  100% {
+    transform: scale(0) rotateY(180deg);
+  }
+}
+
 @keyframes appear {
   0% {
     opacity: 0;

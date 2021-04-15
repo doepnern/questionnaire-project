@@ -8,7 +8,11 @@ import { useQuestionContext, addQuestion } from "context/QuestionContext";
 import { myDebouncer } from "helpers/debouncer";
 import { usePagination } from "hooks/usePagination";
 
-function QuestionOverview({ mode = "default", handleQuizAdding }) {
+function QuestionOverview({
+  mode = "default",
+  handleQuizAdding,
+  ignoreQuestions = [],
+}) {
   const [fragenLoader, setFragenLoader] = useState({
     isLoading: true,
   });
@@ -25,12 +29,24 @@ function QuestionOverview({ mode = "default", handleQuizAdding }) {
     setNewLimit,
   } = usePagination(19);
 
+  const oldIgnoreQuestions = useRef(ignoreQuestions);
   //when current page, or limit per page or available max page changes, refetch data to represent changes
   useEffect(() => {
     console.log(pages);
-    console.log(getPaginationDisplayList());
     getAllUsersHere();
   }, [pages.page, pages.limit, pages.maxPage]);
+
+  useEffect(() => {
+    if (
+      ignoreQuestions.every((iq) =>
+        oldIgnoreQuestions.current.some((oiq) => oiq.fragenid === iq.fragenid)
+      )
+    ) {
+      return;
+    }
+    oldIgnoreQuestions.current = ignoreQuestions;
+    getAllUsersHere();
+  }, [ignoreQuestions]);
 
   function getAllUsersHere(userId, filter) {
     userId = 1;
@@ -47,15 +63,22 @@ function QuestionOverview({ mode = "default", handleQuizAdding }) {
       console.log("loaded");
       console.log(user);
       if (user !== undefined && !Object.keys(user).includes("error")) {
+        //remove questions which should be ignored
         const newQuestions = user.fragen != null ? user.fragen : [];
+        const newQuestionsWithoutIgnored = newQuestions.map((q) => {
+          if (ignoreQuestions.some((iq) => iq.fragenid === q.fragenid)) {
+            return { ...q, added: true };
+          }
+          return { ...q, added: false };
+        });
         setFragenLoader({
           ...fragenLoader,
           isLoading: false,
         });
         //replace questions with newly received questions
-        dispatch(addQuestion(newQuestions));
+        dispatch(addQuestion(newQuestionsWithoutIgnored));
         //set new page max according to total questions available for current settings
-        setNewMaxPage(newQuestions);
+        setNewMaxPage(newQuestionsWithoutIgnored);
       } else {
         setTimeout(() => getAllUsersHere(), 1000);
       }

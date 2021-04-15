@@ -25,6 +25,12 @@
     width: calcSize(1);
   }
 }
+
+.disabled_container {
+  opacity: 50%;
+  pointer-events: none;
+  cursor: not-allowed;
+}
 .HeaderContainer {
   width: 100%;
   height: 55%;

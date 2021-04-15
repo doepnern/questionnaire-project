@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal } from "components";
 import "./QuestionSelection.scss";
 import QuestionOverview from "pages/QuestionOverview";
@@ -7,7 +7,11 @@ export default function QuestionSelection({
   questionSelection,
   toggleShown,
   handleQuizAdding,
+  questionsInQuiz,
 }) {
+  useEffect(() => {
+    if (questionSelection.isShown) console.log(questionsInQuiz);
+  }, [questionSelection.isShown]);
   return (
     <Modal isShown={questionSelection.isShown} toggleShown={toggleShown}>
       <div
@@ -18,6 +22,7 @@ export default function QuestionSelection({
           <QuestionOverview
             mode="quizAdding"
             handleQuizAdding={handleQuizAdding}
+            ignoreQuestions={questionsInQuiz}
           />
         </QuestionContextProvider>
       </div>

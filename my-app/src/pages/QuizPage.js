@@ -31,7 +31,7 @@ export default function QuizPage() {
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
-    { updateCurrentlyEditingQuiz, updateQuiz },
+    { updateCurrentlyEditingQuiz, updateQuiz, getQuestionsInQuiz },
   ] = useQuizState();
   const [questionSelection, setQuestionSelection] = useState({
     isShown: false,
@@ -52,6 +52,7 @@ export default function QuizPage() {
         questionSelection={questionSelection}
         toggleShown={toggleQuestionSelection}
         handleQuizAdding={handleQuizAdding}
+        questionsInQuiz={getQuestionsInQuiz()}
       ></QuestionSelection>
       <QuizItem.QuizContainer>
         <QuizItem.NewQuizItem handleClick={handleNewQuizClick} />

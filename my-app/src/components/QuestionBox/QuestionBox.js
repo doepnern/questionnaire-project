@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./questionBox.scss";
-import { motion } from "framer-motion";
 import { ReactComponent as AddButton } from "svg/plus_button.svg";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import { CustomTag } from "./CustomTag";
@@ -13,16 +12,20 @@ import { CustomTag } from "./CustomTag";
  * QuestionBox
  */
 
-export default function QuestionBox({ children, ...restProps }) {
+export default function QuestionBox({
+  disabled,
+  innerRef,
+  children,
+  ...restProps
+}) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="Container"
+    <div
+      ref={innerRef}
+      className={`Container ${disabled ? "disabled_container" : ""}`}
       {...restProps}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 

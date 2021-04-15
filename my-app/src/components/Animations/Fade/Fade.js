@@ -28,5 +28,5 @@ export default function Fade({
   function onAnimationEnd() {
     if (!show) setRender(false);
   }
-  return <>{shouldRender ? MyDiv : null}</>;
+  return <>{shouldRender ? MyDiv : undefined}</>;
 }
