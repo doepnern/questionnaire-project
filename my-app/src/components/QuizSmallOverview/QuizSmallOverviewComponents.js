@@ -6,7 +6,6 @@ export default function QuizSmallOverviewComponents({ ...restProps }) {
 
 QuizSmallOverviewComponents.Question = function QuizSmallOverviewComponentsQuestion({
   handleClick,
-  question,
   index,
   ...restProps
 }) {

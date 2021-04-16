@@ -1,0 +1,18 @@
+.tqq_Container {
+  min-width: 500px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2%;
+  background-color: #f6fafd;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.28);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.tqq_BodyContainer {
+  height: 80%;
+}
+.tqq_headerContainer {
+  height: 20%;
+}

@@ -45,6 +45,9 @@ $itemsPerColumn: 5;
       background-color: $colorPrimaryLight;
     }
   }
+  :hover {
+    cursor: pointer;
+  }
 }
 
 .qso_questionNumber {

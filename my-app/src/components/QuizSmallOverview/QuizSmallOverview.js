@@ -20,7 +20,7 @@ export default function QuizSmallOverview({
             question={q}
             index={index}
             key={q.fragenid}
-            handleClick={handleClickQuestion}
+            handleClick={() => handleClickQuestion(index)}
           />
         ))}
     </QuizSmallOverviewComponents>

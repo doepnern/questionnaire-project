@@ -59,7 +59,6 @@ QuestionDetailed.Layout = function QuestionDetailedLayout({
         return x;
     }
   };
-  const draggingContainer = useRef(null);
   return (
     <div className="qd_container">
       <div className="qd_headerContainer">
