@@ -63,6 +63,26 @@ QuestionDetailed.SingleAnswerDefault = function QuestionDetailedSingleAnswer({
   );
 };
 
+//single answer for taking the quiz, is always default color until checkCorrectness becomes true
+QuestionDetailed.SingleAnswerTakeQuiz = function QuestionDetailedSingleAnswerTakeQuiz({
+  answer,
+  handleAnswerClick = () => undefined,
+  checkCorrectness = false,
+  ...restProps
+}) {
+  return (
+    <QuestionAnswer.SingleAnswer
+      handleAnswerClick={handleAnswerClick}
+      activated={checkCorrectness ? answer.correct : undefined}
+      {...restProps}
+    >
+      <QuestionAnswer.AnswerTextContainer>
+        <p>{answer.text}</p>
+      </QuestionAnswer.AnswerTextContainer>
+    </QuestionAnswer.SingleAnswer>
+  );
+};
+
 QuestionDetailed.SingleAnswerEditing = function QuestionDetailedSingleAnswer({
   answer,
   handleClickTrash,

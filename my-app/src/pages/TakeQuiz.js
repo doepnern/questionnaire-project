@@ -26,7 +26,6 @@ export default function TakeQuiz() {
             <QuizSmallOverview
               questions={takingQuiz.fragen}
               handleClickQuestion={(questionIndex) => {
-                console.log("question " + questionIndex + " clicked");
                 switchQuestion(questionIndex);
               }}
             ></QuizSmallOverview>

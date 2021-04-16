@@ -14,7 +14,7 @@ export default function QuestionAnswer({ children, innerRef, ...restProps }) {
 //S
 QuestionAnswer.SingleAnswer = function QuestionAnswerSingleAnswer({
   children,
-  activated = false,
+  activated = undefined,
   handleAnswerClick,
   ...restProps
 }) {
@@ -25,7 +25,9 @@ QuestionAnswer.SingleAnswer = function QuestionAnswerSingleAnswer({
     >
       <div
         className={`answerCorrectness ${
-          activated
+          activated == null
+            ? ""
+            : activated
             ? "answerCorrectness-correct"
             : "answerCorrectness-incorrect"
         }`}

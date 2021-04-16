@@ -77,7 +77,10 @@ export function useTakeQuizState(takingQuizId) {
     ) {
       return undefined;
     }
-    return takingQuiz.fragen[takingQuiz.currentQuestion];
+    return {
+      ...takingQuiz.fragen[takingQuiz.currentQuestion],
+      index: takingQuiz.currentQuestion + 1,
+    };
   }
 
   return [
