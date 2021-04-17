@@ -41,8 +41,6 @@ $itemsPerColumn: 5;
   box-shadow: 0 1px 0 0.5px rgba(58, 161, 245, 0.6);
   &.completed {
     background-color: #268742;
-    .qso_questionNumber {
-    }
   }
   :hover {
     cursor: pointer;
