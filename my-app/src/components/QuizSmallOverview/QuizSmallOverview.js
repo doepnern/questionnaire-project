@@ -20,6 +20,7 @@ export default function QuizSmallOverview({
             question={q}
             index={index}
             key={q.fragenid}
+            completed={q.beantwortet}
             handleClick={() => handleClickQuestion(index)}
           />
         ))}

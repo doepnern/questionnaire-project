@@ -16,11 +16,13 @@ QuestionAnswer.SingleAnswer = function QuestionAnswerSingleAnswer({
   children,
   activated = undefined,
   handleAnswerClick,
+  selected = false,
   ...restProps
 }) {
   return (
     <QuestionAnswer.SingleAnswerContainer
       handleClick={handleAnswerClick}
+      selected={selected}
       {...restProps}
     >
       <div
@@ -90,12 +92,15 @@ QuestionAnswer.EditAnswerTextContainer = function AnswerTextContainer({
 QuestionAnswer.SingleAnswerContainer = function SingleAnswerContainer({
   handleClick,
   children,
+  selected = false,
   ...restprops
 }) {
   return (
     <>
       <div
-        className="qa_singleAnswerContainer"
+        className={`qa_singleAnswerContainer ${
+          selected ? "answer-selected" : ""
+        }`}
         onClick={handleClick}
         {...restprops}
       >

@@ -18,7 +18,7 @@ function quizzesFromBenutzer(benutzerId) {
 function quizWithQuestions() {
   query = `
   SELECT quiz.quizid, quiz.beendet, quiz.titel ,json_agg(
-    json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags, 'pos',quizF.fragenPos) ORDER BY questionsWithTags.fragenid ASC) 
+    json_build_object('fragenid',questionsWithTags.fragenid,'titel',questionsWithTags.titel,'antworten',questionsWithTags.antworten,'tags', questionsWithTags.tags, 'pos',quizF.fragenPos,'beantwortet',quizF.beantwortet, 'ausgewaehlteAntworten',quizF.ausgewaehlteAntworten  ) ORDER BY questionsWithTags.fragenid ASC) 
     FILTER (WHERE questionsWithTags.fragenid IS NOT null) as fragen
   FROM quiz
   LEFT JOIN quizFragen as quizF ON quiz.quizid = quizF.quizid

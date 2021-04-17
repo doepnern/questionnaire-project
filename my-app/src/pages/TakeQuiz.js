@@ -11,7 +11,12 @@ export default function TakeQuiz() {
     setTakingQuiz,
     err,
     displayError,
-    { switchQuestion, getCurrentlyTakingQuestion },
+    {
+      switchQuestion,
+      getCurrentlyTakingQuestion,
+      toggleAnswerToSelectedAnswers,
+      submitQuestion,
+    },
   ] = useTakeQuizState(takingQuizId);
   useEffect(() => {
     console.log(takingQuiz);
@@ -34,6 +39,8 @@ export default function TakeQuiz() {
             <TakeQuizQuestion
               question={getCurrentlyTakingQuestion()}
               switchQuestion={switchQuestion}
+              handleClickAnswer={toggleAnswerToSelectedAnswers}
+              handleSubmitClick={submitQuestion}
             ></TakeQuizQuestion>
           </div>
           <div className="placeholder"></div>

@@ -49,7 +49,7 @@ $svg-onWhite: rgba(54, 106, 148, 0.651);
   &::before {
     content: "";
     height: 100%;
-    width: 100%;
+    width: 101%;
     border-left: 8px solid rgb(5, 197, 5);
     background: linear-gradient(
       90deg,
@@ -64,7 +64,7 @@ $svg-onWhite: rgba(54, 106, 148, 0.651);
   &::before {
     content: "";
     height: 100%;
-    width: 100%;
+    width: 101%;
     border-left: 8px solid rgb(252, 41, 41);
     background: rgb(198, 67, 3);
     background: linear-gradient(
@@ -75,6 +75,10 @@ $svg-onWhite: rgba(54, 106, 148, 0.651);
     position: absolute;
     z-index: -1;
   }
+}
+
+.answer-selected {
+  border: 3px solid #445e90;
 }
 
 .answerTextContainer {

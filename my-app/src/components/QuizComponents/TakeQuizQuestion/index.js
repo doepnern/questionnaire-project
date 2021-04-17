@@ -5,12 +5,13 @@ import QuestionDetailed from "../../QuestionDetailed/QuestionDetailed";
 import Button from "@material-ui/core/Button";
 
 export default function TakeQuizQuestion({
-  question = { title: "undefined", index: -1 },
+  question = { title: "undefined", index: -1, beantwortet: false },
+  handleClickAnswer,
+  handleSubmitClick,
 }) {
   console.log(question);
-  const [submitted, setSubmitted] = useState({ state: false });
   useEffect(() => {
-    setSubmitted({ state: false });
+    console.log(question?.ausgewaehlteAntworten);
   }, [question.index]);
   return (
     <div className="tqq_Container">
@@ -29,8 +30,11 @@ export default function TakeQuizQuestion({
                 <QuestionDetailed.SingleAnswerTakeQuiz
                   key={index}
                   answer={a}
-                  handleAnswerClick={() => console.log("youclicked: " + a.text)}
-                  checkCorrectness={submitted.state}
+                  handleAnswerClick={() => handleClickAnswer(a, question)}
+                  checkCorrectness={question.beantwortet}
+                  selected={question.ausgewaehlteAntworten.some((id) =>
+                    a.id ? id === a.id : false
+                  )}
                 ></QuestionDetailed.SingleAnswerTakeQuiz>
               ))
             : undefined}
@@ -38,7 +42,7 @@ export default function TakeQuizQuestion({
       </div>
       <div className="tqq_footerContainer">
         <Button
-          onClick={() => setSubmitted({ state: true })}
+          onClick={() => handleSubmitClick(question)}
           variant="contained"
           size="large"
           color="primary"

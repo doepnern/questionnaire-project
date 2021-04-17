@@ -42,7 +42,6 @@ $itemsPerColumn: 5;
   &.completed {
     background-color: #268742;
     .qso_questionNumber {
-      background-color: $colorPrimaryLight;
     }
   }
   :hover {

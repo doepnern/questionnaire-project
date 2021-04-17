@@ -83,11 +83,71 @@ export function useTakeQuizState(takingQuizId) {
     };
   }
 
+  function toggleAnswerToSelectedAnswers(answer, question) {
+    if (!question || !question.fragenid || !answer || !answer.id) {
+      console.log(
+        "no valid question or answer given to add selected answer to " +
+          JSON.stringify(question, null, 1) +
+          ", " +
+          JSON.stringify(answer, null, 1) +
+          "make sure question has key fragenid and answer has key id"
+      );
+      return;
+    }
+    if (question.beantwortet) {
+      console.log(
+        "the question is already answerd, cant change your input anymore"
+      );
+      return;
+    }
+    //if selected answers of question contains the answer, remove it, otherwise add it
+    setTakingQuiz((tq) => ({
+      ...tq,
+      fragen: replaceQuestion(tq.fragen, {
+        ...question,
+        ausgewaehlteAntworten: question.ausgewaehlteAntworten.some(
+          (id) => id && id === answer.id
+        )
+          ? question.ausgewaehlteAntworten.filter((id) => id !== answer.id)
+          : [...question.ausgewaehlteAntworten, answer.id],
+      }),
+    }));
+  }
+
+  function submitQuestion(question) {
+    if (!question || !question.fragenid)
+      return console.log(
+        "cant submit question" + JSON.stringify(question, null, 1)
+      );
+    if (question.beantwortet)
+      return console.log("question is already submitted");
+    setTakingQuiz((tq) => ({
+      ...tq,
+      fragen: replaceQuestion(tq.fragen, { ...question, beantwortet: true }),
+    }));
+  }
   return [
     takingQuiz,
     setTakingQuiz,
     err,
     displayError,
-    { switchQuestion, getCurrentlyTakingQuestion },
+    {
+      switchQuestion,
+      getCurrentlyTakingQuestion,
+      toggleAnswerToSelectedAnswers,
+      submitQuestion,
+    },
   ];
+}
+
+function replaceQuestion(arr, newQuestion) {
+  const newArr = arr.filter((q) => q.fragenid !== newQuestion.fragenid);
+  if (newArr.length !== arr.length - 1) {
+    console.log(
+      "question to replace in array was not found, not adding new question"
+    );
+    return arr;
+  }
+  newArr.push(newQuestion);
+  return newArr.sort((a, b) => (a.pos <= b.pos ? -1 : 1));
 }

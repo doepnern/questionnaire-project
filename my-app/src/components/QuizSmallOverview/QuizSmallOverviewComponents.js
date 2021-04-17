@@ -7,11 +7,14 @@ export default function QuizSmallOverviewComponents({ ...restProps }) {
 QuizSmallOverviewComponents.Question = function QuizSmallOverviewComponentsQuestion({
   handleClick,
   index,
+  completed = false,
   ...restProps
 }) {
   return (
     <div
-      className="qso_singleQuestionContainer completed"
+      className={
+        "qso_singleQuestionContainer" + (completed ? " completed" : "")
+      }
       onClick={handleClick}
       {...restProps}
     >

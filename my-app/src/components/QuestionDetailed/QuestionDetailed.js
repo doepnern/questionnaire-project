@@ -68,12 +68,14 @@ QuestionDetailed.SingleAnswerTakeQuiz = function QuestionDetailedSingleAnswerTak
   answer,
   handleAnswerClick = () => undefined,
   checkCorrectness = false,
+  selected = false,
   ...restProps
 }) {
   return (
     <QuestionAnswer.SingleAnswer
       handleAnswerClick={handleAnswerClick}
       activated={checkCorrectness ? answer.correct : undefined}
+      selected={selected}
       {...restProps}
     >
       <QuestionAnswer.AnswerTextContainer>
