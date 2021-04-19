@@ -9,6 +9,7 @@ import {
 } from "hooks/useQuizState";
 import { deleteQuiz as dispatchDeleteQuiz } from "services/UserService";
 import { useNotificationContext, displayMessage } from "components";
+import { useHistory } from "react-router-dom";
 
 export default function QuizPage() {
   const { dispatch: dispatchNotification } = useNotificationContext();
@@ -37,6 +38,7 @@ export default function QuizPage() {
     isShown: false,
   });
 
+  const history = useHistory();
   return (
     <>
       <NavBar />
@@ -62,6 +64,7 @@ export default function QuizPage() {
             completed={quiz.beendet}
             handleDeleteClick={() => handleDeletingQuiz(quiz.quizid)}
             handleEditClick={() => toggleEditingQuiz(quiz.quizid)}
+            handleContinueClick={() => history.push(`/quiz/try/${quiz.quizid}`)}
             quiz={quiz}
             {...quiz}
           />

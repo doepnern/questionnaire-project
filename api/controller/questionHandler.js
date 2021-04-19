@@ -37,7 +37,6 @@ async function getQuestionsFromUser(userId, filter, limit, offset) {
   };
   return userObj;
 }
-
 module.exports = {
   getQuestionsFromUser,
 };

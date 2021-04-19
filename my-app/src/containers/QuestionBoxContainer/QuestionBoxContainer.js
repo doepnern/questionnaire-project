@@ -45,7 +45,6 @@ export default function QuestionBoxContainer({
           <QuestionBox.NewQuestion />
         </QuestionBox>
         {questionContext.questions.map((question, index) => {
-          console.log(question);
           return (
             <QuestionBox
               key={question.fragenid}

@@ -40,7 +40,7 @@ async function upsertQuiz(quizData) {
     for (let q of quizData.fragen) {
       if (q && q.fragenid) {
         res.push(
-          await performQuery(...addFrageToQuizSQL(q.fragenid, q.pos, quizAdded))
+          await performQuery(...addFrageToQuizSQL(q.fragenid, q, quizAdded))
         );
       }
     }

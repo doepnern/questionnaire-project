@@ -35,6 +35,11 @@ export function addQuestion(question) {
   //remove additional keys from answers
   if (question.hasOwnProperty("antworten")) {
     answers = question.antworten.map((answer) => {
+      if (isNaN(parseInt(answer.id)))
+        throw new Error(
+          "Every answer has to have an id, make sure evry questions answer has an id, answer without: " +
+            JSON.stringify(answer, null, 1)
+        );
       const k = qi.keysInBoth(answer, qi.typesAnswer);
       const newAnswer = {};
       k.forEach((key) => (newAnswer[key] = answer[key]));

@@ -11,12 +11,7 @@ export default function TakeQuiz() {
     setTakingQuiz,
     err,
     displayError,
-    {
-      switchQuestion,
-      getCurrentlyTakingQuestion,
-      toggleAnswerToSelectedAnswers,
-      submitQuestion,
-    },
+    handlers,
   ] = useTakeQuizState(takingQuizId);
   useEffect(() => {
     console.log(takingQuiz);
@@ -31,16 +26,17 @@ export default function TakeQuiz() {
             <QuizSmallOverview
               questions={takingQuiz.fragen}
               handleClickQuestion={(questionIndex) => {
-                switchQuestion(questionIndex);
+                handlers.switchQuestion(questionIndex);
               }}
             ></QuizSmallOverview>
           </div>
           <div className="tk_takeQuizQuestion">
             <TakeQuizQuestion
-              question={getCurrentlyTakingQuestion()}
-              switchQuestion={switchQuestion}
-              handleClickAnswer={toggleAnswerToSelectedAnswers}
-              handleSubmitClick={submitQuestion}
+              question={handlers.getCurrentlyTakingQuestion()}
+              switchQuestion={handlers.switchQuestion}
+              handleClickAnswer={handlers.toggleAnswerToSelectedAnswers}
+              handleSubmitClick={handlers.submitQuestion}
+              buttonText={handlers.getButtonText()}
             ></TakeQuizQuestion>
           </div>
           <div className="placeholder"></div>

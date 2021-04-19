@@ -8,11 +8,10 @@ export default function TakeQuizQuestion({
   question = { title: "undefined", index: -1, beantwortet: false },
   handleClickAnswer,
   handleSubmitClick,
+  buttonText = "Undefinded",
 }) {
   console.log(question);
-  useEffect(() => {
-    console.log(question?.ausgewaehlteAntworten);
-  }, [question.index]);
+
   return (
     <div className="tqq_Container">
       <div className="tqq_headerContainer">
@@ -47,7 +46,7 @@ export default function TakeQuizQuestion({
           size="large"
           color="primary"
         >
-          Check
+          {buttonText}
         </Button>
       </div>
     </div>

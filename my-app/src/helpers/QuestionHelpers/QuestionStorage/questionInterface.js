@@ -39,6 +39,7 @@ export const typesQuestion = {
 export const typesAnswer = {
   text: (x) => typeof x === "string",
   correct: (x) => typeof x === "boolean",
+  id: (x) => !isNaN(parseInt(x)),
 };
 
 //makes sure returned object has all needed keys to be a question and none, not belonging to question, also checks for correct format of updated keys, throws error in case of unfitting format, object needs at least key: fragenid
@@ -61,7 +62,7 @@ export function questionFromObject(obj) {
 
 export function addAnswer(question) {
   let q = _.cloneDeep(question);
-  q.antworten.push(new createAnswer());
+  q.antworten.push(new createAnswer(question));
   return { obj: q, changes: 1 };
 }
 
@@ -153,10 +154,14 @@ export const createQuestion = function (id) {
   this.antworten = [];
   this.added = false;
 };
-//dont use directly, use addAnswer instead
-export const createAnswer = function () {
+//dont use directly, use addAnswer instead, makes sure answer has an id, no answer in question has
+export const createAnswer = function (question) {
   this.text = "new answer";
   this.correct = false;
+  this.id =
+    question.antworten.length > 0
+      ? Math.max(...question.antworten.map((a) => a.id)) + 1
+      : 1;
 };
 
 //finds keys, which are in both objects
