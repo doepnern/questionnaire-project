@@ -16,7 +16,6 @@ const {
   createNewQuestion,
   deleteQuestionById,
   deleteTagById,
-  getQuestions,
 } = require("./db-integration");
 
 //enable env file
@@ -85,7 +84,7 @@ app.post("/api/quiz", (req, res) => {
   handleRequest(() => upsertQuiz(req.body), res);
 });
 
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "../my-app/build/index.html"));
 });
 
