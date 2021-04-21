@@ -61,7 +61,6 @@ CustomTag.AddTag = function CustomTagAddTag({ handleAddingTag, ...restProps }) {
     </div>
   );
   function handleAddInputClose() {
-    console.log("closed");
     handleAddingTag(open.value);
     setOpen((o) => {
       return { ...o, open: false, disabled: true, value: "" };

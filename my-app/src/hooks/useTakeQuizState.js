@@ -244,7 +244,6 @@ export function useTakeQuizState(takingQuizId) {
           selectedIds.filter((s) => !correctIds.includes(s)).length;
       }
       const result = correctAnswered - wrongAnswered;
-      console.log({ correctAnswered, wrongAnswered });
       return result < 1 ? 0 : result;
     }
     function filterAnswers(answerArr, filter) {

@@ -4,9 +4,7 @@ import InformationOverlayDiv from "./InformationOverlayDiv";
 import { useNotificationContext } from "components";
 export default function InformationOverlayContainer() {
   const { notificationContext } = useNotificationContext();
-  useEffect(() => {
-    console.log(notificationContext);
-  }, [notificationContext]);
+
   return (
     <Fade
       zIndex={2001}

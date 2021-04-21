@@ -3,7 +3,6 @@ function deleteQuizSQL(quizid) {
   querys.push(deleteUserQuiz(quizid));
   querys.push(deleteQuizFragen(quizid));
   querys.push(deleteQuiz(quizid));
-  console.log(querys);
   return querys;
 }
 

@@ -32,7 +32,6 @@ function QuestionOverview({
   const oldIgnoreQuestions = useRef(ignoreQuestions);
   //when current page, or limit per page or available max page changes, refetch data to represent changes
   useEffect(() => {
-    console.log(pages);
     getAllUsersHere();
   }, [pages.page, pages.limit, pages.maxPage]);
 
@@ -60,7 +59,6 @@ function QuestionOverview({
       }
     );
     function setNewQuestions(user) {
-      console.log("loaded");
       console.log(user);
       if (user !== undefined && !Object.keys(user).includes("error")) {
         //remove questions which should be ignored

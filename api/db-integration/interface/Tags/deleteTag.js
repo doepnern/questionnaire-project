@@ -3,7 +3,6 @@ const { isInt } = require("../../../my_util");
 
 //deletes tag by id if it exists, if given questionId, tag only gets deleted from question
 async function deleteTagById(tagId, questionId) {
-  console.log({ tagId, questionId });
   //see if questionId is valid int
   if (isInt(tagId)) {
     let res;

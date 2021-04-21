@@ -11,7 +11,6 @@ async function handleAddingTagToQuestion(tagName, questionId) {
   //for now assume question with id exists, TODO: check if question with id exists
   //try to find tag with name, replace underscore with space
   tagName = tagName.split("_").join(" ");
-  console.log("---------------------------tags found ");
   const tagFound = await findTag(undefined, tagName);
   let newTagId;
   //falls tag nicht vorhanden, tag erstellen

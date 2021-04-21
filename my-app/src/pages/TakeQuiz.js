@@ -13,9 +13,7 @@ export default function TakeQuiz() {
     displayError,
     handlers,
   ] = useTakeQuizState(takingQuizId);
-  useEffect(() => {
-    console.log(takingQuiz);
-  });
+
   return (
     <>
       {err.active ? (
@@ -45,12 +43,3 @@ export default function TakeQuiz() {
     </>
   );
 }
-
-/**
- * <QuizSmallOverview
-            questions={takingQuiz.fragen}
-            handleClickQuestion={(questionId) =>
-              console.log("question " + questionId + " clicked")
-            }
-          ></QuizSmallOverview>
- */

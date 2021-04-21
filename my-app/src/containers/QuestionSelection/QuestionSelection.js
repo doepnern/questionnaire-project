@@ -9,9 +9,6 @@ export default function QuestionSelection({
   handleQuizAdding,
   questionsInQuiz,
 }) {
-  useEffect(() => {
-    if (questionSelection.isShown) console.log(questionsInQuiz);
-  }, [questionSelection.isShown]);
   return (
     <Modal isShown={questionSelection.isShown} toggleShown={toggleShown}>
       <div

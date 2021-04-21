@@ -11,7 +11,6 @@ function insertInto(tableName, values) {
   for (let val of Object.values(values)) {
     valArray.push(val);
   }
-  console.log(`INSERT INTO ${tableName} Values(${valArray.join()})`);
   return `INSERT INTO ${tableName} Values(${valArray.join()});`;
 }
 

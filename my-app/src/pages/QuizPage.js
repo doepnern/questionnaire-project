@@ -104,9 +104,7 @@ export default function QuizPage() {
 
   // opens edit quiz dialogue and sets quizEditing to -1 -> if that is id at close -> need to let db create new quiz
   function handleNewQuizClick() {
-    //TODO: create new quiz and get new quizzes id
     updateQuiz({ quizid: -1, beendet: false, titel: "new quiz" }, 1, (res) => {
-      console.log(res);
       if (
         res.status === "success" &&
         res.result &&

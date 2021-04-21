@@ -1,7 +1,6 @@
 const { isInt } = require("../../../my_util/index");
 
 function upsertQuizSQL(quizData) {
-  console.log({ quizData });
   //if quizId is -1, create new quiz
   if (!isInt(quizData.quizid)) {
     throw new Error(

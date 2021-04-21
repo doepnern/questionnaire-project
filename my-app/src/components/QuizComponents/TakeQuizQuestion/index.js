@@ -10,8 +10,6 @@ export default function TakeQuizQuestion({
   handleSubmitClick,
   buttonText = "Undefinded",
 }) {
-  console.log(question);
-
   return (
     <div className="tqq_Container">
       <div className="tqq_headerContainer">

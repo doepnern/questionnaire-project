@@ -1,7 +1,6 @@
 const { isInt } = require("../../../my_util");
 
 function addFrageToQuizSQL(fragenId, frage, quizId) {
-  console.log({ frage });
   if (!isInt(fragenId) || !isInt(quizId) || !frage)
     throw new Error(
       "fragenId and quizId has to be int, in order to add question to quiz given was fragenId " +
