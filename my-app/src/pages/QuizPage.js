@@ -8,19 +8,31 @@ import {
   deleteQuestionQuiz,
 } from "hooks/useQuizState";
 import { deleteQuiz as dispatchDeleteQuiz } from "services/UserService";
-import { useNotificationContext, displayMessage } from "components";
+import {
+  useNotificationContext,
+  displayMessage,
+  displayDialogue,
+} from "components";
 import { useHistory } from "react-router-dom";
 
 export default function QuizPage() {
   const { dispatch: dispatchNotification } = useNotificationContext();
   useEffect(() => {
     refreshQuizzes(1);
+    // dispatchNotification(
+    //   displayMessage(
+    //     "successfully did something you wanted",
+    //     "error",
+    //     dispatchNotification,
+    //     20000
+    //   )
+    // );
     dispatchNotification(
-      displayMessage(
-        "successfully did something you wanted",
-        "error",
-        dispatchNotification,
-        20000
+      displayDialogue(
+        "example dialogue with a relatively long message",
+        undefined,
+        () => console.log("you chose yes"),
+        () => console.log("you chose no")
       )
     );
   }, []);

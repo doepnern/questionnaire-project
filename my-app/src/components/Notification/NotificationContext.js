@@ -1,11 +1,11 @@
 import React, { useReducer } from "react";
 import { useContext } from "react";
 
-export const NotificationContext = React.createContext();
-
 //different text styles(error, etc) for the global Overlay Messages
 const INFORMATION = "information";
 // use "error" for alternative styling const ERROR = "error";
+
+export const NotificationContext = React.createContext();
 
 const initialState = {
   notification: {
@@ -15,12 +15,19 @@ const initialState = {
   },
   dialogue: {
     status: "idle",
-    message: " are you sure deleting all overlays?",
+    message: "",
     options: [
-      { name: "yes", handleClick: () => null },
-      { name: "cancel", handleClick: () => null },
+      {
+        name: "yes",
+        handleClick: () =>
+          console.log("please add success callback to dialogue"),
+      },
+      {
+        name: "cancel",
+        handleClick: () =>
+          console.log("please add decline callback to dialogue"),
+      },
     ],
-    onSuccess: () => console.log("please add success callback to dialogue"),
   },
 };
 
@@ -49,9 +56,24 @@ function reset() {
 function displayDialogue(
   message,
   options = initialState.dialogue.options,
-  onSuccess = initialState.onSuccess
+  onSuccess,
+  onDecline
 ) {
-  return { type: DISPLAY_DIALOGUE, message, options, onSuccess };
+  //by default first item gets onSuccess and lastItem gets onDecline callbacks, if you want custom callbacks define them in options
+  const optionsWithoutFirstAndLast = options.slice(1, options.length - 1);
+  const optionsWithCallback = [
+    addCallbackIfDefined(options[0], onSuccess),
+    ...optionsWithoutFirstAndLast,
+    addCallbackIfDefined(options[options.length - 1], onDecline),
+  ];
+  return { type: DISPLAY_DIALOGUE, message, options: optionsWithCallback };
+}
+
+function addCallbackIfDefined(obj, callback) {
+  if (callback) {
+    return { ...obj, handleClick: callback };
+  }
+  return obj;
 }
 
 function closeDialogue(message) {
@@ -91,7 +113,6 @@ function NotificationContextReducer(state, action) {
           status: "selecting",
           message: action.message,
           options: action.options,
-          onSuccess: action.onSuccess,
         },
       };
     case CLOSE_DIALOGUE:
