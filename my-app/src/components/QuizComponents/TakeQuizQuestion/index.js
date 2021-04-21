@@ -25,7 +25,7 @@ export default function TakeQuizQuestion({
       <div className="tqq_BodyContainer">
         <QuestionAnswer>
           {question.antworten
-            ? JSON.parse(question.antworten).map((a, index) => (
+            ? question.antworten.map((a, index) => (
                 <QuestionDetailed.SingleAnswerTakeQuiz
                   key={index}
                   answer={a}

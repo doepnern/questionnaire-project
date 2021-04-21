@@ -52,6 +52,8 @@ const createTableQuiz = `
   quizId serial NOT NULL,
   beendet boolean Not NULL,
   titel varchar NOT NULL,
+  score varchar NOT NULL,
+  progress varchar NOT NULL,
   PRIMARY KEY(quizId)
   );
 `;

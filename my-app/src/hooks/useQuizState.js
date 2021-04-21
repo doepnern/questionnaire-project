@@ -7,6 +7,7 @@ import {
   insertIfNotContained,
   removeIfContained,
 } from "helpers/QuestionHelpers/QuestionStorage/questionInterface";
+import { formatAnswersFromQuestion } from "helpers/util";
 
 export function useQuizState() {
   const [quizzes, setQuizzes] = useState([]);
@@ -17,7 +18,13 @@ export function useQuizState() {
 
   function refreshQuizzes(userId) {
     getQuiz(userId, (res) => {
-      setQuizzes(res.result[0]?.quizzes);
+      console.log(res.result[0]?.quizzes);
+      setQuizzes(
+        res.result[0]?.quizzes.map((q) => ({
+          ...q,
+          fragen: formatAnswersFromQuestion(q.fragen),
+        }))
+      );
     });
   }
 
@@ -52,6 +59,7 @@ export function useQuizState() {
     );
     setQuizzes(nextState);
   }
+
   return [
     quizzes,
     setQuizzes,
@@ -59,7 +67,11 @@ export function useQuizState() {
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
-    { updateQuiz, updateCurrentlyEditingQuiz, getQuestionsInQuiz },
+    {
+      updateQuiz,
+      updateCurrentlyEditingQuiz,
+      getQuestionsInQuiz,
+    },
   ];
 }
 

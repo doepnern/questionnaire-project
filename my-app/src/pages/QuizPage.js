@@ -32,7 +32,12 @@ export default function QuizPage() {
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
-    { updateCurrentlyEditingQuiz, updateQuiz, getQuestionsInQuiz },
+    {
+      updateCurrentlyEditingQuiz,
+      updateQuiz,
+      getQuestionsInQuiz,
+      calcQuizResult,
+    },
   ] = useQuizState();
   const [questionSelection, setQuestionSelection] = useState({
     isShown: false,
@@ -62,6 +67,8 @@ export default function QuizPage() {
           <QuizItem
             key={quiz.quizid}
             completed={quiz.beendet}
+            score={quiz.score}
+            progress={quiz.progress}
             handleDeleteClick={() => handleDeletingQuiz(quiz.quizid)}
             handleEditClick={() => toggleEditingQuiz(quiz.quizid)}
             handleContinueClick={() => history.push(`/quiz/try/${quiz.quizid}`)}

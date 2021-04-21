@@ -8,6 +8,8 @@ export default function QuizItem({
   handleEditClick,
   handleDeleteClick,
   handleContinueClick,
+  score = "-",
+  progress = "-",
   fragen = [],
 }) {
   return (
@@ -17,11 +19,11 @@ export default function QuizItem({
       </div>
       <div className="QuizInfo">
         <span>Status: {completed ? "finished" : "In progress.."}</span>
-        <span>Result: -</span>
+        <span>Result: {score}</span>
       </div>
       <div className="secondQuizInfo">
         <span>Question: {fragen.length}</span>
-        <span>Answered: 0</span>
+        <span>Progress: {progress}</span>
       </div>
       <div className="buttonArea">
         <div

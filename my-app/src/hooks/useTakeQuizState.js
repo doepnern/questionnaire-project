@@ -1,6 +1,7 @@
 import { getQuiz, updateQuiz } from "services/UserService";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { formatQuizResult } from "helpers/util";
 
 export function useTakeQuizState(takingQuizId) {
   const initialState = { fragen: [], currentQuestion: -1 };
@@ -20,9 +21,8 @@ export function useTakeQuizState(takingQuizId) {
         (res) =>
           setTakingQuiz((tq) => {
             const baseState = keepCurrentQuestion ? tq : initialState;
-            const quizFromDB = findCurrentQuiz(
-              res.result[0].quizzes,
-              takingQuizId
+            const quizFromDB = formatQuizResult(
+              findCurrentQuiz(res.result[0].quizzes, takingQuizId)
             );
             const firstUnanswered = quizFromDB.fragen.findIndex(
               (f) => !f.beantwortet
@@ -100,8 +100,16 @@ export function useTakeQuizState(takingQuizId) {
   //switches to next question, if there is no next question, exits the quiz
   function nextQuestion() {
     if (isLastQuestion()) {
-      syncDbToQuiz({ ...takingQuiz, beendet: true });
-      history.push("/quiz");
+      //finish quiz, if succsessfull return to quizzes
+      syncDbToQuiz(
+        {
+          ...takingQuiz,
+          beendet: true,
+          score: calcQuizResult(),
+          progress: "100%",
+        },
+        () => history.push("/quiz")
+      );
       return;
     }
     switchQuestion(takingQuiz.currentQuestion + 1);
@@ -163,26 +171,22 @@ export function useTakeQuizState(takingQuizId) {
       return console.log(
         "cant submit question" + JSON.stringify(question, null, 1)
       );
-    if (question.beantwortet) nextQuestion();
-    setTakingQuiz((tq) =>
-      syncDbToQuiz({
+    if (question.beantwortet) return nextQuestion();
+    setTakingQuiz((tq) => {
+      const newState = {
         ...tq,
         fragen: replaceQuestion(tq.fragen, { ...question, beantwortet: true }),
-      })
-    );
+      };
+      return syncDbToQuiz({ ...newState, progress: calcProgress(newState) });
+    });
   }
 
-  function syncDbToQuiz(newObj) {
-    console.log({ newObj });
+  function syncDbToQuiz(newObj, callback = () => undefined) {
     if (newObj?.quizid && parseInt(newObj.quizid) > -1) {
-      updateQuiz(
-        newObj,
-        1,
-        () => undefined,
-        (res) =>
-          displayError(
-            "cant reach db to sync your progress" + JSON.stringify(res, null, 4)
-          )
+      updateQuiz(newObj, 1, callback, (res) =>
+        displayError(
+          "cant reach db to sync your progress" + JSON.stringify(res, null, 4)
+        )
       );
     }
     return newObj;
@@ -199,6 +203,53 @@ export function useTakeQuizState(takingQuizId) {
 
   function isLastQuestion() {
     return takingQuiz.currentQuestion === takingQuiz.fragen.length - 1;
+  }
+
+  function calcProgress(state = takingQuiz) {
+    //divide total answers by answered answers
+    const totalAnswer = state.fragen.length;
+    const beantwortet = state.fragen.filter((q) => q.beantwortet).length;
+    return beantwortet === 0
+      ? totalAnswer === 0
+        ? "100%"
+        : "0%"
+      : `${((beantwortet / totalAnswer) * 100).toFixed(2)}%`;
+  }
+  //every correctly answered question gives 1 point, every missed wrongly selected answer gives -1 point, max is total number of correct answers
+  function calcQuizResult() {
+    const maxPoints = getMaxPoints(takingQuiz.fragen);
+    return `${getAnswerScore(takingQuiz.fragen)}/${maxPoints}`;
+    function getMaxPoints(fragenArr) {
+      //get number of correct answers per question and add for all questions
+      return fragenArr.reduce(
+        (acc, cur) =>
+          acc + filterAnswers(cur.antworten, (a) => a.correct).length,
+        0
+      );
+    }
+
+    function getAnswerScore(questionArr) {
+      if (!questionArr instanceof Array) return 0;
+      //per question get selected answeres and see which of them are also in the correct array. Then substract 1 point for each selected answer not in the correct array
+      let correctAnswered = 0;
+      let wrongAnswered = 0;
+      for (let q of questionArr) {
+        const selectedIds = q.ausgewaehlteAntworten;
+        const correctIds = filterAnswers(q.antworten, (a) => a.correct);
+        correctAnswered =
+          correctAnswered +
+          selectedIds.filter((s) => correctIds.includes(s)).length;
+        wrongAnswered =
+          wrongAnswered +
+          selectedIds.filter((s) => !correctIds.includes(s)).length;
+      }
+      const result = correctAnswered - wrongAnswered;
+      console.log({ correctAnswered, wrongAnswered });
+      return result < 1 ? 0 : result;
+    }
+    function filterAnswers(answerArr, filter) {
+      return answerArr ? answerArr.filter(filter).map((a) => a.id) : [];
+    }
   }
 
   return [

@@ -18,7 +18,6 @@ export function usePagination(initialLimit) {
         newContent.length > 0
           ? Math.floor((newContent[0].totalcount - 1) / p.limit)
           : 0;
-      console.log({ newMax });
       return {
         ...p,
         maxPage: newMax,
