@@ -1,5 +1,5 @@
 import { QuestionBox, QuestionAnswer } from "components";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { QuestionDetailed } from "components";
 import { ReactComponent as UndoButton } from "svg/back_button.svg";
 import { ReactComponent as RedoButton } from "svg/redo_button.svg";

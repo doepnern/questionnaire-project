@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./customTag.scss";
 import { ReactComponent as RemoveTagSVG } from "svg/remove_tag.svg";
 import { ReactComponent as AddTagSVG } from "svg/add_tag.svg";
@@ -47,7 +47,7 @@ CustomTag.AddTag = function CustomTagAddTag({ handleAddingTag, ...restProps }) {
           placeholder="new tag"
           onBlur={open.open ? handleAddInputClose : undefined}
           onKeyDown={(e) =>
-            e.key == "Enter" ? handleAddInputClose() : undefined
+            e.key === "Enter" ? handleAddInputClose() : undefined
           }
           onChange={(e) => {
             const val = e.target.value;

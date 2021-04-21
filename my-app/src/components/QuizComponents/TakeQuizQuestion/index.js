@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./styles.scss";
 import QuestionAnswer from "../../QuestionDetailed/QuestionAnswer";
 import QuestionDetailed from "../../QuestionDetailed/QuestionDetailed";

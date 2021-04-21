@@ -27,17 +27,12 @@ export default function QuizPage() {
 
   const [
     quizzes,
-    setQuizzes,
+    ,
     dispatch,
     refreshQuizzes,
     editingQuiz,
     setEditingQuiz,
-    {
-      updateCurrentlyEditingQuiz,
-      updateQuiz,
-      getQuestionsInQuiz,
-      calcQuizResult,
-    },
+    { updateCurrentlyEditingQuiz, updateQuiz, getQuestionsInQuiz },
   ] = useQuizState();
   const [questionSelection, setQuestionSelection] = useState({
     isShown: false,

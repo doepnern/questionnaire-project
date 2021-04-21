@@ -1,12 +1,6 @@
 import React, { useReducer } from "react";
 import { useContext } from "react";
-import {
-  QuestionStorage,
-  addAnswer,
-  removeAnswer,
-  updateAnswer,
-} from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage";
-import _ from "lodash";
+import { QuestionStorage } from "helpers/QuestionHelpers/QuestionStorage/QuestionStorage";
 
 export const QuestionContext = React.createContext();
 
@@ -114,6 +108,8 @@ function QuestionContextReducer(state, action) {
         console.log("error: " + e);
       }
       break;
+    default:
+      console.log("no action given");
   }
   return {
     ...state,

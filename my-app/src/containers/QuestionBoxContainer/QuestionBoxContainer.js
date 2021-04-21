@@ -10,7 +10,6 @@ import {
   deleteTagById,
   addTagForQuestion,
 } from "services/UserService";
-import _ from "lodash";
 
 export default function QuestionBoxContainer({
   reloadQuestions,

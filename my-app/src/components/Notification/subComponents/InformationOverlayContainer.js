@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Fade from "../../Misc/Fade/Fade";
 import InformationOverlayDiv from "./InformationOverlayDiv";
 import { useNotificationContext } from "components";

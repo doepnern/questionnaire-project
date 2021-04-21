@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { debugCall } from "helpers/debugPrint";
+import React, { useEffect, useRef } from "react";
 /**
  * Create draggable autosorting list by passing in a state consisting of objects where each object has a pos key and an id key, whose name can be specified in stateId property
  * As Children only ListDrag.Items are valid to be dragged, give those their respective id as dataId, their pos as dataPos and their index in the current state as index property

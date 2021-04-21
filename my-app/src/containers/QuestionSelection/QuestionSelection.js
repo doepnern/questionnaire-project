@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Modal } from "components";
 import "./QuestionSelection.scss";
 import QuestionOverview from "pages/QuestionOverview";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useTakeQuizState } from "hooks/useTakeQuizState";
 import { QuizSmallOverview, TakeQuizQuestion } from "components";
@@ -6,13 +6,7 @@ import "./takeQuiz.scss";
 
 export default function TakeQuiz() {
   const takingQuizId = parseInt(useParams().quizid);
-  const [
-    takingQuiz,
-    setTakingQuiz,
-    err,
-    displayError,
-    handlers,
-  ] = useTakeQuizState(takingQuizId);
+  const [takingQuiz, , err, , handlers] = useTakeQuizState(takingQuizId);
 
   return (
     <>

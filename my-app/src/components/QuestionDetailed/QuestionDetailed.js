@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./questionDetailed.scss";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import QuestionAnswer from "./QuestionAnswer";
 import { ReactComponent as EditAnswerButton } from "svg/edit_button.svg";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";

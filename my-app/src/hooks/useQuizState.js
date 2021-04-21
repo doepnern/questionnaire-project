@@ -18,7 +18,6 @@ export function useQuizState() {
 
   function refreshQuizzes(userId) {
     getQuiz(userId, (res) => {
-      console.log(res.result[0]?.quizzes);
       setQuizzes(
         res.result[0]?.quizzes.map((q) => ({
           ...q,

@@ -19,7 +19,7 @@ function reset() {
 function addToHistory(o) {
   //make a copy of onject
   const obj = _.cloneDeep(o);
-  if (this.currentPosition == 0) {
+  if (this.currentPosition === 0) {
     this.history.push(obj);
     return;
   }

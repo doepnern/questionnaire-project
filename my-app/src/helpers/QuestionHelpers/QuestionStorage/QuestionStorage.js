@@ -100,7 +100,7 @@ export function updateQuestion(fragenid, action) {
 //finds first appearance of question with fragenid === fragenid
 export function findQuestionById(fragenid) {
   if (!qi.isInt(fragenid))
-    throw "need to provide valid fragenid to find question";
+    throw new Error("need to provide valid fragenid to find question");
   //find right question
   let id = parseInt(fragenid);
   let index = 0;
@@ -110,7 +110,7 @@ export function findQuestionById(fragenid) {
     }
     index++;
   }
-  throw "couldnt find question with fitting id";
+  throw new Error("couldnt find question with fitting id");
 }
 
 /**
@@ -143,12 +143,14 @@ QuestionStorage.prototype.replaceQuestion = replaceQuestion;
 QuestionStorage.prototype.findQuestionById = findQuestionById;
 QuestionStorage.prototype.travelBack = function () {
   const historicQuestions = this.history.travelBack();
-  if (historicQuestions == null) throw "cant go back to this point in time";
+  if (historicQuestions == null)
+    throw new Error("cant go back to this point in time");
   this.questions = historicQuestions;
 };
 QuestionStorage.prototype.travelForward = function () {
   const historicQuestions = this.history.travel(1);
-  if (historicQuestions == null) throw "cant go forward to this point in time";
+  if (historicQuestions == null)
+    throw new Error("cant go forward to this point in time");
   this.questions = historicQuestions;
 };
 QuestionStorage.prototype.canTravelBackward = function () {

@@ -7,7 +7,7 @@ import {
 import { myDebouncer } from "helpers/debouncer";
 import { myFunctionTimer } from "helpers/functionTimer";
 
-export default function TestQuestionContext({}) {
+export default function TestQuestionContext() {
   const { questionContext, dispatch } = useQuestionContext();
   const testRef = useRef(
     new tests(getExamples(), [addQuestion, updateQuestion])
@@ -25,16 +25,16 @@ export default function TestQuestionContext({}) {
   return <></>;
 }
 
-function webFrage(id) {
-  this.fragenid = id;
-  this.titel = "";
-  this.antworten = "";
-  this.tags = [];
-}
-function tag(id) {
-  this.tagid = id;
-  this.tagname = "";
-}
+// function webFrage(id) {
+//   this.fragenid = id;
+//   this.titel = "";
+//   this.antworten = "";
+//   this.tags = [];
+// }
+// function tag(id) {
+//   this.tagid = id;
+//   this.tagname = "";
+// }
 function getExamples() {
   const examples = [
     {
@@ -105,22 +105,22 @@ tests.prototype.performNext = function (dispatchFunction) {
   } else console.log("reached end of tests");
 };
 
-function debounceTest() {
-  //testing function
-  function testingDebounce(s) {
-    console.log(s);
-  }
-  let myTest = myDebouncer(testingDebounce, 10);
-  let myTimerTest = myFunctionTimer((n) => {
-    let x = 0;
-    for (let i = 0; i < n; i++) {
-      x = x * x;
-    }
-    return x;
-  });
-  setTimeout(() => myTest("second hi"), 0);
-  setTimeout(() => myTest("third hi"), 0);
-  setTimeout(() => myTest("fourth hi"), 0);
-  myTimerTest(100000);
-  myTimerTest(10);
-}
+// function debounceTest() {
+//   //testing function
+//   function testingDebounce(s) {
+//     console.log(s);
+//   }
+//   let myTest = myDebouncer(testingDebounce, 10);
+//   let myTimerTest = myFunctionTimer((n) => {
+//     let x = 0;
+//     for (let i = 0; i < n; i++) {
+//       x = x * x;
+//     }
+//     return x;
+//   });
+//   setTimeout(() => myTest("second hi"), 0);
+//   setTimeout(() => myTest("third hi"), 0);
+//   setTimeout(() => myTest("fourth hi"), 0);
+//   myTimerTest(100000);
+//   myTimerTest(10);
+// }

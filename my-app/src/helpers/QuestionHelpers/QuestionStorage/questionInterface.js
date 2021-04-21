@@ -46,7 +46,9 @@ export const typesAnswer = {
 export function questionFromObject(obj) {
   // obj at least needs a fragenId
   if (!obj.fragenid || !isInt(obj.fragenid)) {
-    throw "not a valid fragenid, make sure object for questionFromObject has key: fragenid with valid Integer value";
+    throw new Error(
+      "not a valid fragenid, make sure object for questionFromObject has key: fragenid with valid Integer value"
+    );
   }
   const newQuestion = new createQuestion(parseInt(obj.fragenid));
   const finalQuestion = updateObjectKeysWithTypeChecking(
@@ -69,7 +71,7 @@ export function addAnswer(question) {
 export function updateAnswer(question, index, antwort) {
   let q = _.cloneDeep(question);
   if (!q.antworten[index])
-    throw "antworten array not available at position index";
+    throw new Error("antworten array not available at position index");
   const newAnswer = updateObjectKeysWithTypeChecking(
     q.antworten[index],
     antwort,
@@ -82,7 +84,7 @@ export function updateAnswer(question, index, antwort) {
 export function deleteAnswer(question, index) {
   let q = _.cloneDeep(question);
   if (!q.antworten[index])
-    throw "antworten array not available at position index";
+    throw new Error("antworten array not available at position index");
   const newA = [
     ...q.antworten.slice(0, index),
     ...q.antworten.slice(index + 1),
@@ -181,9 +183,9 @@ export function updateObjectKeysWithTypeChecking(objIn, updatingObj, type) {
   const check = keyTypesAreValid(newObj.obj, type);
   if (check.res) return newObj;
   else
-    throw (
+    throw new Error(
       "cant update your object, updating object doesnt have right types for: " +
-      check.failures
+        check.failures
     );
 }
 
@@ -193,9 +195,9 @@ export function updateObjectKeys(objIn, updatingObj) {
   let changes = 0;
   const obj = _.cloneDeep(objIn);
   if (!keys instanceof Array) {
-    throw "keys have to be an array";
+    throw new Error("keys have to be an array");
   }
-  keys.map((key) => {
+  keys.forEach((key) => {
     if (obj[key] !== updatingObj[key]) {
       if (!_.isEqual(obj[key], updatingObj[key])) {
         changes++;
@@ -209,7 +211,7 @@ export function updateObjectKeys(objIn, updatingObj) {
 export function isInt(value) {
   return (
     !isNaN(value) &&
-    parseInt(Number(value)) == value &&
+    parseInt(Number(value)) === value &&
     !isNaN(parseInt(value, 10))
   );
 }

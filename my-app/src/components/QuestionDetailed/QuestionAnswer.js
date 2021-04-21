@@ -1,4 +1,3 @@
-import { Checkbox } from "components";
 import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as PlusButton } from "svg/plus_button.svg";
 import "./questionAnswer.scss";
