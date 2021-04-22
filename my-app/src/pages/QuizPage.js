@@ -6,35 +6,16 @@ import {
   useQuizState,
   addQuestionQuiz,
   deleteQuestionQuiz,
+  changeNameQuiz,
 } from "hooks/useQuizState";
 import { deleteQuiz as dispatchDeleteQuiz } from "services/UserService";
-import {
-  useNotificationContext,
-  displayMessage,
-  displayDialogue,
-} from "components";
+import { useNotificationContext, confirmationDialogue } from "components";
 import { useHistory } from "react-router-dom";
 
 export default function QuizPage() {
   const { dispatch: dispatchNotification } = useNotificationContext();
   useEffect(() => {
     refreshQuizzes(1);
-    // dispatchNotification(
-    //   displayMessage(
-    //     "successfully did something you wanted",
-    //     "error",
-    //     dispatchNotification,
-    //     20000
-    //   )
-    // );
-    dispatchNotification(
-      displayDialogue(
-        "example dialogue with a relatively long message",
-        undefined,
-        () => console.log("you chose yes"),
-        () => console.log("you chose no")
-      )
-    );
   }, []);
 
   const [
@@ -60,6 +41,7 @@ export default function QuizPage() {
         quizzes={quizzes}
         handleAddClick={toggleQuestionSelection}
         handleTrashClick={handleDeletingQuestion}
+        handleNameChange={handleQuizNameChange}
         updateCurrentlyEditingQuiz={updateCurrentlyEditingQuiz}
       ></EditQuiz>
       <QuestionSelection
@@ -88,9 +70,9 @@ export default function QuizPage() {
   );
 
   // toggles editing screen and sets currently editing id to quizid
-  function toggleEditingQuiz(id) {
+  function toggleEditingQuiz(id, refresh = false) {
+    if (refresh) refreshQuizzes(1);
     setEditingQuiz((s) => {
-      if (s.isEditing) refreshQuizzes(1);
       return {
         ...s,
         isEditing: !s.isEditing,
@@ -129,7 +111,11 @@ export default function QuizPage() {
   }
 
   function handleDeletingQuiz(quizid) {
-    dispatchDeleteQuiz(quizid, () => refreshQuizzes(1));
+    confirmationDialogue(
+      "Are you sure deleting quiz with id: " + quizid,
+      dispatchNotification,
+      () => dispatchDeleteQuiz(quizid, () => refreshQuizzes(1))
+    );
   }
 
   //adds a question to a quiz
@@ -138,5 +124,8 @@ export default function QuizPage() {
   }
   function handleDeletingQuestion(question) {
     dispatch(deleteQuestionQuiz(question));
+  }
+  function handleQuizNameChange(value) {
+    dispatch(changeNameQuiz(value));
   }
 }

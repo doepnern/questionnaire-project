@@ -5,18 +5,17 @@ import ListDrag from "../../Misc/ListDrag/ListDrag";
 
 //The edit quiz has own state, so changes are only applied once the submit button is pressed
 export default function EditQuizComponents({
-  currentQuiz,
+  currentQuiz = { questions: [], titel: "undefined" },
   handleAddClick,
   handleTrashClick,
   handleSubmitClick,
+  handleNameChange,
   children,
 }) {
-  const questions = currentQuiz.questions ? currentQuiz.questions : [];
-  const titel = currentQuiz.titel ? currentQuiz.titel : "undefined";
+  const questions = currentQuiz.questions;
   //reload state when questions change
   const [questionState, setQuestions] = useState(questions);
   const previousQuestions = useRef(questions);
-  const [titelState, setTitel] = useState(titel);
 
   //if questions are changed putside this component, update question
   useEffect(() => {
@@ -25,13 +24,6 @@ export default function EditQuizComponents({
     setQuestions(() => questions);
   }, [currentQuiz]);
 
-  //if title is changed outside this component, update title
-  useEffect(() => {
-    if (currentQuiz.titel && !(titelState === currentQuiz.titel)) {
-      setTitel(currentQuiz.titel);
-    }
-  }, [currentQuiz.titel]);
-
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">
@@ -39,8 +31,8 @@ export default function EditQuizComponents({
           fragenid="qc_titleInput"
           label="Title"
           variant="filled"
-          value={titelState}
-          onChange={(e) => setTitel(e.target.value)}
+          value={currentQuiz.titel != null ? currentQuiz.titel : "undefined"}
+          onChange={(e) => handleNameChange(e.target.value)}
         ></TextField>
       </div>
       <EditQuizComponents.QuestionList
@@ -56,7 +48,10 @@ export default function EditQuizComponents({
           variant="contained"
           color="primary"
           onClick={() =>
-            handleSubmitClick({ fragen: questionState, titel: titelState })
+            handleSubmitClick({
+              fragen: questionState,
+              titel: currentQuiz.titel,
+            })
           }
         >
           Submit

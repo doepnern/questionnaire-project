@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import EditQuizComponents from "./EditQuizComponents";
 import "./EditQuiz.scss";
 import QuestionDetailed from "../../QuestionDetailed/QuestionDetailed";
+import { useNotificationContext, confirmationDialogue } from "components";
+import _ from "lodash";
 
 export default function EditQuiz({
   editingQuiz,
@@ -9,12 +11,18 @@ export default function EditQuiz({
   handleAddClick,
   handleTrashClick,
   quizzes,
+  handleNameChange,
   updateCurrentlyEditingQuiz,
 }) {
+  const { dispatch } = useNotificationContext();
+  const initialQuiz = useRef({});
+  useEffect(() => {
+    if (editingQuiz.isEditing) initialQuiz.current = findQuiz();
+  }, [editingQuiz.isEditing]);
   return (
     <QuestionDetailed.Container
       isShown={editingQuiz.isEditing}
-      toggleShown={toggleShown}
+      toggleShown={handleCloseWithoutSubmit}
       style={{
         width: "40%",
         height: "50%",
@@ -31,6 +39,7 @@ export default function EditQuiz({
               }
             : { questions: [], titel: "" }
         }
+        handleNameChange={handleNameChange}
         handleAddClick={handleAddClick}
         handleTrashClick={handleTrashClick}
         handleSubmitClick={handleSubmitQuiz}
@@ -45,6 +54,16 @@ export default function EditQuiz({
     //for user 1
     updateCurrentlyEditingQuiz(newQuiz, 1);
     toggleShown();
+  }
+
+  function handleCloseWithoutSubmit() {
+    //if quiz got changed, ask if changes should be saved
+    if (!_.isEqual(findQuiz(), initialQuiz.current)) {
+      const msg = "Do you want to close without saving changes?";
+      confirmationDialogue(msg, dispatch, () => toggleShown(undefined, true));
+    } else {
+      toggleShown();
+    }
   }
 }
 

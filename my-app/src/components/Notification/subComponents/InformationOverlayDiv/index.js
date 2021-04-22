@@ -4,7 +4,7 @@ import "./informationOverlayDiv.scss";
 export default function InformationOverlayDiv({ children, ...restProps }) {
   return (
     <div className="InformationOverlayDivContainer" {...restProps}>
-      {children}
+      <span>{children}</span>
     </div>
   );
 }

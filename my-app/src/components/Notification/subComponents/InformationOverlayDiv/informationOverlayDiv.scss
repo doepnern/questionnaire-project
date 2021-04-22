@@ -1,5 +1,6 @@
 .InformationOverlayDivContainer {
-  width: 300px;
+  min-width: 300px;
+  max-width: 80%;
   height: 50px;
   background-color: rgb(124, 124, 124);
   display: flex;
@@ -7,4 +8,7 @@
   align-items: center;
   margin-bottom: 5px;
   border-radius: 3px;
+  span {
+    padding: 0 10px 0 10px;
+  }
 }

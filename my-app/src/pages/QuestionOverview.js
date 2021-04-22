@@ -59,7 +59,6 @@ function QuestionOverview({
       }
     );
     function setNewQuestions(user) {
-      console.log(user);
       if (user !== undefined && !Object.keys(user).includes("error")) {
         //remove questions which should be ignored
         const newQuestions = user.fragen != null ? user.fragen : [];

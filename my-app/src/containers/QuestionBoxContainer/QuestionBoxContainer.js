@@ -10,6 +10,7 @@ import {
   deleteTagById,
   addTagForQuestion,
 } from "services/UserService";
+import { useNotificationContext, displayMessage } from "components";
 
 export default function QuestionBoxContainer({
   reloadQuestions,
@@ -24,6 +25,7 @@ export default function QuestionBoxContainer({
   });
   const { questionContext, dispatch } = useQuestionContext();
   const questionBoxes = useRef(new Array(50));
+  const { dispatch: dispatchNotification } = useNotificationContext();
 
   return (
     <div className="QuestionBoxWrapper">
@@ -122,8 +124,24 @@ export default function QuestionBoxContainer({
     //update questions in db
     updateQuestions(
       questionContext.questions,
-      () => console.log("successfully updated db"),
-      () => console.log("db update failed")
+      () =>
+        dispatchNotification(
+          displayMessage(
+            "Successfully synced questions",
+            undefined,
+            dispatchNotification,
+            2000
+          )
+        ),
+      () =>
+        dispatchNotification(
+          displayMessage(
+            "Error trying to sync your questions to db, changes may be lost",
+            "error",
+            dispatchNotification,
+            2000
+          )
+        )
     );
   }
   function handleRemoveTagClicked(tagid, questionid) {

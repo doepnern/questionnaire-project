@@ -26,6 +26,7 @@ const initialState = {
         name: "cancel",
         handleClick: () =>
           console.log("please add decline callback to dialogue"),
+        style: "warning",
       },
     ],
   },
@@ -39,9 +40,9 @@ const DISPLAY_DIALOGUE = "displayDialogue";
 const CLOSE_DIALOGUE = "closeDialogue";
 
 /* displays a message in selected styles for selected timeperiod */
-function displayMessage(message, style = INFORMATION, callback, callbackTime) {
-  if (callback && callbackTime)
-    setTimeout(() => callback(removeMessage(message)), callbackTime);
+function displayMessage(message, style = INFORMATION, dispatch, callbackTime) {
+  if (dispatch && callbackTime)
+    setTimeout(() => dispatch(removeMessage(message)), callbackTime);
   return { type: DISPLAY_MESSAGE, message, style };
 }
 /* removes if specified message is currently displayed */

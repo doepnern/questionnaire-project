@@ -5,9 +5,7 @@ import "../styles/dialogue.scss";
 
 export default function InformationOverlayContainer() {
   const { notificationContext } = useNotificationContext();
-  useEffect(() => {
-    console.log({ notificationContext }, [notificationContext]);
-  });
+
   return (
     <Fade
       zIndex={2001}
@@ -24,7 +22,7 @@ export default function InformationOverlayContainer() {
           <div className="buttonDiv">
             {notificationContext.dialogue.options.map((opt, index) => {
               let idAttr = "dialogue_button";
-              if (index === notificationContext.dialogue.options?.length - 1) {
+              if (opt.style === "warning") {
                 idAttr = "dialogue_button red";
               }
               return (
@@ -34,6 +32,7 @@ export default function InformationOverlayContainer() {
                   }}
                   className={idAttr}
                   key={index}
+                  autoFocus={opt.style === "warning" ? true : false}
                 >
                   <span>{opt.name}</span>
                 </button>
