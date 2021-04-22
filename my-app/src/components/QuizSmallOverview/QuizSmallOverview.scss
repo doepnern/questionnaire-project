@@ -4,6 +4,17 @@ $baseHeight: 350px;
 $singleQuestionMargin: 3%;
 $itemsPerRow: 4;
 $itemsPerColumn: 5;
+
+@function getWidth($numItems) {
+  $res: ((100% - (($numItems + 1) * $singleQuestionMargin)) / $numItems);
+  @return $res;
+}
+@function getHeight($numItemsHeight) {
+  $resH: (
+    (100% - (($numItemsHeight + 1) * $singleQuestionMargin)) / $numItemsHeight
+  );
+  @return $resH;
+}
 .qso_container {
   height: $baseHeight;
   width: $baseWidth;
@@ -11,7 +22,7 @@ $itemsPerColumn: 5;
   border-radius: 2%;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: rgb(214, 209, 209);
+  background-color: #e7e2e2;
   align-content: flex-start;
   overflow: auto;
   border: 2px solid rgb(175, 167, 167);
@@ -22,18 +33,23 @@ $itemsPerColumn: 5;
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+
+  //hidden by default on screen smaller 950px
+  @media only screen and (max-width: 950px) {
+    display: none;
+  }
+}
+//is shown when class showOnMobile is added
+.showOnMobile {
+  @media only screen and (max-width: 950px) {
+    display: flex;
+  }
 }
 
 .qso_singleQuestionContainer {
-  /*width: ($baseWidth - ($singleQuestionMargin * ($itemsPerRow + 1))) /
-    $itemsPerRow;
-  height: ($baseHeight - $singleQuestionMargin * ($itemsPerColumn + 1)) /
-    $itemsPerColumn;*/
   box-sizing: border-box;
-  width: ((100% - (($itemsPerRow + 1) * $singleQuestionMargin)) / $itemsPerRow);
-  height: (
-    (100% - (($itemsPerColumn + 1) * $singleQuestionMargin)) / $itemsPerColumn
-  );
+  width: getWidth($itemsPerRow);
+  height: getHeight($itemsPerColumn);
   background-color: $colorPrimaryLight;
   margin-left: $singleQuestionMargin;
   margin-top: $singleQuestionMargin;

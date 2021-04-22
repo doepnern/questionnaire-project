@@ -1,5 +1,6 @@
 .tqq_Container {
   min-width: 500px;
+  max-width: 650px;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -8,6 +9,10 @@
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.28);
   border-radius: 5px;
   overflow: hidden;
+  @media only screen and (max-width: 950px) {
+    min-width: 300px;
+    width: 100%;
+  }
 }
 
 .tqq_headerContainer {

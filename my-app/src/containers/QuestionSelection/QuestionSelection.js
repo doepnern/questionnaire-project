@@ -13,7 +13,7 @@ export default function QuestionSelection({
     <Modal isShown={questionSelection.isShown} toggleShown={toggleShown}>
       <div
         className="QuestionSelectionContainer"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <QuestionContextProvider>
           <QuestionOverview

@@ -11,19 +11,19 @@ import "./QuizSmallOverview.scss";
 export default function QuizSmallOverview({
   questions = [],
   handleClickQuestion,
+  mobileShown,
 }) {
   return (
-    <QuizSmallOverviewComponents>
-      {true &&
-        questions.map((q, index) => (
-          <QuizSmallOverviewComponents.Question
-            question={q}
-            index={index}
-            key={q.fragenid}
-            completed={q.beantwortet}
-            handleClick={() => handleClickQuestion(index)}
-          />
-        ))}
+    <QuizSmallOverviewComponents mobileShown={mobileShown}>
+      {questions.map((q, index) => (
+        <QuizSmallOverviewComponents.Question
+          question={q}
+          index={index}
+          key={q.fragenid}
+          completed={q.beantwortet}
+          handleClick={() => handleClickQuestion(index)}
+        />
+      ))}
     </QuizSmallOverviewComponents>
   );
 }

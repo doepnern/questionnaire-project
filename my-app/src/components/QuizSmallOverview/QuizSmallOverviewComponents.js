@@ -1,7 +1,15 @@
 import React from "react";
 
-export default function QuizSmallOverviewComponents({ ...restProps }) {
-  return <div className="qso_container" {...restProps}></div>;
+export default function QuizSmallOverviewComponents({
+  mobileShown = false,
+  ...restProps
+}) {
+  return (
+    <div
+      className={`qso_container ${mobileShown ? "showOnMobile" : ""}`}
+      {...restProps}
+    ></div>
+  );
 }
 
 QuizSmallOverviewComponents.Question = function QuizSmallOverviewComponentsQuestion({

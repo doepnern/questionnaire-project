@@ -21,7 +21,7 @@ QuestionDetailed.Container = function QuestionDetailedContainer({
     <>
       <Modal isShown={isShown} toggleShown={toggleShown}>
         <motion.div
-          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           className="questionDetailedContainer"
           animate={{ opacity: "100%" }}
           initial={{

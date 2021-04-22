@@ -7,7 +7,7 @@ export default function Modal({ children, isShown, toggleShown }) {
       {isShown && (
         <motion.div
           className="Modal"
-          onClick={toggleShown}
+          onMouseDown={toggleShown}
           transition={{ duration: 0.1 }}
           animate="shown"
           initial="hidden"

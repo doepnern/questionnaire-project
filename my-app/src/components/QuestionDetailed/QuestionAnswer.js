@@ -82,7 +82,7 @@ QuestionAnswer.EditAnswerTextContainer = function AnswerTextContainer({
           setInput(e.target.value);
         }}
         onBlur={updateAnswer}
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       />
     </div>
   );
@@ -100,7 +100,7 @@ QuestionAnswer.SingleAnswerContainer = function SingleAnswerContainer({
         className={`qa_singleAnswerContainer ${
           selected ? "answer-selected" : ""
         }`}
-        onClick={handleClick}
+        onMouseDown={handleClick}
         {...restprops}
       >
         {children}
@@ -129,7 +129,7 @@ QuestionAnswer.SingleAnswerContainerOld = function SingleAnswerContainerOld({
 
 QuestionAnswer.Button = function ({ children, handleClick, ...restProps }) {
   return (
-    <div className="answerButtonDiv" onClick={handleClick}>
+    <div className="answerButtonDiv" onMouseDown={handleClick}>
       {children}
     </div>
   );
