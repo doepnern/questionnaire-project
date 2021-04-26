@@ -25,7 +25,8 @@ export function QuestionStorage(oldStorage) {
     this.questions = [];
     this.history = new qh.KeepHistory();
   } else {
-    this.questions = _.cloneDeep(oldStorage.questions);
+    //shallow copy is enough because questions will be updated immutably
+    this.questions = [...oldStorage.questions];
     this.history = new qh.KeepHistory(oldStorage.history);
   }
 }
