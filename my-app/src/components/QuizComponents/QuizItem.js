@@ -8,6 +8,7 @@ export default function QuizItem({
   handleEditClick,
   handleDeleteClick,
   handleContinueClick,
+  handleRestartClick,
   score = "-",
   progress = "-",
   fragen = [],
@@ -33,8 +34,11 @@ export default function QuizItem({
           <div className="EnterQuiz">Edit Quiz</div>
         </div>
         <div className="QuizButtonContainer default_qbc">
-          <div className="EnterQuiz" onClick={handleContinueClick}>
-            Continue
+          <div
+            className="EnterQuiz"
+            onClick={completed ? handleRestartClick : handleContinueClick}
+          >
+            {completed ? "Restart" : "Continue"}
           </div>
         </div>
         <div className="QuizButtonContainer delete_qbc">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { TextField, Button } from "@material-ui/core";
 import { ReactComponent as TrashButton } from "svg/trash_button.svg";
 import ListDrag from "../../Misc/ListDrag/ListDrag";
@@ -10,20 +10,9 @@ export default function EditQuizComponents({
   handleTrashClick,
   handleSubmitClick,
   handleNameChange,
-  children,
+  questionState,
+  setQuestions,
 }) {
-  const questions = currentQuiz.questions;
-  //reload state when questions change
-  const [questionState, setQuestions] = useState(questions);
-  const previousQuestions = useRef(questions);
-
-  //if questions are changed putside this component, update question
-  useEffect(() => {
-    if (questions === previousQuestions.current) return;
-    previousQuestions.current = questions;
-    setQuestions(() => questions);
-  }, [currentQuiz]);
-
   return (
     <div className="EditQuizContainer">
       <div className="qc_textField">

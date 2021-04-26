@@ -49,9 +49,12 @@ export default function ListDrag({
       };
     }
   }, [state]);
+  //when state changes, update internal state adn check if draggable element got removed, if yes, remove from list
   useEffect(() => {
+    console.log("state change");
     currentState.current = state;
   }, [state]);
+
   return (
     <>
       {!nodeRef && (
@@ -129,7 +132,7 @@ export default function ListDrag({
 
   function getDragAfterElement(y) {
     //get all draggable elements
-    const draggableElements = draggables.current;
+    const draggableElements = draggables.current.filter((de) => de != null);
     //find closest element below current dragging element and return, return undefined if at bottom
     return draggableElements.reduce(
       (closest, child) => {
@@ -179,7 +182,7 @@ ListDrag.Item = function ListDragItem({
   ...restProps
 }) {
   const myProps = {
-    ref: draggables ? (el) => (draggables.current[index] = el) : undefined,
+    ref: draggables ? (el) => (draggables.current[dataId] = el) : undefined,
     className: className + " draggable",
     draggable: draggable,
     onDragStart: handleDragStart,

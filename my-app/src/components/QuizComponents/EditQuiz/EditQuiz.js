@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from "react";
 import EditQuizComponents from "./EditQuizComponents";
 import "./EditQuiz.scss";
 import QuestionDetailed from "../../QuestionDetailed/QuestionDetailed";
-import { useNotificationContext, confirmationDialogue } from "components";
+import {
+  useNotificationContext,
+  confirmationDialogue,
+  displayMessage,
+} from "components";
 import _ from "lodash";
 
 export default function EditQuiz({
@@ -17,8 +21,19 @@ export default function EditQuiz({
   const { dispatch } = useNotificationContext();
   const initialQuiz = useRef({});
   useEffect(() => {
-    if (editingQuiz.isEditing) initialQuiz.current = findQuiz();
+    if (editingQuiz.isEditing) {
+      initialQuiz.current = findQuiz();
+      dispatch(
+        displayMessage(
+          "Edit your quiz and drag and drop the questions in the order you like",
+          undefined,
+          dispatch,
+          3000
+        )
+      );
+    }
   }, [editingQuiz.isEditing]);
+
   return (
     <QuestionDetailed.Container
       isShown={editingQuiz.isEditing}
@@ -43,11 +58,19 @@ export default function EditQuiz({
         handleAddClick={handleAddClick}
         handleTrashClick={handleTrashClick}
         handleSubmitClick={handleSubmitQuiz}
+        questionState={getQuizFragen()}
+        setQuestions={(newQuestions) =>
+          updateCurrentlyEditingQuiz({ fragen: newQuestions }, 1, false)
+        }
       ></EditQuizComponents>
     </QuestionDetailed.Container>
   );
   function findQuiz() {
     return quizzes.filter((q) => q.quizid === editingQuiz.quizEditing);
+  }
+  function getQuizFragen() {
+    const quiz = findQuiz();
+    return quiz.length > 0 ? quiz[0].fragen : undefined;
   }
 
   function handleSubmitQuiz(newQuiz) {

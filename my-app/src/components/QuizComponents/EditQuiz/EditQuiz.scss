@@ -98,13 +98,15 @@ $singleQuestionHeight: (100%/6);
   .qc_singleQuestion {
     box-sizing: border-box;
     height: ($singleQuestionHeight);
-    width: 97%;
-    margin: 0 auto 3px auto;
-    background-color: #babad0;
+    //width: 99%;
+    margin: 0 auto 1px auto;
+    background-color: #f6fafd;
+    border-radius: 1px;
+    height: 37px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.237);
     &:first-child {
       margin-top: 3px;
     }
-    border-radius: 5px;
     display: flex;
     align-items: center;
     position: relative;

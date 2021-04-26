@@ -58,7 +58,19 @@ export function useQuizState() {
     );
   }
 
-  function updateCurrentlyEditingQuiz(updatingObj = {}, userId) {
+  //updates the currently editing quiz with the supplied object
+  function updateCurrentlyEditingQuiz(
+    updatingObj = {},
+    userId,
+    updateDB = true
+  ) {
+    if (!updateDB)
+      return setQuizzes((q) =>
+        replaceQuizWithId(q, {
+          ...findQuiz(quizzes, editingQuiz.quizEditing),
+          ...updatingObj,
+        })
+      );
     updateQuiz(
       editingQuiz.quizEditing >= 0
         ? { ...findQuiz(quizzes, editingQuiz.quizEditing), ...updatingObj }
@@ -67,6 +79,26 @@ export function useQuizState() {
     );
   }
 
+  function restartQuiz(quiz) {
+    updateQuiz(
+      {
+        ...quiz,
+        beendet: false,
+        score: "-",
+        progress: "0%",
+        fragen: resetFragen(quiz.fragen),
+      },
+      1
+    );
+
+    function resetFragen(questions = []) {
+      return questions.map((q) => ({
+        ...q,
+        ausgewaehlteAntworten: [],
+        beantwortet: false,
+      }));
+    }
+  }
   function getQuestionsInQuiz() {
     if (editingQuiz.quizEditing < 0) return [];
     const currentQuiz = findQuiz(quizzes, editingQuiz.quizEditing);
@@ -93,6 +125,7 @@ export function useQuizState() {
       updateQuiz,
       updateCurrentlyEditingQuiz,
       getQuestionsInQuiz,
+      restartQuiz,
     },
   ];
 }
@@ -117,7 +150,6 @@ function questionStateReducer(state, action) {
         state.currentlyEditing,
         action.value
       );
-      return;
     default:
       return [...state.quizzes];
   }
